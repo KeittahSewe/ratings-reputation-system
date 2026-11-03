@@ -1,0 +1,16 @@
+.page {
+  padding: 48px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: var(--font-size-page-title);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+}

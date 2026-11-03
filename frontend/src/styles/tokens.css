@@ -1,0 +1,40 @@
+/*
+  Design tokens for the whole app. Values come from the UI rules in CLAUDE.md.
+  Components use these variables instead of raw colour or size values.
+*/
+
+:root {
+  /* Colours */
+  --color-text: #092327;
+  --color-text-secondary: #4a5a64;
+  --color-primary: #0b5351;
+  --color-ai-accent: #00a9a5; /* fill, tag background or left border only, never text */
+  --color-border: #4e8098;
+  --color-hairline: #cbd9e2;
+  --color-surface-light: #90c2e7;
+  --color-page: #ffffff;
+  --color-card: #f2f8f9;
+
+  /* Sentiment colours. Always pair with a text label and a number. */
+  --color-positive: #2e7d32;
+  --color-neutral: #6b7a82;
+  --color-negative: #b3453b;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-size-page-title: 28px;
+  --font-size-section-heading: 18px;
+  --font-size-body: 14px;
+  --font-size-helper: 12px;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+  background: var(--color-page);
+}
