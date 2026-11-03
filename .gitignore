@@ -1,0 +1,37 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model weights and large data (these live on Google Drive)
+*.pt
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.keras
+*.joblib
+glove*.txt
+glove*.zip
+
+# Editors and OS
+.vscode/
+.DS_Store
+Thumbs.db

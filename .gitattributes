@@ -1,0 +1,5 @@
+# Store text files with LF endings so Windows and the Linux hosts agree
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
