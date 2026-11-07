@@ -1,0 +1,9 @@
+{
+  "source": "sst5_train.csv",
+  "method": "balanced",
+  "weights": {
+    "0": 0.8604,
+    "1": 1.7537,
+    "2": 0.7889
+  }
+}
