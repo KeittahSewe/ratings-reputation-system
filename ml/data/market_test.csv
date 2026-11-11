@@ -1,0 +1,391 @@
+id,text,label,source,stars,direction,category
+mkt-794f78,"the house was clean and the client was friendly. the old wiring was in such bad condition that the job took twice as long, and he would not adjust the price.",1,market,3.0,worker_to_client,electrical
+mkt-2db497,overcharged me for parts i later found at gikomba for half the price. not honest at all.,0,market,2.0,client_to_worker,plumbing
+mkt-a48862,"difficult to rate. the diagnosis was impressive, he found in ten minutes what two others had missed, and he explained it in a way i could understand. but the repair itself dragged on for three visits because he kept arriving without the right breaker, and each visit meant someone had to stay home from work to open for him. the power is stable now and the price was what he quoted. i just wish it had not taken two weeks.",1,market,3.0,client_to_worker,electrical
+mkt-2dace2,"the bathroom fittings are beautiful. getting there was painful though: late arrivals, a missed appointment and a lot of dust.",1,market,3.0,client_to_worker,plumbing
+mkt-6564f9,"very professional fundi. came on time, replaced the whole bathroom mixer and cleaned up after himself. will definitely call him again.",2,market,5.0,client_to_worker,plumbing
+mkt-e215f8,"cancelled when i was already at the gate in kitengela, after i had bought the materials with my own money.",0,market,3.0,worker_to_client,electrical
+mkt-673318,paid well. treated me with respect. asked me to come back next month.,2,market,3.0,worker_to_client,cleaning
+mkt-9d3ae2,"we have had a mixed experience over the past term. in the first few weeks she was very engaged, gave homework and checked it carefully, and our son enjoyed the sessions. later on she started cutting lessons short and the homework stopped, although she remained polite and always apologised. his marks went up a little in the middle of the term and came back down at the end. we have not decided whether to continue next year.",1,market,3.0,client_to_worker,tutoring
+mkt-eed41c,rude and arrogant. said i did not know anything about wood when i asked a simple question about the finish.,0,market,1.0,client_to_worker,carpentry
+mkt-e4c252,"mama fua wa ukweli. clothes washed, ironed and folded neatly, and she sorted the whites from the colours without me telling her.",2,market,5.0,client_to_worker,cleaning
+mkt-07d104,very understanding when the rain delayed the exterior work. she paid for the extra day without me asking. rare to find such clients.,2,market,5.0,worker_to_client,painting
+mkt-a2166e,"they expected me to babysit the younger siblings during lessons at no extra cost. when i refused, they cut my hours. avoid.",0,market,1.0,worker_to_client,tutoring
+mkt-f47c27,"the sofa looks much better. one of the cushions shrank a little after cleaning, though. i am not sure how i feel.",1,market,3.0,client_to_worker,cleaning
+mkt-b37ba8,"nice enough person, but the ceiling is streaky and there are drips dried on the window frames. i cannot recommend.",0,market,2.0,client_to_worker,painting
+mkt-93ea69,"polite and fair, but they always ask me to do 'one more small thing' at the end.",1,market,3.0,worker_to_client,cleaning
+mkt-af4f37,okay work.,1,market,3.0,client_to_worker,carpentry
+mkt-7e38c1,some walls are good and some are patchy.,1,market,1.0,client_to_worker,painting
+mkt-7e5a38,he built the shelves according to the drawing.,1,market,3.0,client_to_worker,carpentry
+mkt-fe41f0,"good at cleaning, not good at time. arrives anywhere between 8 and 11. once she is there, though, the work is decent.",1,market,5.0,client_to_worker,cleaning
+mkt-a705d9,"quick to respond and fixed the tripping. the new sockets are slightly crooked, which bothers me every time i look at them.",1,market,3.0,client_to_worker,electrical
+mkt-5bc165,okay for a quick clean. for a proper deep clean i would look elsewhere. depends what you need.,1,market,3.0,client_to_worker,cleaning
+mkt-c6d956,the father questioned everything i taught in front of the child and corrected me with wrong answers. it undermined everything i tried to do.,0,market,1.0,worker_to_client,tutoring
+mkt-eec6d9,our lights had been tripping every time it rained. he found a damaged cable in the ceiling within twenty minutes and replaced it. not a single trip since.,2,market,5.0,client_to_worker,electrical
+mkt-418a17,the cleaners scratched our wooden floors with the wrong scrubber. they refused to take responsibility. their office did not reply to my email.,0,market,2.0,client_to_worker,cleaning
+mkt-1b699a,"he built wardrobes into an awkward corner of the bedroom that two other carpenters said could not be done. sliding doors, a shoe rack and a mirror panel. my wife has not stopped showing them off to visitors.",2,market,5.0,client_to_worker,carpentry
+mkt-72c4b2,the kitchen cabinets started sagging within two months. he used chipboard instead of the plywood i paid for. i only found out when a hinge pulled out. cheated.,0,market,1.0,client_to_worker,carpentry
+mkt-6e7217,"after our renovation the whole house was covered in cement dust. her team of three cleared it in a day, wiped every surface twice and even cleaned the paint off the window glass. i honestly did not think it was possible.",2,market,5.0,client_to_worker,cleaning
+mkt-b80005,fixed the main leak but did not have time for the second tap. said he would come back. will see.,1,market,3.0,client_to_worker,plumbing
+mkt-41a8ab,left sawdust everywhere. scratched my floor tiles while moving the timber. did not even apologise.,0,market,1.0,client_to_worker,carpentry
+mkt-bfbae0,"neat pipework, honest pricing, polite. exactly what you want.",2,market,5.0,client_to_worker,plumbing
+mkt-bd997d,"charged for a full term upfront, then moved to mombasa after three weeks. has ignored all my messages since.",0,market,1.0,client_to_worker,tutoring
+mkt-2eb46e,"the client was pleasant and offered tea every afternoon. she also changed the bedroom colour after the first coat was already on, which cost me a full day.",1,market,3.0,worker_to_client,painting
+mkt-ef6087,"the estate security gave me a hard time at the gate, but the client came down personally to sort it out and even paid for the lost hour.",2,market,4.0,worker_to_client,electrical
+mkt-a43bce,interior repaint of a one-bedroom in south b. client supplied the paint.,1,market,3.0,worker_to_client,painting
+mkt-781ca1,overpriced and slow. a two hour job took the whole day because he kept leaving to buy things he should have come with.,0,market,2.0,client_to_worker,electrical
+mkt-a16372,asked for an extra socket. received a hole in the wall and a promise. excellent value.,0,market,1.0,client_to_worker,electrical
+mkt-e3261b,still has not paid the balance three weeks later. stopped answering my texts. be careful with this one.,0,market,1.0,worker_to_client,plumbing
+mkt-c05756,he used nails where the design clearly needed screws and glue. the chairs are already loose. two months old.,0,market,2.0,client_to_worker,carpentry
+mkt-771d2b,"he did the three rooms as agreed. one is great, one is okay and one will need touching up near the ceiling.",1,market,3.0,client_to_worker,painting
+mkt-6d56df,"repaired our old dining chairs. some are as good as new, others still feel a bit loose.",1,market,3.0,client_to_worker,carpentry
+mkt-a5acb4,she covered every piece of furniture before starting and there was not a single drop of paint on the floor afterwards. the sitting room looks brand new. worth every shilling.,2,market,5.0,client_to_worker,painting
+mkt-49aeb3,"good people. payment came in three small instalments over a month instead of once, which i had not planned for.",1,market,3.0,worker_to_client,electrical
+mkt-88d150,"smooth even coats, no patches, and the team was polite throughout. they even moved the wall unit back for me. i will be using them for the upstairs rooms too.",2,market,3.0,client_to_worker,painting
+mkt-e747c1,covered fractions and decimals this month.,1,market,1.0,client_to_worker,tutoring
+mkt-a068a3,the best.,2,market,5.0,client_to_worker,tutoring
+mkt-6f48c3,"good knowledge of pumps and he explained the problem well. however, he charged for an extra visit. that visit was only needed because he forgot a part.",1,market,3.0,client_to_worker,plumbing
+mkt-1e4037,replaced the toilet seal. job done.,1,market,3.0,client_to_worker,plumbing
+mkt-912779,"beautiful work on the feature wall, honestly. but he left the brushes soaking in my kitchen sink and the empty tins in the corridor for me to throw out.",1,market,3.0,client_to_worker,painting
+mkt-571c4f,fixed the cupboard hinge.,1,market,3.0,client_to_worker,carpentry
+mkt-52c722,"respectful family. they gave me a quiet room to teach in and switched off the tv during lessons. small things, but they matter. i enjoy teaching there.",2,market,5.0,worker_to_client,tutoring
+mkt-5310f9,not recommended.,0,market,1.0,client_to_worker,cleaning
+mkt-4acc0f,"i have mixed feelings. on the positive side the exterior looks fresh, the lines around the windows are clean and the neighbours have even asked for his number. on the negative side he asked for more money halfway because he had underestimated the paint, he was unreachable for two days in the middle of the job, and the gate was never done because he ran out of time. hard to say whether i would hire him again.",1,market,3.0,client_to_worker,painting
+mkt-878321,"normal job, nothing to report.",1,market,3.0,worker_to_client,plumbing
+mkt-6de7a2,deep cleaned our three-bedroom house in kileleshwa before we moved in. the kitchen grease that had been there for years is gone. even the window tracks were spotless.,2,market,5.0,client_to_worker,cleaning
+mkt-1461b0,he cleaned the water tank on the roof and showed me photos before and after. the tap water is clear now. good job.,2,market,5.0,client_to_worker,cleaning
+mkt-102a5f,mwalimu mzuri sana. the kids understand kiswahili insha much better. their marks have gone up. we are very grateful.,2,market,5.0,client_to_worker,tutoring
+mkt-600e36,"he is new to tutoring, and it shows. he is learning, though, and the kids like him.",1,market,5.0,client_to_worker,tutoring
+mkt-6fa13d,very rude to my apprentice and accused us of stealing a spanner that was later found in his own car.,0,market,1.0,worker_to_client,plumbing
+mkt-ccae51,no show. waited the whole day in kitengela.,0,market,1.0,client_to_worker,plumbing
+mkt-1c353b,sofa and carpet cleaning done in one afternoon. the stains from the children's juice are completely gone. the sofa dried by evening. very happy.,2,market,5.0,client_to_worker,cleaning
+mkt-33064e,"changed his mind on the sink position once, but he understood it would cost extra and paid without argument. easy to work with.",2,market,4.0,worker_to_client,plumbing
+mkt-1c246f,"he turned up on time and found the source of the leak quickly. the repair only slowed it down, though. he needs to come back with a different part.",1,market,3.0,client_to_worker,plumbing
+mkt-21a61c,delivered a three-seater sofa to the client in ngong.,1,market,3.0,worker_to_client,carpentry
+mkt-7043a7,"the quote was fair and the job is decent, but communication was a struggle. messages went unanswered for a day at a time. in the end it got done.",1,market,3.0,client_to_worker,painting
+mkt-9dc647,"the paint smell lingered for a few days, which i expected, but the job itself is flawless. the gloss on the doors is like glass.",2,market,5.0,client_to_worker,painting
+mkt-466c1b,"i paid a 60 percent deposit for a solar backup installation after he sent very convincing photos of previous jobs. he delivered the batteries a week late, mounted the inverter on a wooden board next to the gas cylinder, and ran the cables across the floor of the store with no trunking. the system cut out on the second night. he has since given me four different dates for coming to fix it and has not appeared on any of them. i am out of pocket and still in the dark.",0,market,1.0,client_to_worker,electrical
+mkt-766905,replaced the rotten window frames and painted them to match. looks like the original. the rain no longer comes in.,2,market,5.0,client_to_worker,carpentry
+mkt-b7424d,used bleach on my coloured towels after i specifically said not to. ruined. she said it was the only soap she had.,0,market,1.0,client_to_worker,cleaning
+mkt-8e90c2,"beautiful table, said nobody, ever. the legs are different lengths and the top is already cracking.",0,market,1.0,client_to_worker,carpentry
+mkt-30dbf8,"the client was not home, so the caretaker let me in.",1,market,5.0,worker_to_client,cleaning
+mkt-5de340,kept changing the lesson times on the day itself. twice i travelled from kikuyu and found nobody at home.,0,market,3.0,worker_to_client,tutoring
+mkt-3c4823,"called me at 11pm, at 5am and on sunday during church about a job that was already finished and tested. blocked.",0,market,1.0,worker_to_client,electrical
+mkt-1344b4,not prepared. he kept asking my daughter what topic they were on and spent half the lesson finding the page. waste of money.,0,market,2.0,client_to_worker,tutoring
+mkt-03b94b,"excellent piano teacher, very gentle with beginners. my daughter played at the school concert after only four months.",2,market,3.0,client_to_worker,tutoring
+mkt-d8e70e,taught our teenager basic coding in python over the long holiday. now he builds small games instead of just playing them. he even showed his class. proud parents here.,2,market,4.0,client_to_worker,tutoring
+mkt-973d85,"came late, smelled of alcohol and argued with me when i asked him to switch off the mains first. i sent him away. still demanded transport money.",0,market,1.0,client_to_worker,electrical
+mkt-5510d1,"i booked him to install a new kitchen sink before my family visited for the holidays. he postponed twice, each time with a different story, then finally showed up with a helper who clearly had no experience. the sink is not level, the drain pipe drips into the cabinet and there is silicone smeared all over the counter. when i raised it he said i should have bought a better sink. very disappointed and would not recommend.",0,market,1.0,client_to_worker,plumbing
+mkt-01a07c,she listened when i explained why the cooker needed its own circuit and agreed to do it properly instead of cutting corners. respect.,2,market,5.0,worker_to_client,electrical
+mkt-5d4cdc,"average service, average price.",1,market,3.0,client_to_worker,plumbing
+mkt-68aee4,"she cancelled five sessions in one month, always at the last minute, and still wanted full payment. unprofessional. we stopped after that month.",0,market,1.0,client_to_worker,tutoring
+mkt-b4b28f,"the new pipes look neat and the pressure is better, but he rescheduled twice without telling me.",1,market,3.0,client_to_worker,plumbing
+mkt-41c75c,"he came, looked at the geyser and replaced the element.",1,market,5.0,client_to_worker,plumbing
+mkt-14d5e9,"ceiling, perfect. walls, perfect. doors, sticky for a week and one still does not close properly.",1,market,3.0,client_to_worker,painting
+mkt-ca86f3,satisfactory.,1,market,3.0,client_to_worker,cleaning
+mkt-4ddf55,"punctual, prepared and kind to the children. our twins look forward to saturday mornings now. even the younger one wants to join. asante mwalimu.",2,market,5.0,client_to_worker,tutoring
+mkt-0af21f,"did what was asked, though the finishing around the sink could be neater.",1,market,3.0,client_to_worker,plumbing
+mkt-4145d0,"the lessons were pleasant, but after four months of tuition there has been no improvement at all in her maths scores. what exactly are we paying for?",0,market,4.0,client_to_worker,tutoring
+mkt-c5bd33,the mother checks in every friday to ask how things are going and what she can do at home. that kind of partnership makes teaching easy.,2,market,5.0,worker_to_client,tutoring
+mkt-e93401,"we hired this team to repaint our four-bedroom maisonette in syokimau while we were upcountry for a week. the agreement was that everything would be covered and the house locked each evening. we came back to find paint splashed on the tiles and the kitchen counters, a cracked mirror nobody would explain, one bedroom painted the wrong colour entirely, and the back door left unlocked. when i called the supervisor he blamed his workers and hung up. an expensive lesson.",0,market,1.0,client_to_worker,painting
+mkt-b93f1c,"the cleaning was okay at first glance, but when i checked behind the fridge and under the sofa it was clear only the visible areas had been done. not thorough.",0,market,4.0,client_to_worker,cleaning
+mkt-415bc4,repaired the cabinet doors in the client's kitchen.,1,market,3.0,worker_to_client,carpentry
+mkt-4b06cd,"very good with children who have attention difficulties. she breaks the work into small pieces and gives breaks, and our son no longer cries before homework.",2,market,5.0,client_to_worker,tutoring
+mkt-fb7fec,"they were late with payment once when their business was struggling, but they told me early and paid everything with an apology. good people.",2,market,4.0,worker_to_client,tutoring
+mkt-1e87cf,stima was back within an hour of calling him. thank you!,2,market,5.0,client_to_worker,electrical
+mkt-0e5d5c,fundi wa ukweli. he came with the timber already treated and cut. work finished in two days. will call him for the doors next.,2,market,5.0,client_to_worker,carpentry
+mkt-43887e,useless. the fault is still there.,0,market,1.0,client_to_worker,electrical
+mkt-6d7669,"charged 4,500 to 'diagnose' the problem, then said he needed to come back another day with a different tool. never came back. money gone.",0,market,1.0,client_to_worker,electrical
+mkt-8cd6dc,kind family and a hardworking student.,2,market,3.0,worker_to_client,tutoring
+mkt-919c3e,"okay tutor. a bit expensive for what you get. not bad, not great.",1,market,3.0,client_to_worker,tutoring
+mkt-cd45ff,he replaced all the old galvanised pipes in the compound in two days as promised. the tenants have not complained about rusty water since. good value for the size of the job.,2,market,4.0,client_to_worker,plumbing
+mkt-2d3cf6,"fast, friendly and careful with my plants on the balcony. the flat felt brand new.",2,market,4.0,client_to_worker,cleaning
+mkt-3d160d,"asked a lot of questions at first, but once we agreed on the design he trusted me completely. great to work for.",2,market,4.0,worker_to_client,carpentry
+mkt-ddbf9a,he clearly did not know how to fit a pressure pump and kept calling someone on the phone for instructions. the pump makes a terrible noise now. avoid if you need a pump installed.,0,market,2.0,client_to_worker,plumbing
+mkt-44a153,"reliable, honest about progress and never pushes for extra sessions just to earn more. rare quality. we will keep her for as long as she can teach.",2,market,5.0,client_to_worker,tutoring
+mkt-c75376,kept adding walls that were not in the quote and got angry when i asked for more money. i ended up doing two extra rooms for free just to keep the peace.,0,market,1.0,worker_to_client,painting
+mkt-0afcbd,used a cheaper brand than the one i paid for. i found the empty tins behind the house. he denied it until i showed him the photos.,0,market,1.0,client_to_worker,painting
+mkt-ead8ce,"she is very strict. some days that helps, some days the kids just shut down.",1,market,3.0,client_to_worker,tutoring
+mkt-690992,blamed me for their daughter's poor school report and told other parents in the estate not to hire me.,0,market,1.0,worker_to_client,tutoring
+mkt-13b568,"argued over every shilling and insisted i use the cheap pipes he bought himself, which then burst.",0,market,3.0,worker_to_client,plumbing
+mkt-a24fda,"weekly cleaning, two-bedroom flat in kilimani.",1,market,3.0,worker_to_client,cleaning
+mkt-006886,"paid in full. it took a week of reminders, though. not sure i would take another job from her.",1,market,3.0,worker_to_client,painting
+mkt-06271d,"pleasant young man and clearly trained. he just took very long, and i am not sure the extra socket needed a full day.",1,market,3.0,client_to_worker,electrical
+mkt-3b65dd,client was around for the whole job.,1,market,5.0,worker_to_client,plumbing
+mkt-3b0234,mixed the cleaning chemicals and the whole flat smelled of chlorine for hours. my eyes were burning. that is dangerous.,0,market,1.0,client_to_worker,cleaning
+mkt-66b2e5,client changed the bathroom layout twice after we had started and then refused to pay for the extra fittings.,0,market,1.0,worker_to_client,plumbing
+mkt-72cb00,"clear instructions, but very hard to reach on phone when i needed a decision on the pipe route.",1,market,3.0,worker_to_client,plumbing
+mkt-7f0266,"licensed, showed me his epra card without being asked, and gave a written quote before touching anything. the new consumer unit is neatly labelled. very professional.",2,market,5.0,client_to_worker,electrical
+mkt-0fafdf,did a clean job on the shower drain and was very respectful in the house. i would hire him again.,2,market,3.0,client_to_worker,plumbing
+mkt-808d4d,"helped us pick the colour when we were stuck between two greys, and his suggestion was the right one. finished a day early as well. great experience overall.",2,market,5.0,client_to_worker,painting
+mkt-8e50c3,"she works hard and is honest, i have no doubt about that. but she does not follow instructions, and i have to remind her about the same things every week.",1,market,3.0,client_to_worker,cleaning
+mkt-732236,"the windows were sparkling, i will admit. everything else, from the floors to the kitchen counters, looked like nobody had been there.",0,market,2.0,client_to_worker,cleaning
+mkt-581d54,"the colour is exactly what we wanted and the walls look good. the skirting boards, however, have paint all along the top edge and he did not come back to clean them.",1,market,3.0,client_to_worker,painting
+mkt-f8b8bf,"gate motor works. intercom still does not. he says the intercom was not part of the quote, i say it was.",1,market,3.0,client_to_worker,electrical
+mkt-f668b7,"the parents pay on time, but the home is very noisy during lessons and it is hard for the child to concentrate.",1,market,3.0,worker_to_client,tutoring
+mkt-fbb84b,he fixed the fault. it took a while.,1,market,1.0,client_to_worker,electrical
+mkt-6e8482,"avoid. took money, did nothing.",0,market,1.0,client_to_worker,carpentry
+mkt-aea8cc,"did the nursery in a soft yellow before the baby arrived. low odour paint as requested, and it dried beautifully. asante!",2,market,5.0,client_to_worker,painting
+mkt-f05831,fair price. a bit slow.,1,market,3.0,client_to_worker,plumbing
+mkt-f1622a,the client had already moved the furniture and bought all the paint i listed. paid the balance the same day i finished. wish all clients were like this.,2,market,5.0,worker_to_client,painting
+mkt-02e62c,"wonderful service. two visits, two new leaks.",0,market,1.0,client_to_worker,plumbing
+mkt-bb47b5,"welcoming home, lunch provided, and the payment came through before i reached the stage.",2,market,3.0,worker_to_client,painting
+mkt-5e860d,very thorough with the mattresses and the curtains. our house smells fresh for the first time in months.,2,market,3.0,client_to_worker,cleaning
+mkt-473b48,"client paid well. the site was a nightmare though, with no ladder, no light in the ceiling space and a dog that did not like me.",1,market,3.0,worker_to_client,electrical
+mkt-c9d00b,"good client, though his compound had no shade and working under the sun all day was difficult.",2,market,3.0,worker_to_client,carpentry
+mkt-47fbd9,cleaned the house on monday.,1,market,3.0,client_to_worker,cleaning
+mkt-8b73f0,the oven had not been cleaned in two years and i was embarrassed to show it to anyone. now it looks like it just came out of the box. highly recommend her for kitchens.,2,market,5.0,client_to_worker,cleaning
+mkt-11d04c,"polite, but he questioned every item on the materials list and went to check prices himself before agreeing. it added a day. we got there in the end.",1,market,3.0,worker_to_client,electrical
+mkt-5bb02d,perfect.,2,market,5.0,client_to_worker,cleaning
+mkt-00c580,"the bed frame took a week longer than promised because his timber supplier let him down, but he kept me informed and the quality made up for it. not a single creak.",2,market,4.0,client_to_worker,carpentry
+mkt-956e4c,built a dog kennel. dog seems fine with it. client paid.,1,market,3.0,worker_to_client,carpentry
+mkt-1f0dc4,"he is good with heavy furniture like beds and tables, but the fine detail on my jewellery box was poor.",1,market,3.0,client_to_worker,carpentry
+mkt-4c1b66,installed a pressure pump for us and labelled every valve so we know what is what. small touch but very helpful.,2,market,5.0,client_to_worker,plumbing
+mkt-e1262f,did not show up. did not call. did not apologise.,0,market,1.0,client_to_worker,tutoring
+mkt-308a14,took a deposit for materials and disappeared for a week. only came back after i threatened to report him.,0,market,1.0,client_to_worker,plumbing
+mkt-12b8c2,"the wardrobe is functional. nothing special, nothing wrong.",1,market,3.0,client_to_worker,carpentry
+mkt-09fab0,"i was nervous about online lessons for an eight-year-old, but she kept him engaged the whole hour with games and drawings. he learnt his times tables in three weeks.",2,market,5.0,client_to_worker,tutoring
+mkt-1c7e6d,"rewired the whole servant quarter in a day. tidy, safe and exactly on budget. he tested every point before leaving.",2,market,3.0,client_to_worker,electrical
+mkt-55bf7a,used eco-friendly products because my son has asthma. no harsh smell at all. thank you for being so considerate.,2,market,5.0,client_to_worker,cleaning
+mkt-187fe8,"reasonable price and he finished on time. the finishing is just okay, with some roller marks if you look closely. fine for the price.",1,market,3.0,client_to_worker,painting
+mkt-d03851,"arrived a bit late because of the rain in rongai, but the work itself was excellent. the new geyser is installed properly and he tested everything twice before leaving. he also left his number for any follow-up.",2,market,5.0,client_to_worker,plumbing
+mkt-b9fddd,"picked the table up from my workshop and only paid half, promising the rest on friday. that was six weeks ago.",0,market,1.0,worker_to_client,carpentry
+mkt-f08888,fault finding and repair on a lighting circuit in embakasi. took about two hours.,1,market,3.0,worker_to_client,electrical
+mkt-20abc7,"started well. after a few weeks she became more relaxed, and the standard dropped. still acceptable.",1,market,3.0,client_to_worker,cleaning
+mkt-122ab4,the water heater stopped working the following week and he has not come back to check it despite promising.,0,market,4.0,client_to_worker,plumbing
+mkt-77ca9b,"honestly i am torn about this one. he is clearly skilled, the shower pressure is the best it has ever been and the new mixer looks great. on the other hand he worked very slowly, spent a lot of time on his phone and the job took four days instead of the two he promised, which meant my family had no bathroom for most of the week. good result, frustrating experience.",1,market,3.0,client_to_worker,plumbing
+mkt-a6d827,"client paid on time, but she was not home when i came to install the shelves, so i had to come back the next day.",1,market,3.0,worker_to_client,carpentry
+mkt-6e6c75,two of the six downlights stopped working within a week and the dimmer buzzes loudly. he promised to pass by. still waiting for him to return.,0,market,4.0,client_to_worker,electrical
+mkt-0ce04f,"he seemed knowledgeable and talked well, but the water heater switch melted two days later. talking is not the same as doing.",0,market,2.0,client_to_worker,electrical
+mkt-2f42a9,did the job. did not say much. left.,1,market,3.0,client_to_worker,electrical
+mkt-b73968,"good communication from the first call. sent the location pin, photos of the db board and a clear list of what was needed. made my work easy.",2,market,5.0,worker_to_client,electrical
+mkt-1ad279,"came with his own ladders and drop sheets, started at 7 and washed the brushes outside so there was no mess in the sink. professional from start to finish.",2,market,5.0,client_to_worker,painting
+mkt-a02561,"okay for a rental. i would not use him for my own house, but for tenants it does the job.",1,market,3.0,client_to_worker,painting
+mkt-d9493e,new client. first visit was okay. will see how it goes.,1,market,3.0,worker_to_client,cleaning
+mkt-82cd71,showed up two days after the agreed date with no apology. then left at 1pm each day. a job quoted for three days took nine.,0,market,2.0,client_to_worker,painting
+mkt-68a8c5,"repeat client. same house as last year, same colours.",1,market,3.0,worker_to_client,painting
+mkt-7ae0d7,"arrived two hours late, spent half the time on her phone and left the bathroom worse than she found it. charged full price anyway.",0,market,1.0,client_to_worker,cleaning
+mkt-67120e,patient when the varnish needed an extra day to dry. paid in full and gave me a good tip. i hope to work for her again.,2,market,5.0,worker_to_client,carpentry
+mkt-003633,"two bedrooms and the corridor done in a single day, and the edges along the ceiling are razor sharp. no smell by evening either. very happy with the result.",2,market,5.0,client_to_worker,painting
+mkt-edf8ae,"she pays on time, but she watches everything i do, and she checks every room after i finish.",1,market,3.0,worker_to_client,cleaning
+mkt-aabf82,"kind and patient with the children. not very strict, though, and sometimes they get away with not finishing their work.",1,market,3.0,client_to_worker,tutoring
+mkt-b98fec,"he was friendly with the kids, credit where it is due. the problem is that friendly is all he was, and the lessons were mostly stories about his own school days.",0,market,2.0,client_to_worker,tutoring
+mkt-d2eba6,paid half and went quiet. it has been a month. i will not work for him again.,0,market,1.0,worker_to_client,painting
+mkt-04ee11,"sorted out the changeover switch for our generator. before, we had to run extensions through the window whenever there was a blackout. now it is one switch. life changing, honestly.",2,market,5.0,client_to_worker,electrical
+mkt-445390,"my daughter likes her. whether her grades have improved is another matter, and we will see after the end-of-term exams.",1,market,3.0,client_to_worker,tutoring
+mkt-1e0441,fixed the leaking kitchen sink within an hour and even showed me how to tighten the trap myself next time. fair price too. already recommended him to my neighbour.,2,market,5.0,client_to_worker,plumbing
+mkt-9cfc3f,"he broke two tiles while opening the wall. when i asked him to replace them, he said it was not his problem. avoid.",0,market,1.0,client_to_worker,plumbing
+mkt-60344c,"paid fairly and quickly, and the instructions were clear.",2,market,3.0,worker_to_client,carpentry
+mkt-85f67d,terrible. avoid.,0,market,1.0,client_to_worker,painting
+mkt-3e02a8,fantastic electrician. the lights work beautifully as long as nobody uses the microwave.,0,market,2.0,client_to_worker,electrical
+mkt-5379e8,honest and polite. slower than i would like for the hours i pay her.,1,market,3.0,client_to_worker,cleaning
+mkt-88f949,"installed the instant shower and tested the earthing properly, so no more tingling from the tap. he also showed me the test reading. i feel much safer now.",2,market,5.0,client_to_worker,electrical
+mkt-155032,he watered down the paint to stretch it. the colour is uneven and it started peeling in the bathroom after three weeks. very dishonest.,0,market,1.0,client_to_worker,painting
+mkt-170cb8,left live wires hanging out of the wall with only masking tape on them. i have children in this house. completely irresponsible.,0,market,1.0,client_to_worker,electrical
+mkt-cb5edd,"patchy walls, paint on the sockets and skirting, and brush marks you can see from the door. he said it would look better once dry. it did not. i am now paying someone else to redo it.",0,market,1.0,client_to_worker,painting
+mkt-29be8a,long distance from my home. the family is fine.,1,market,5.0,worker_to_client,tutoring
+mkt-8464ea,first job for this client. the water supply was off when i arrived. the work was done the next day.,1,market,3.0,worker_to_client,plumbing
+mkt-5208c9,"we had been dealing with a mystery leak under the floor of our kileleshwa apartment for almost two months and two other plumbers had already given up. kiprono came with a moisture meter, traced the problem to a cracked joint behind the shower wall, and explained every step before breaking any tiles. he replaced the joint, patched the wall neatly and the bill matched his quote exactly. highly recommend.",2,market,5.0,client_to_worker,plumbing
+mkt-c62859,the socket he installed sparked the first time i plugged in the kettle. when i called him he said that is normal. it is not normal.,0,market,1.0,client_to_worker,electrical
+mkt-289ba0,"we hired a home tutor to help our son through his final year of secondary school, at a fee that stretched our budget. for the first month he was excellent, prepared and punctual. then he started arriving late, leaving early and sending a younger relative in his place without telling us. the relative had no idea what the syllabus was. by the time we realised what was happening, two months of preparation time had been wasted, and he refused to refund anything.",0,market,1.0,client_to_worker,tutoring
+mkt-0d0605,"safe and tidy installation. not cheap, and not fast.",1,market,3.0,client_to_worker,electrical
+mkt-d097f8,"good family, but the house is always very dirty after weekends and the pay does not change for the extra work.",1,market,3.0,worker_to_client,cleaning
+mkt-42581f,"paid on time and gave me directions that were actually correct, which is rare in syokimau.",2,market,4.0,worker_to_client,plumbing
+mkt-b5f2f6,"he came at 9pm when our gate motor jammed with the car half inside. fixed in fifteen minutes. charged a normal rate too, no 'emergency fee' stories.",2,market,5.0,client_to_worker,electrical
+mkt-219a7a,"nice finish, but it took twice as long as he said it would.",1,market,5.0,client_to_worker,painting
+mkt-46210f,"she respects my time. if she needs to cancel she tells me a day before, and she still pays for the slot.",2,market,5.0,worker_to_client,cleaning
+mkt-92fd08,the wardrobe doors do not close properly and one shelf collapsed the first week. when i called he said i put too many clothes on it.,0,market,1.0,client_to_worker,carpentry
+mkt-ccaaab,"our main door had swollen in the rains and would not lock. he planed it, rehung it and treated the edges so it will not happen again. fifteen minutes and done.",2,market,5.0,client_to_worker,carpentry
+mkt-904a41,polite family. they often ask me to stay longer than the hour without adjusting the fee.,1,market,3.0,worker_to_client,tutoring
+mkt-1dc628,the client switched the mains back on while i was still working on the circuit because he wanted to watch the match. i could have been killed.,0,market,1.0,worker_to_client,electrical
+mkt-438b2c,"it works now. whether it was worth 8,000 i honestly do not know.",1,market,5.0,client_to_worker,electrical
+mkt-fc7822,kazi safi! fixed the outside tap and the toilet cistern in one visit.,2,market,5.0,client_to_worker,plumbing
+mkt-37f960,"the kitchen and bathroom were well done. the bedrooms were rushed, and there was still dust on the wardrobe tops.",1,market,3.0,client_to_worker,cleaning
+mkt-d6987e,spent most of the session on his phone while my son did exercises from the book. i could have done that myself for free.,0,market,1.0,client_to_worker,tutoring
+mkt-de7e70,"came three hours late, did not have the right fittings and left the job half done. still wanted full payment. i had to call someone else the next day.",0,market,1.0,client_to_worker,plumbing
+mkt-f625a7,"good on the wiring, careless with the walls. there are chips in the plaster around every new switch.",1,market,5.0,client_to_worker,electrical
+mkt-3f318f,told me the job was two sockets. i arrived to find a whole house with no earthing. he wanted it all done for the price of the two sockets.,0,market,1.0,worker_to_client,electrical
+mkt-c11568,"she paid the full amount but asked for a discount after the work was done, saying a corner was not perfect.",1,market,3.0,worker_to_client,carpentry
+mkt-0042eb,client kept changing the cabinet design after i had already cut the wood. refused to pay for the wasted timber. i lost money on this job.,0,market,1.0,worker_to_client,carpentry
+mkt-219122,installed a cooker unit for the client.,1,market,5.0,worker_to_client,electrical
+mkt-093a6b,"her fees are on the higher side for our area, but she is worth every shilling. my son's english composition has completely transformed.",2,market,4.0,client_to_worker,tutoring
+mkt-127e95,first month with this family. too early to say. the child seems willing.,1,market,3.0,worker_to_client,tutoring
+mkt-c1c469,fixed the roof trusses after the storm and made sure the iron sheets were properly secured. very safety conscious. the house was dry by evening.,2,market,3.0,client_to_worker,carpentry
+mkt-e7706f,"not bad. the toilet flushes properly now, though the cistern lid got cracked when he moved it.",1,market,3.0,client_to_worker,plumbing
+mkt-cfa1f7,installed new skirting and door frames throughout the house in lavington. you can see the care in every corner. highly recommend to anyone who values neat work.,2,market,5.0,client_to_worker,carpentry
+mkt-45058e,he knows his subject but he is not very good at explaining it to young children. better suited to secondary school students.,1,market,3.0,client_to_worker,tutoring
+mkt-b69562,"good with laundry. not so good with ironing, and my shirts still have creases on the collars.",1,market,3.0,client_to_worker,cleaning
+mkt-8ae54f,"chemistry tuition, form 3. started in september.",1,market,5.0,client_to_worker,tutoring
+mkt-acb91c,"fixed the shower quickly, i will give him that, but he left the main valve half closed and we had no water upstairs for a whole day until we figured it out. not careful at all.",0,market,2.0,client_to_worker,plumbing
+mkt-05592f,paid promptly. referred me to two neighbours the same week. clients like this keep a fundi in business.,2,market,3.0,worker_to_client,electrical
+mkt-9ef3ca,"she is a very friendly lady and the children liked her. sadly the cleaning itself was poor, with sticky floors, dirty mirrors and dishes put back in the cupboard still wet.",0,market,2.0,client_to_worker,cleaning
+mkt-b6f171,he left my gate half painted for two weeks and only returned when i posted about it on the estate group.,0,market,1.0,client_to_worker,painting
+mkt-bb0a69,"i asked for a specific colour of stain and he used a slightly different one. it still looks nice, but it is not what i wanted.",1,market,3.0,client_to_worker,carpentry
+mkt-53c44a,"i have used this cleaning service four times now and my experience has been inconsistent. the first and third visits were excellent, with every corner done and the team very polite. the second visit was clearly rushed, and the fourth team did not know where anything went and put half my kitchen in the wrong cupboards. when it is good it is very good, but i never know which team i will get.",1,market,3.0,client_to_worker,cleaning
+mkt-e10a4d,"the wiring in the ceiling is a mess of joints wrapped in tape. i only found out when the next electrician showed me photos. shocking, and not in a funny way.",0,market,2.0,client_to_worker,electrical
+mkt-a30364,paid in cash. the address was hard to find.,1,market,5.0,worker_to_client,carpentry
+mkt-3999cf,painted my salon in donholm overnight so i did not lose a day of business. customers keep complimenting the new look. i have already booked him for the second branch.,2,market,5.0,client_to_worker,painting
+mkt-230373,"i run an airbnb in westlands and he has handled the turnovers for three months now. fresh linen, stocked bathroom, photos sent to me after every clean. guests keep mentioning how clean the place is in their reviews.",2,market,5.0,client_to_worker,cleaning
+mkt-79f0bf,two cleaners came and did the general cleaning we booked.,1,market,3.0,client_to_worker,cleaning
+mkt-3c2ce8,neither impressed nor disappointed.,1,market,3.0,client_to_worker,electrical
+mkt-60083d,"still owes me for three saturdays. each time i ask, it is 'next week'.",0,market,1.0,worker_to_client,cleaning
+mkt-4a8ace,very good.,2,market,4.0,client_to_worker,electrical
+mkt-0da156,he kept the offcuts and some of the extra timber i paid for. when i asked about it he said it was his commission.,0,market,1.0,client_to_worker,carpentry
+mkt-66ffe0,wanted mahogany furniture at the price of pine and got angry when i explained the difference.,0,market,3.0,worker_to_client,carpentry
+mkt-f2f716,he fitted the new door frame on tuesday.,1,market,1.0,client_to_worker,carpentry
+mkt-315184,"paid on time. the house was not ready, though, and i lost half a day waiting for the old tiles to be removed. mixed experience.",1,market,3.0,worker_to_client,plumbing
+mkt-8c0243,"the lessons are structured and he arrives on time. the child finds him boring, and i can see why.",1,market,3.0,client_to_worker,tutoring
+mkt-2dece9,the mother is supportive. the father thinks tuition is a waste of money and sometimes cancels sessions without telling her.,1,market,3.0,worker_to_client,tutoring
+mkt-0daa19,matched the old colour on a patched wall so well that i cannot tell where the repair was.,2,market,5.0,client_to_worker,painting
+mkt-e2deb3,"teaches well, communicates poorly. we never know until the last minute whether she is coming.",1,market,3.0,client_to_worker,tutoring
+mkt-151bf3,"fast and friendly, but i had to call him back to tighten two joints that were dripping.",1,market,3.0,client_to_worker,plumbing
+mkt-e338d7,helped my son prepare for his kcse physics practicals with real experiments at home using cheap materials. brilliant teacher. he got an a-.,2,market,5.0,client_to_worker,tutoring
+mkt-1bdb41,"we moved into an older house in buruburu and had no idea what state the wiring was in. he spent a whole morning inspecting every socket and the meter board, then gave us a list of what was dangerous, what could wait and what was fine, with prices for each. we did the urgent items first and he never once pushed us to do more than we could afford. everything he fixed has worked perfectly, and we will call him for the rest in january.",2,market,5.0,client_to_worker,electrical
+mkt-523335,"some improvement in english, none in mathematics. overall it is hard to judge.",1,market,3.0,client_to_worker,tutoring
+mkt-cca749,"the kitchen cabinets look modern and clean. one door is already slightly misaligned, and i am waiting to see if it gets worse.",1,market,5.0,client_to_worker,carpentry
+mkt-ded2af,"locked the paint in a store and would only release one tin at a time, so we lost hours waiting for him each day. very difficult man.",0,market,3.0,worker_to_client,painting
+mkt-f3e917,"client stood over me the whole day criticising every stroke, then deducted money for 'wasting paint'.",0,market,1.0,worker_to_client,painting
+mkt-b1c836,"arrived exactly when he said he would. the fault turned out to be bigger than expected and he could only do a temporary fix for now. coming back next week, so the jury is still out.",1,market,3.0,client_to_worker,electrical
+mkt-5ddd7c,"good quality wood and solid joints. the varnish, though, is uneven in places and he said that is just how it is.",1,market,3.0,client_to_worker,carpentry
+mkt-193308,he did half the job well. the other half he handed to a younger guy who was learning on my house.,1,market,3.0,client_to_worker,electrical
+mkt-f32e2f,job was a kitchen sink replacement in a two-bedroom flat in umoja. client provided the sink. work took about three hours.,1,market,3.0,worker_to_client,plumbing
+mkt-9f45c2,"not cheap, not expensive. the work is somewhere in the middle too.",1,market,3.0,client_to_worker,carpentry
+mkt-0207c2,"bargained very hard and i barely made a profit, but he paid exactly what we agreed, on the day we agreed.",2,market,3.0,worker_to_client,painting
+mkt-356ded,"kind family. they left out everything i needed, paid on time and the children were well behaved. i always look forward to thursdays at this house.",2,market,5.0,worker_to_client,cleaning
+mkt-0f866d,"promised a big improvement before the exams. the marks went down. when i asked about it, he blamed the school. then he blamed my son.",0,market,1.0,client_to_worker,tutoring
+mkt-076517,charged for three coats and did one. you can still see the old blue underneath. when i complained he said the paint was the problem.,0,market,1.0,client_to_worker,painting
+mkt-d24190,he shouted at my daughter for getting a question wrong. she came out of the room crying and refused to go back. we stopped the lessons immediately.,0,market,1.0,client_to_worker,tutoring
+mkt-cb6aaa,"payment always arrives, sometimes on the 1st, sometimes on the 15th.",1,market,3.0,worker_to_client,tutoring
+mkt-268b61,"the leak he 'fixed' came back two days later, worse than before. i have called him five times. now he is not picking my calls.",0,market,1.0,client_to_worker,plumbing
+mkt-ac0aba,he changed three bulb holders and one socket.,1,market,3.0,client_to_worker,electrical
+mkt-3aed57,installed the water meter connection last week.,1,market,3.0,client_to_worker,plumbing
+mkt-33b5b9,very clear about what she wanted done and paid the full amount via m-pesa before i had even packed my tools.,2,market,5.0,worker_to_client,plumbing
+mkt-349110,"they pay well, but the child is never ready when i arrive, so we lose the first fifteen minutes of every session.",1,market,3.0,worker_to_client,tutoring
+mkt-60d7b3,she came with her own supplies and did not waste any time. the bathroom tiles look white again. i have booked her every second saturday now.,2,market,5.0,client_to_worker,cleaning
+mkt-8c89be,fine for homework help. not the person for exam preparation.,1,market,3.0,client_to_worker,tutoring
+mkt-519078,"he cleaned the windows well, but left water dripping on the sills and the floor below them.",1,market,3.0,client_to_worker,cleaning
+mkt-6da481,"wow, what a deep clean. the dust under the bed is still exactly where it was last month.",0,market,1.0,client_to_worker,cleaning
+mkt-7bc073,"the table looks great, but it took three weeks longer than he said.",1,market,3.0,client_to_worker,carpentry
+mkt-c1eb14,very rude to my house help. he asked her to make him lunch every day. we had to let him go.,0,market,1.0,client_to_worker,tutoring
+mkt-b09fbc,"i hired a deep cleaning company in karen to prepare the house for an important family event. they sent two people instead of the four we paid for, arrived at noon instead of eight, skipped the windows entirely and left before the kitchen was done because they had 'another job'. the manager offered a twenty percent refund after i called four times. we ended up cleaning the kitchen ourselves at midnight before the guests arrived.",0,market,1.0,client_to_worker,cleaning
+mkt-2aabe4,painted the bedroom on thursday.,1,market,3.0,client_to_worker,painting
+mkt-7d1fae,"she is clearly very knowledgeable in biology, i am not disputing that. but she teaches at university level to a grade 9 child and gets impatient when he does not follow. he is more confused now than before.",0,market,2.0,client_to_worker,tutoring
+mkt-f386d8,"made us a mvule dining table from scratch and it is stunning. the joints are tight, the finish is smooth and he delivered it himself to make sure nothing got scratched on the way.",2,market,5.0,client_to_worker,carpentry
+mkt-f9d719,the work is decent and the price was fair. the communication could be much better. i had to chase him for updates.,1,market,3.0,client_to_worker,carpentry
+mkt-fb0f4e,took my deposit for a sofa set in march. it is now june. still 'almost ready'. i have given up.,0,market,1.0,client_to_worker,carpentry
+mkt-7b9507,"repeat client. fair, but always in a hurry.",1,market,3.0,worker_to_client,carpentry
+mkt-4c28f8,"nice people. the house was full of furniture they would not move, though, so the job took an extra day that i was not paid for.",1,market,3.0,worker_to_client,painting
+mkt-272bfb,"the bed was nicely varnished, i will give him that. but the slats broke on the second night and the frame wobbles every time you turn over.",0,market,2.0,client_to_worker,carpentry
+mkt-13be0a,"they pay what we agreed. the water often goes off in that estate, so some days i cannot finish the job.",2,market,3.0,worker_to_client,cleaning
+mkt-81f19c,"respectful family, clear instructions and prompt payment.",2,market,3.0,worker_to_client,plumbing
+mkt-468dfd,"kept me waiting at the gate for two hours, then said he was not ready for the job and would not pay my transport.",0,market,1.0,worker_to_client,plumbing
+mkt-d0326a,"good client. the house was ready when i arrived, the water was already switched off and he offered tea. would work for him again anytime.",2,market,5.0,worker_to_client,plumbing
+mkt-ea8e78,"the house was very dirty after their party, more than we had agreed, but they apologised and added extra money on top. fair people.",2,market,4.0,worker_to_client,cleaning
+mkt-3e1fd2,okay job on the drainage. time will tell if it holds up.,1,market,3.0,client_to_worker,plumbing
+mkt-331526,"punctual, neat and he switched off the mains before starting, unlike the last guy. fair charges. no complaints at all.",2,market,5.0,client_to_worker,electrical
+mkt-e19d0e,lovely surprise to come home and find my cream sofa now has white polka dots. thanks a lot.,0,market,1.0,client_to_worker,painting
+mkt-b5bccb,fitted kitchen cabinets in our kasarani flat. every door closes softly and lines up perfectly. he also fixed a drawer i had not even mentioned. very skilled hands.,2,market,5.0,client_to_worker,carpentry
+mkt-4e5e9a,gave me lunch and bus fare without me asking. clear about which rooms were priority. a pleasure to work for.,2,market,4.0,worker_to_client,cleaning
+mkt-9529a0,the client accused me of stealing a phone that her son later found under his bed. she never apologised and still deducted a day's pay.,0,market,1.0,worker_to_client,cleaning
+mkt-17cb00,our son was failing maths in grade 8 and had lost all confidence. after two months with her he got a b and actually volunteers to answer questions in class now. she is patient and explains things in more than one way until he gets it.,2,market,5.0,client_to_worker,tutoring
+mkt-5c1868,"good painter, poor timekeeper.",1,market,3.0,client_to_worker,painting
+mkt-d199ed,"paid on time, even during the months when the child was sick and we had to cancel some sessions. that is generous. thank you.",2,market,4.0,worker_to_client,tutoring
+mkt-0c892c,"started very well. slowed down a lot towards the end, and the last room took as long as the first three. the result is acceptable.",1,market,3.0,client_to_worker,painting
+mkt-14908e,she covered the topics on the list. sessions were an hour each. payment was by m-pesa.,1,market,3.0,client_to_worker,tutoring
+mkt-b40b6e,the doors close well now. he did leave a lot of wood shavings for me to sweep.,2,market,3.0,client_to_worker,carpentry
+mkt-418a4a,"locked me in the house while she went out, so i could not leave when i finished. i waited three hours.",0,market,3.0,worker_to_client,cleaning
+mkt-b2fd09,"added four sockets in the kitchen and you cannot even see where the conduits were chased into the wall. clean, clean work. he even vacuumed the dust afterwards.",2,market,5.0,client_to_worker,electrical
+mkt-264e20,"the price was a little higher than i expected for a one-bedroom, but the place was spotless and she did the fridge and the balcony without me asking. worth it in the end.",2,market,4.0,client_to_worker,cleaning
+mkt-416a43,knows his work but very expensive. i paid almost double what my neighbour paid for the same job. the work itself has no problem.,1,market,3.0,client_to_worker,electrical
+mkt-de1db2,work was okay. nothing special.,1,market,3.0,client_to_worker,plumbing
+mkt-b9560e,"fair price for a fair job. nothing to complain about, nothing to celebrate either.",1,market,3.0,client_to_worker,cleaning
+mkt-1e725f,fixed a socket that three other people had 'fixed' before. this time it has stayed fixed.,2,market,5.0,client_to_worker,electrical
+mkt-7f7a81,good carpenter.,2,market,4.0,client_to_worker,carpentry
+mkt-479e2e,insulted my workers and made us carry heavy timber up four floors without any help. very unpleasant.,0,market,1.0,worker_to_client,carpentry
+mkt-ffec67,repaired three wobbly chairs and a cupboard door that had been hanging off one hinge for a year. quick and cheap. should have called him much earlier.,2,market,5.0,client_to_worker,carpentry
+mkt-f878a6,trustworthy. i left her alone in the house the whole day and nothing was touched except the dirt. that peace of mind is worth a lot.,2,market,5.0,client_to_worker,cleaning
+mkt-e1ea5e,"booked for monday, moved to wednesday by the client, done on wednesday.",1,market,3.0,worker_to_client,electrical
+mkt-44840e,"he forgot one bulb holder on the first visit but came back the next morning without charging anything extra. he apologised too. solid, honest electrician.",2,market,4.0,client_to_worker,electrical
+mkt-03a030,"very organised tutor. she sends a short report after every session on whatsapp so we know what was covered and what to practise. as a working parent, that means a lot. highly recommended.",2,market,5.0,client_to_worker,tutoring
+mkt-c12e75,"good work on the water tank connection, no more low pressure upstairs. asante sana",2,market,4.0,client_to_worker,plumbing
+mkt-600588,third time using her for our rentals in ruaka and she has never disappointed. always reachable on phone and keeps receipts for every part she buys. our caretaker trusts her completely.,2,market,5.0,client_to_worker,plumbing
+mkt-5cc0c4,"friendly client. the dog jumps on me every time i arrive, though, and he does not tie it up even when i ask.",1,market,3.0,worker_to_client,cleaning
+mkt-179158,"client had the materials ready, the ceiling space was accessible and he paid the moment the lights came on. perfect.",2,market,5.0,worker_to_client,electrical
+mkt-3af093,"the work on the first room was actually decent, but after i paid the second instalment the quality dropped badly and the last two rooms look rushed. feels like he stopped caring once he had the money.",0,market,2.0,client_to_worker,painting
+mkt-4db4b8,three months later they still owe me for march. every call ends with 'tomorrow'.,0,market,1.0,worker_to_client,tutoring
+mkt-1449cf,cancelled on the morning of the job twice in one month. both times i had taken leave to be home. i gave up on them.,0,market,2.0,client_to_worker,cleaning
+mkt-6c2e61,kazi mbaya. the tap he installed is already loose.,0,market,2.0,client_to_worker,plumbing
+mkt-51b817,the door he fitted keeps sticking and he refuses to come back unless i pay a new call-out fee.,0,market,2.0,client_to_worker,carpentry
+mkt-8b277a,she broke a glass vase and hid the pieces in the bin without telling me. i discovered it the next day. honesty matters more than a broken vase.,0,market,1.0,client_to_worker,cleaning
+mkt-00dcd5,the kitchen walls are fiti now. clean work and he was done by 2pm. bei pia ilikuwa poa.,2,market,4.0,client_to_worker,painting
+mkt-c79036,good with the younger one. not so good with the older one. we might keep her for one child only.,1,market,3.0,client_to_worker,tutoring
+mkt-6c988c,"he was a bit expensive compared to the jua kali guys at gikomba, but you can feel the difference in quality. proper finishing. it will last years.",2,market,4.0,client_to_worker,carpentry
+mkt-ac5392,"money went missing from the drawer in the bedroom on the day she cleaned. i cannot prove it, but i will not be using her again.",0,market,1.0,client_to_worker,cleaning
+mkt-c062af,okay electrician for small things like sockets and bulbs. for the db board i would look for someone more experienced.,1,market,3.0,client_to_worker,electrical
+mkt-64e66e,"i commissioned a full set of built-in cabinets for my new kitchen in kitengela and paid seventy percent upfront, as he insisted. what arrived after five weeks was a collection of mismatched panels with exposed screw heads, doors that swing open on their own, and a countertop that slopes so badly that eggs roll off it. he spent one afternoon trying to fix it, made it worse, and then stopped answering. i have had to hire another carpenter to take it all out and start again.",0,market,1.0,client_to_worker,carpentry
+mkt-b5fdde,the cleaning is fine. whether it is worth what she charges i am still deciding.,1,market,5.0,client_to_worker,cleaning
+mkt-e68b20,replaced the main switch.,1,market,3.0,client_to_worker,electrical
+mkt-4b76c6,the plumber arrived in the afternoon and cleared the drain.,1,market,1.0,client_to_worker,plumbing
+mkt-bd9abb,he came on saturday and fixed the outside tap as agreed.,1,market,3.0,client_to_worker,plumbing
+mkt-6f8d98,"honest and careful. he told me the old cupboards were still good and only needed new hinges, which saved me a lot of money.",2,market,5.0,client_to_worker,carpentry
+mkt-99283f,"fundi came, spoiled things and left. the fridge socket has no power now, and it was working before he touched the board.",0,market,1.0,client_to_worker,electrical
+mkt-b9d891,excellent.,2,market,5.0,client_to_worker,painting
+mkt-7e9fa7,explained the difference between the cheap breakers and the proper ones and let me decide. i appreciate a fundi who does not just pick the most expensive option.,2,market,5.0,client_to_worker,electrical
+mkt-8dcbb0,amazing tutor if you want your child to learn nothing and pay for the privilege.,0,market,1.0,client_to_worker,tutoring
+mkt-8fb453,"he sometimes ran ten minutes over, which affected our dinner, but only because he wanted to finish the topic properly. the results speak for themselves.",2,market,5.0,client_to_worker,tutoring
+mkt-eefb12,"accused me of stealing his hammer, which he later found in his own car. no apology. never again.",0,market,1.0,worker_to_client,carpentry
+mkt-a71ed4,"the exterior wall began bubbling within a month and he says it is the cement, not his work. he will not return to look at it. i feel cheated.",0,market,4.0,client_to_worker,painting
+mkt-c3f960,"he made chemistry make sense for my daughter, who had decided she 'just could not do science'. she is now thinking of studying pharmacy. thank you, sir.",2,market,5.0,client_to_worker,tutoring
+mkt-14116c,wrong shade. i showed him the exact colour code and he still mixed something closer to pink. refused to redo it unless i bought new paint.,0,market,1.0,client_to_worker,painting
+mkt-1a8654,"the cupboard he built is fine to look at, but it already smells of damp because he did not treat the wood. i am not happy.",0,market,4.0,client_to_worker,carpentry
+mkt-b279ea,polite guy but the toilet still runs nonstop after his visit. waste of money.,0,market,2.0,client_to_worker,plumbing
+mkt-abf2f1,made a baby cot with rounded edges and non-toxic varnish as i asked. sturdy and beautiful. our daughter sleeps in it every night.,2,market,5.0,client_to_worker,carpentry
+mkt-418e5a,"the security light works, fine. but he drilled through a water pipe while fixing it, flooded the corridor and then claimed the pipe was in the wrong place. i paid a plumber more than i paid him.",0,market,1.0,client_to_worker,electrical
+mkt-3cb590,"he was clear about the design but very tough on the price. we agreed in the end. i made very little on the job, though. fair enough.",1,market,3.0,worker_to_client,carpentry
+mkt-19f87b,"the quote was slightly higher than others i got, but honestly the quality is on another level. no regrets.",2,market,4.0,client_to_worker,plumbing
+mkt-942032,"refused to pay the balance, claiming the colour looked different from the sample, even though she chose it herself and signed for it.",0,market,1.0,worker_to_client,painting
+mkt-a17c31,parents were very supportive and made sure the child had done the homework before every session. paid at the start of each month without reminders.,2,market,5.0,worker_to_client,tutoring
+mkt-8f58ce,maths tutoring twice a week for grade 6.,1,market,3.0,client_to_worker,tutoring
+mkt-812ef4,shouted at me in front of her guests because one glass had a water mark. very humiliating. i will not go back.,0,market,1.0,worker_to_client,cleaning
+mkt-4c5597,rude to my house help. left a mess of cement and pipe offcuts in the compound. never again.,0,market,1.0,client_to_worker,plumbing
+mkt-ac6c04,"not the neatest job but not the worst either. you get what you pay for at that price. no complaints, no praise.",1,market,3.0,client_to_worker,painting
+mkt-499aca,"the lights are working again, which is the main thing. he did leave dust and bits of wire all over the sitting room floor though. so, half happy.",1,market,3.0,client_to_worker,electrical
+mkt-4e6f3d,he measured wrongly and the door is two inches short at the bottom. now there is a gap where cold air and insects come in. he said i should buy a door mat.,0,market,2.0,client_to_worker,carpentry
+mkt-a025c0,strong furniture. took ages.,1,market,5.0,client_to_worker,carpentry
+mkt-6a2dec,"floors mopped, dishes done, bins out.",1,market,1.0,client_to_worker,cleaning
+mkt-9701d7,"our house in kahawa sukari had damp patches that kept showing through every time we repainted. instead of just painting over them like the last fundi did, he scraped the walls back, treated the damp, applied a sealer and waited two full days before putting on the first coat. it took longer than we planned, but he kept us updated every evening on whatsapp. three months later, through the rains, the walls are still perfect.",2,market,5.0,client_to_worker,painting
+mkt-26da3c,honest painter. he told me i only needed 12 litres when the hardware shop had tried to sell me 20. the savings paid for his lunch all week!,2,market,5.0,client_to_worker,painting
+mkt-8a33e6,"polite and hardworking, and the walls are well covered. the colour came out darker than the sample though, and i am still deciding whether i like it.",1,market,3.0,client_to_worker,painting
+mkt-b61c99,"the second coat was delayed by a day because of the weather, but he told us early and the final result on the exterior is superb.",2,market,4.0,client_to_worker,painting
+mkt-44089e,copied answers from a website into my child's homework instead of teaching him how to do it. the teacher noticed and my son got into trouble.,0,market,1.0,client_to_worker,tutoring
+mkt-edb08d,"the carpets look cleaner, but the colours seem a bit faded now. hard to say whether it was worth it.",1,market,3.0,client_to_worker,cleaning
+mkt-094a82,client explained exactly what she wanted with a photo and measurements. paid the deposit on time and the balance on delivery. no stress at all.,2,market,5.0,worker_to_client,carpentry
+mkt-d71a8a,"ten out of ten for speed. finished in forty minutes. the house, sadly, noticed no difference at all.",0,market,1.0,client_to_worker,cleaning
+mkt-e56a0e,i wanted a simple bookshelf and he sketched three options with prices on the spot. the one we chose is solid and exactly the size we needed. delivered on the day he promised.,2,market,5.0,client_to_worker,carpentry
+mkt-ae1e44,"the tutor is good with the theory and explains clearly, but my son still struggles with exam questions because there is very little practice.",1,market,3.0,client_to_worker,tutoring
+mkt-0f4468,"friendly lady, though she kept adding small jobs and asking for a discount on each one.",1,market,3.0,worker_to_client,plumbing
+mkt-bc9ec5,"second time working for this landlord. he still pays late, and he still pays in full.",1,market,3.0,worker_to_client,electrical
+mkt-f737fc,he bypassed the earth leakage to stop the tripping instead of finding the fault. another electrician told me it was a fire risk and had to undo everything.,0,market,1.0,client_to_worker,electrical
+mkt-f3044a,"the carpet cleaning machine left a wet patch that smelled of damp for a week. when i complained they said it would dry. it did not, and now there is a stain.",0,market,1.0,client_to_worker,cleaning
+mkt-2ebb78,sorted our blocked toilet the same evening i called. he explained it was tree roots in the line and cleared them properly. saved us big time.,2,market,5.0,client_to_worker,plumbing
+mkt-e20b79,"if the plan was to paint the floor as well as the walls, then congratulations, job well done.",0,market,1.0,client_to_worker,painting
+mkt-ede982,"he is skilled, there is no doubt about that, and the king-size bed he made is very strong and looks better than the ones we saw in the showrooms on mombasa road. but he is not easy to deal with at all. he argues about everything, turns up when it suits him, and does things his own way even when you clearly ask for something different. great furniture, tiring process.",1,market,3.0,client_to_worker,carpentry
+mkt-af0886,he painted over the damp patch as i asked. we will see after the rains whether it comes back.,1,market,3.0,client_to_worker,painting
+mkt-1b0578,"took a while to get an appointment because he is always booked, but now i understand why. the security lights and the sensor work perfectly. worth the wait.",2,market,5.0,client_to_worker,electrical
+mkt-37bb4f,"agreed on a one-bedroom. when i arrived it was a four-bedroom house with a compound, and he refused to pay more.",0,market,1.0,worker_to_client,cleaning
+mkt-c4d818,"did not sand or fill the cracks before painting, so every flaw on the wall is now just a shinier flaw.",0,market,2.0,client_to_worker,painting
+mkt-00df74,"the parents would not pay for the sessions their son missed because he was at a birthday party, even though i was there waiting at the agreed time.",0,market,1.0,worker_to_client,tutoring
+mkt-6439f5,it is fine.,1,market,3.0,client_to_worker,painting
+mkt-cfe997,"grade 7 learner, mathematics and integrated science, saturdays in ruiru.",1,market,3.0,worker_to_client,tutoring
+mkt-d81e01,did the job over the weekend.,1,market,5.0,worker_to_client,painting
+mkt-26bfc5,he let me work in his compound and even provided an extension for my tools. very supportive client.,2,market,5.0,worker_to_client,carpentry
+mkt-c8b606,"great job, if you enjoy mopping the bathroom floor every morning.",0,market,1.0,client_to_worker,plumbing
+mkt-09b943,reliable and fast.,2,market,4.0,client_to_worker,plumbing
+mkt-cb29ea,"she was a bit particular about the edges, but she was fair, pointed things out politely and paid in full via m-pesa. good customer.",2,market,4.0,worker_to_client,painting
+mkt-598a96,knew exactly which colours he wanted and did not change his mind halfway. paint was on site before i arrived. smooth job.,2,market,4.0,worker_to_client,painting
+mkt-897cdc,"started well and was very friendly, but he disappeared halfway through the job for a funeral and never came back to finish. i understand emergencies, but three weeks with no contact is too much.",0,market,2.0,client_to_worker,carpentry
+mkt-3a0978,top notch finishing on our gate and perimeter wall.,2,market,5.0,client_to_worker,painting
+mkt-4323c6,"two coats on the living room walls and one on the ceiling, as per the quote.",1,market,3.0,client_to_worker,painting
+mkt-1bf615,"refused to buy proper cable and insisted on the thin one to save money, then blamed me when the breaker kept tripping. has not paid the balance. has not answered since.",0,market,1.0,worker_to_client,electrical
+mkt-65edff,"our main valve burst early on a sunday morning and he was here within forty minutes. pole for the early call, but he still came smiling and had the water back on before lunch.",2,market,5.0,client_to_worker,plumbing
+mkt-ad9557,"she was about thirty minutes late because of a matatu breakdown, but she called to explain and then stayed late to finish everything properly. excellent work.",2,market,5.0,client_to_worker,cleaning

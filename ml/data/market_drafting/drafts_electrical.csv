@@ -1,0 +1,67 @@
+id,text,stars,direction,category
+mkt-eec6d9,Our lights had been tripping every time it rained. He found a damaged cable in the ceiling within twenty minutes and replaced it. Not a single trip since.,5,client_to_worker,electrical
+mkt-7f0266,"Licensed, showed me his EPRA card without being asked, and gave a written quote before touching anything. The new consumer unit is neatly labelled. Very professional.",5,client_to_worker,electrical
+mkt-88f949,"Installed the instant shower and tested the earthing properly, so no more tingling from the tap. He also showed me the test reading. I feel much safer now.",5,client_to_worker,electrical
+mkt-1e87cf,Stima was back within an hour of calling him. Thank you!,5,client_to_worker,electrical
+mkt-1bdb41,"We moved into an older house in Buruburu and had no idea what state the wiring was in. He spent a whole morning inspecting every socket and the meter board, then gave us a list of what was dangerous, what could wait and what was fine, with prices for each. We did the urgent items first and he never once pushed us to do more than we could afford. Everything he fixed has worked perfectly, and we will call him for the rest in January.",5,client_to_worker,electrical
+mkt-b2fd09,"Added four sockets in the kitchen and you cannot even see where the conduits were chased into the wall. Clean, clean work. He even vacuumed the dust afterwards.",5,client_to_worker,electrical
+mkt-b5f2f6,"He came at 9pm when our gate motor jammed with the car half inside. Fixed in fifteen minutes. Charged a normal rate too, no 'emergency fee' stories.",5,client_to_worker,electrical
+mkt-1c7e6d,"Rewired the whole servant quarter in a day. Tidy, safe and exactly on budget. He tested every point before leaving.",3,client_to_worker,electrical
+mkt-1b0578,"Took a while to get an appointment because he is always booked, but now I understand why. The security lights and the sensor work perfectly. Worth the wait.",5,client_to_worker,electrical
+mkt-7e9fa7,Explained the difference between the cheap breakers and the proper ones and let me decide. I appreciate a fundi who does not just pick the most expensive option.,5,client_to_worker,electrical
+mkt-4a8ace,Very good.,4,client_to_worker,electrical
+mkt-04ee11,"Sorted out the changeover switch for our generator. Before, we had to run extensions through the window whenever there was a blackout. Now it is one switch. Life changing, honestly.",5,client_to_worker,electrical
+mkt-331526,"Punctual, neat and he switched off the mains before starting, unlike the last guy. Fair charges. No complaints at all.",5,client_to_worker,electrical
+mkt-44840e,"He forgot one bulb holder on the first visit but came back the next morning without charging anything extra. He apologised too. Solid, honest electrician.",4,client_to_worker,electrical
+mkt-1e725f,Fixed a socket that three other people had 'fixed' before. This time it has stayed fixed.,5,client_to_worker,electrical
+mkt-179158,"Client had the materials ready, the ceiling space was accessible and he paid the moment the lights came on. Perfect.",5,worker_to_client,electrical
+mkt-01a07c,She listened when I explained why the cooker needed its own circuit and agreed to do it properly instead of cutting corners. Respect.,5,worker_to_client,electrical
+mkt-b73968,"Good communication from the first call. Sent the location pin, photos of the DB board and a clear list of what was needed. Made my work easy.",5,worker_to_client,electrical
+mkt-ef6087,"The estate security gave me a hard time at the gate, but the client came down personally to sort it out and even paid for the lost hour.",4,worker_to_client,electrical
+mkt-05592f,Paid promptly. Referred me to two neighbours the same week. Clients like this keep a fundi in business.,3,worker_to_client,electrical
+mkt-c62859,The socket he installed sparked the first time I plugged in the kettle. When I called him he said that is normal. It is not normal.,1,client_to_worker,electrical
+mkt-170cb8,Left live wires hanging out of the wall with only masking tape on them. I have children in this house. Completely irresponsible.,1,client_to_worker,electrical
+mkt-3e02a8,Fantastic electrician. The lights work beautifully as long as nobody uses the microwave.,2,client_to_worker,electrical
+mkt-6d7669,"Charged 4,500 to 'diagnose' the problem, then said he needed to come back another day with a different tool. Never came back. Money gone.",1,client_to_worker,electrical
+mkt-f737fc,He bypassed the earth leakage to stop the tripping instead of finding the fault. Another electrician told me it was a fire risk and had to undo everything.,1,client_to_worker,electrical
+mkt-973d85,"Came late, smelled of alcohol and argued with me when I asked him to switch off the mains first. I sent him away. Still demanded transport money.",1,client_to_worker,electrical
+mkt-466c1b,"I paid a 60 percent deposit for a solar backup installation after he sent very convincing photos of previous jobs. He delivered the batteries a week late, mounted the inverter on a wooden board next to the gas cylinder, and ran the cables across the floor of the store with no trunking. The system cut out on the second night. He has since given me four different dates for coming to fix it and has not appeared on any of them. I am out of pocket and still in the dark.",1,client_to_worker,electrical
+mkt-43887e,Useless. The fault is still there.,1,client_to_worker,electrical
+mkt-6e6c75,Two of the six downlights stopped working within a week and the dimmer buzzes loudly. He promised to pass by. Still waiting for him to return.,4,client_to_worker,electrical
+mkt-e10a4d,"The wiring in the ceiling is a mess of joints wrapped in tape. I only found out when the next electrician showed me photos. Shocking, and not in a funny way.",2,client_to_worker,electrical
+mkt-781ca1,Overpriced and slow. A two hour job took the whole day because he kept leaving to buy things he should have come with.,2,client_to_worker,electrical
+mkt-0ce04f,"He seemed knowledgeable and talked well, but the water heater switch melted two days later. Talking is not the same as doing.",2,client_to_worker,electrical
+mkt-a16372,Asked for an extra socket. Received a hole in the wall and a promise. Excellent value.,1,client_to_worker,electrical
+mkt-99283f,"Fundi came, spoiled things and left. The fridge socket has no power now, and it was working before he touched the board.",1,client_to_worker,electrical
+mkt-418e5a,"The security light works, fine. But he drilled through a water pipe while fixing it, flooded the corridor and then claimed the pipe was in the wrong place. I paid a plumber more than I paid him.",1,client_to_worker,electrical
+mkt-1bf615,"Refused to buy proper cable and insisted on the thin one to save money, then blamed me when the breaker kept tripping. Has not paid the balance. Has not answered since.",1,worker_to_client,electrical
+mkt-3c4823,"Called me at 11pm, at 5am and on Sunday during church about a job that was already finished and tested. Blocked.",1,worker_to_client,electrical
+mkt-3f318f,Told me the job was two sockets. I arrived to find a whole house with no earthing. He wanted it all done for the price of the two sockets.,1,worker_to_client,electrical
+mkt-1dc628,The client switched the mains back on while I was still working on the circuit because he wanted to watch the match. I could have been killed.,1,worker_to_client,electrical
+mkt-e215f8,"Cancelled when I was already at the gate in Kitengela, after I had bought the materials with my own money.",3,worker_to_client,electrical
+mkt-e68b20,Replaced the main switch.,3,client_to_worker,electrical
+mkt-ac0aba,He changed three bulb holders and one socket.,3,client_to_worker,electrical
+mkt-3c2ce8,Neither impressed nor disappointed.,3,client_to_worker,electrical
+mkt-499aca,"The lights are working again, which is the main thing. He did leave dust and bits of wire all over the sitting room floor though. So, half happy.",3,client_to_worker,electrical
+mkt-416a43,Knows his work but very expensive. I paid almost double what my neighbour paid for the same job. The work itself has no problem.,3,client_to_worker,electrical
+mkt-a705d9,"Quick to respond and fixed the tripping. The new sockets are slightly crooked, which bothers me every time I look at them.",3,client_to_worker,electrical
+mkt-193308,He did half the job well. The other half he handed to a younger guy who was learning on my house.,3,client_to_worker,electrical
+mkt-a48862,"Difficult to rate. The diagnosis was impressive, he found in ten minutes what two others had missed, and he explained it in a way I could understand. But the repair itself dragged on for three visits because he kept arriving without the right breaker, and each visit meant someone had to stay home from work to open for him. The power is stable now and the price was what he quoted. I just wish it had not taken two weeks.",3,client_to_worker,electrical
+mkt-0d0605,"Safe and tidy installation. Not cheap, and not fast.",3,client_to_worker,electrical
+mkt-b1c836,"Arrived exactly when he said he would. The fault turned out to be bigger than expected and he could only do a temporary fix for now. Coming back next week, so the jury is still out.",3,client_to_worker,electrical
+mkt-f8b8bf,"Gate motor works. Intercom still does not. He says the intercom was not part of the quote, I say it was.",3,client_to_worker,electrical
+mkt-06271d,"Pleasant young man and clearly trained. He just took very long, and I am not sure the extra socket needed a full day.",3,client_to_worker,electrical
+mkt-f625a7,"Good on the wiring, careless with the walls. There are chips in the plaster around every new switch.",5,client_to_worker,electrical
+mkt-fbb84b,He fixed the fault. It took a while.,1,client_to_worker,electrical
+mkt-438b2c,"It works now. Whether it was worth 8,000 I honestly do not know.",5,client_to_worker,electrical
+mkt-2f42a9,Did the job. Did not say much. Left.,3,client_to_worker,electrical
+mkt-c062af,Okay electrician for small things like sockets and bulbs. For the DB board I would look for someone more experienced.,3,client_to_worker,electrical
+mkt-f08888,Fault finding and repair on a lighting circuit in Embakasi. Took about two hours.,3,worker_to_client,electrical
+mkt-219122,Installed a cooker unit for the client.,5,worker_to_client,electrical
+mkt-473b48,"Client paid well. The site was a nightmare though, with no ladder, no light in the ceiling space and a dog that did not like me.",3,worker_to_client,electrical
+mkt-11d04c,"Polite, but he questioned every item on the materials list and went to check prices himself before agreeing. It added a day. We got there in the end.",3,worker_to_client,electrical
+mkt-49aeb3,"Good people. Payment came in three small instalments over a month instead of once, which I had not planned for.",3,worker_to_client,electrical
+mkt-794f78,"The house was clean and the client was friendly. The old wiring was in such bad condition that the job took twice as long, and he would not adjust the price.",3,worker_to_client,electrical
+mkt-bc9ec5,"Second time working for this landlord. He still pays late, and he still pays in full.",3,worker_to_client,electrical
+mkt-e1ea5e,"Booked for Monday, moved to Wednesday by the client, done on Wednesday.",3,worker_to_client,electrical
+mkt-19a29a,How much does it cost to rewire a three-bedroom house in Nairobi? Asking before I look for a fundi.,,client_to_worker,electrical
