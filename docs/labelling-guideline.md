@@ -1,6 +1,6 @@
 # Labelling guideline: marketplace review sentiment
 
-This guideline is used to label every review in the marketplace test set (`market_test.csv`). Both labellers use it: Keittah labels every review, and a second labeller labels a random 20% sample so agreement can be measured with Cohen's kappa.
+This guideline was used to label every review in the marketplace test set (`market_test.csv`). Because of time constraints, the full set of 395 rows was labelled by a separate Claude instance that received this guideline as a written prompt, blind to star ratings and to the label each review was drafted towards. A second labeller (Ted) labelled a random sample of 100 reviews independently, and agreement was measured with Cohen's kappa on the original labels. Keittah settled every disagreement using this guideline.
 
 ## Before you start
 
@@ -29,6 +29,7 @@ This guideline is used to label every review in the marketplace test set (`marke
 - **Sarcasm.** Label by what the reviewer means, not the words. "Great job, if you like water on your floor" is negative.
 - **Reviews of clients.** Workers also review clients. Paying on time, giving clear instructions and being reachable count as praise. Late payment, changing the job halfway and unreachable clients count as complaints.
 - **Kenyan English and mixed phrasing.** Label by meaning. Words like "fundi", "sorted" or "M-Pesa" are normal context, not signals on their own.
+- **Short factual descriptions of the job.** A bare description submitted as a review, such as "Chemistry tuition, Form 3. Started in September.", is neutral, not remove. Remove is only for text that is clearly not a review, such as a question, an advert or a job posting. *(Added 11 November 2026 after two second-labeller disagreements on texts of this kind. It matches every label already given, so no earlier label changed.)*
 - **Text that is not a review** (a question, an advert, text in another language): do not label it. Mark it for removal.
 
 ## Examples
