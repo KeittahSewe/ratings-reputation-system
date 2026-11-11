@@ -1,0 +1,137 @@
+{
+  "sst5_and_market_scores": "/content/drive/MyDrive/capstone-ml/logs/evaluation_scores.csv",
+  "bootstrap_ci": {
+    "mean_macro_f1": {
+      "majority": 0.1608,
+      "svm": 0.3802,
+      "lstm": 0.4161,
+      "distilbert": 0.6603,
+      "roberta": 0.7282
+    },
+    "ci_low": {
+      "majority": 0.1414,
+      "svm": 0.3299,
+      "lstm": 0.3787,
+      "distilbert": 0.6181,
+      "roberta": 0.6889
+    },
+    "ci_high": {
+      "majority": 0.1779,
+      "svm": 0.4265,
+      "lstm": 0.4524,
+      "distilbert": 0.7015,
+      "roberta": 0.7654
+    }
+  },
+  "roberta_minus_distilbert": {
+    "point": 0.06789999999999996,
+    "ci95": [
+      0.030049188597654916,
+      0.10602119509677563
+    ]
+  },
+  "efficiency": [
+    {
+      "index": "svm",
+      "median_ms": 4.7,
+      "p95_ms": 7.0,
+      "size_mb": 3.1,
+      "peak_rss_mb": NaN
+    },
+    {
+      "index": "lstm",
+      "median_ms": 516.3,
+      "p95_ms": 723.8,
+      "size_mb": 41.7,
+      "peak_rss_mb": NaN
+    },
+    {
+      "index": "distilbert pytorch fp32",
+      "median_ms": 70.5,
+      "p95_ms": 106.4,
+      "size_mb": 268.6,
+      "peak_rss_mb": NaN
+    },
+    {
+      "index": "roberta pytorch fp32",
+      "median_ms": 138.1,
+      "p95_ms": 213.6,
+      "size_mb": 502.2,
+      "peak_rss_mb": NaN
+    },
+    {
+      "index": "distilbert onnx fp32",
+      "median_ms": 34.7,
+      "p95_ms": 67.9,
+      "size_mb": 267.9,
+      "peak_rss_mb": 411.5
+    },
+    {
+      "index": "distilbert onnx int8",
+      "median_ms": 19.9,
+      "p95_ms": 34.1,
+      "size_mb": 67.4,
+      "peak_rss_mb": 161.5
+    },
+    {
+      "index": "roberta onnx fp32",
+      "median_ms": 71.3,
+      "p95_ms": 125.0,
+      "size_mb": 498.8,
+      "peak_rss_mb": 732.4
+    },
+    {
+      "index": "roberta onnx int8",
+      "median_ms": 43.0,
+      "p95_ms": 82.2,
+      "size_mb": 125.4,
+      "peak_rss_mb": 239.2
+    }
+  ],
+  "calibration": {
+    "distilbert": {
+      "temperature": 1.2984,
+      "ece_val_before": 0.06591082764256552,
+      "ece_val_after": 0.057687567159547024,
+      "ece_market_before": 0.038871171153508716,
+      "ece_market_after": 0.03618818590274224,
+      "mean_conf_market_before": 0.6955468058586121,
+      "mean_conf_market_after": 0.6366402506828308,
+      "market_accuracy": 0.658974358974359
+    },
+    "roberta": {
+      "temperature": 1.2548,
+      "ece_val_before": 0.05338999442248644,
+      "ece_val_after": 0.04318631106782892,
+      "ece_market_before": 0.06923171518704829,
+      "ece_market_after": 0.0826814836416489,
+      "mean_conf_market_before": 0.6846345067024231,
+      "mean_conf_market_after": 0.6381751298904419,
+      "market_accuracy": 0.717948717948718
+    }
+  },
+  "exports": {
+    "distilbert": {
+      "seed": 43,
+      "pytorch_market_f1": 0.668458631862245,
+      "fp32_market_f1": 0.668458631862245,
+      "fp32_mb": 267.942261,
+      "int8_market_f1": 0.6589226402304694,
+      "int8_mb": 67.359122,
+      "form": "int8"
+    },
+    "roberta": {
+      "seed": 44,
+      "pytorch_market_f1": 0.7177867744562553,
+      "fp32_market_f1": 0.7177867744562553,
+      "fp32_mb": 498.819105,
+      "int8_market_f1": 0.6991104552491931,
+      "int8_mb": 125.432131,
+      "form": "fp32"
+    }
+  },
+  "decision": {
+    "chosen": "distilbert",
+    "reason": "DistilBERT is 6.79 points behind roberta, outside the 3-point margin; distilbert is the best-scoring model that meets the speed and memory limits"
+  }
+}
