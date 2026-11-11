@@ -1,0 +1,34 @@
+{
+  "model_version": "distilbert-sst5-3cls-v1.0-20261111-seed43-onnx-int8",
+  "base_checkpoint": "distilbert-base-uncased",
+  "seed": 43,
+  "format": "onnx int8",
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "max_length": 128,
+  "preprocessing": "clean_text from ml/01_data_prep.ipynb (lowercase, treebank undone)",
+  "temperature": 1.2984,
+  "confidence_score": "max of softmax(log(p) / temperature)",
+  "decision": "DistilBERT is 6.79 points behind roberta, outside the 3-point margin; distilbert is the best-scoring model that meets the speed and memory limits",
+  "metrics": {
+    "sst5_test_macro_f1_seed": 0.6541,
+    "market_macro_f1_seed_pytorch": 0.6685,
+    "market_macro_f1_seed_exported": 0.6589,
+    "market_macro_f1_three_seed_mean": 0.6603,
+    "market_macro_f1_ci95": [
+      0.6181,
+      0.7015
+    ],
+    "ece_market_after_scaling": 0.0362
+  },
+  "efficiency_colab_cpu_1_thread": {
+    "median_ms": 19.9,
+    "p95_ms": 34.1,
+    "size_mb": 67.4,
+    "peak_rss_mb": 161.5
+  },
+  "date": "2026-11-11"
+}
