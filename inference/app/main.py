@@ -2,6 +2,7 @@ import hmac
 import logging
 import os
 from contextlib import asynccontextmanager
+from typing import Annotated
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -17,6 +18,10 @@ from app.text import clean_text
 # Longest review text accepted. The model only reads the first 128 tokens, and
 # this stops a huge request from tying up the service while it is cleaned.
 MAX_TEXT_CHARS = 5000
+
+# Most texts one /classify/batch request may carry. Each is classified one at a
+# time, so this keeps a batch to a few seconds on Render's free CPU.
+MAX_BATCH = 32
 
 # Routes anyone can call without the X-Service-Key header.
 OPEN_PATHS = {"/health"}
@@ -101,8 +106,11 @@ async def handle_unexpected_error(request: Request, exc: Exception):
     return error_response(500, "internal_error", "Something went wrong on the server")
 
 
+ReviewText = Annotated[str, Field(max_length=MAX_TEXT_CHARS)]
+
+
 class ClassifyRequest(BaseModel):
-    text: str = Field(max_length=MAX_TEXT_CHARS)
+    text: ReviewText
 
     @field_validator("text")
     @classmethod
@@ -110,6 +118,18 @@ class ClassifyRequest(BaseModel):
         if not clean_text(value):
             raise ValueError("text is empty after cleaning")
         return value
+
+
+class BatchRequest(BaseModel):
+    texts: list[ReviewText] = Field(min_length=1, max_length=MAX_BATCH)
+
+    @field_validator("texts")
+    @classmethod
+    def none_empty_after_cleaning(cls, values):
+        empty = [str(i) for i, value in enumerate(values) if not clean_text(value)]
+        if empty:
+            raise ValueError(f"item {', '.join(empty)} is empty after cleaning")
+        return values
 
 
 @app.get("/health")
@@ -120,3 +140,11 @@ def health(request: Request):
 @app.post("/classify")
 def classify_review(body: ClassifyRequest, request: Request):
     return classify(request.app.state.model, body.text)
+
+
+@app.post("/classify/batch")
+def classify_batch(body: BatchRequest, request: Request):
+    # One text at a time, exactly as /classify does it, so every result is
+    # identical to classifying that text on its own. Order follows the input.
+    model = request.app.state.model
+    return {"results": [classify(model, text) for text in body.texts]}
