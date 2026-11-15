@@ -64,6 +64,15 @@ Invoke-RestMethod http://localhost:8000/health
 
 This returns `{ "status": "ok", "model_version": "distilbert-sst5-3cls-v1.0-20261111-seed43-onnx-int8" }`.
 
+## Tests
+
+```powershell
+.venv\Scripts\python -m pip install -r requirements-dev.txt
+.venv\Scripts\python -m pytest -v
+```
+
+`tests/test_text.py` checks that `app/text.py` cleans text exactly as `ml/01_data_prep.ipynb` did. It runs the notebook's six checks, then rebuilds all 390 reviews in `ml/data/market_test.csv` from the raw text in `market_labelled.csv`. pytest is in `requirements-dev.txt`, so Render does not install it.
+
 ## Render
 
 | Setting | Value |
