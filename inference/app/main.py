@@ -1,19 +1,36 @@
+import logging
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# Settings come from environment variables only. They are read here so later
-# issues can load the model and check the service key.
-MODEL_PATH = os.environ.get("MODEL_PATH")
-MODEL_VERSION = os.environ.get("MODEL_VERSION")
+from app.model import ModelLoadError, load_model
+from app.model_files import ModelFilesError, ensure_model_files
+
+# The model's own settings (version, temperature, labels) come from model_card.json.
+# Only the service key is read here; it is checked by a later issue.
 INFERENCE_SERVICE_KEY = os.environ.get("INFERENCE_SERVICE_KEY")
 
-app = FastAPI(title="Sentiment inference service")
+logger = logging.getLogger("uvicorn.error")
 
-# Stays None until a model is loaded in a later issue.
-loaded_model_version = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Runs once at startup. If the model cannot be loaded, the service stops
+    # here instead of starting without a model.
+    try:
+        model_dir = ensure_model_files()
+        app.state.model = load_model(model_dir)
+    except (ModelFilesError, ModelLoadError) as exc:
+        logger.error("Startup failed: %s", exc)
+        raise
+    logger.info("Loaded model %s", app.state.model.model_version)
+    yield
+
+
+app = FastAPI(title="Sentiment inference service", lifespan=lifespan)
 
 
 def error_response(status_code, code, message):
@@ -48,5 +65,5 @@ async def handle_unexpected_error(request: Request, exc: Exception):
 
 
 @app.get("/health")
-def health():
-    return {"status": "ok", "model_version": loaded_model_version}
+def health(request: Request):
+    return {"status": "ok", "model_version": request.app.state.model.model_version}
