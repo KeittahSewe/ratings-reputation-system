@@ -86,6 +86,43 @@ The text is cleaned with `clean_text` (the same function as `ml/01_data_prep.ipy
 
 `text` must be at most 5,000 characters and must not be empty after cleaning.
 
+
+
+def post_batch(client, body, key=KEY):
+    headers = {} if key is None else {"X-Service-Key": key}
+    return client.post("/classify/batch", json=body, headers=headers)
+
+
+def test_batch_matches_classify_in_input_order(client):
+    texts = [param.values[0] for param in CANONICAL] + ["Good work, but he left the gate open."]
+    response = post_batch(client, {"texts": texts})
+    assert response.status_code == 200
+    results = response.json()["results"]
+    assert len(results) == len(texts)
+    for text, result in zip(texts, results):
+        single = post_classify(client, {"text": text}).json()
+        # latency_ms is timed per call, so it is the only field allowed to differ.
+        single.pop("latency_ms")
+        result.pop("latency_ms")
+        assert result == single
+
+
+def test_batch_without_key_gets_401(client):
+    response = post_batch(client, {"texts": ["Good work."]}, key=None)
+    assert response.status_code == 401
+
+
+@pytest.mark.parametrize(
+    "texts",
+    [[], ["Good work."] * (MAX_BATCH + 1), ["Good work.", "   "], ["Good work.", "a" * (MAX_TEXT_CHARS + 1)]],
+    ids=["empty-list", "over-the-cap", "empty-item", "over-long-item"],
+)
+def test_batch_bad_input_gets_422(client, texts):
+    response = post_batch(client, {"texts": texts})
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "invalid_request"
+    assert response.json()["error"]["message"].startswith("texts")
+
 ## Tests
 
 ```powershell
