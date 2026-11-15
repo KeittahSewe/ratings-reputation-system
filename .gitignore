@@ -30,6 +30,7 @@ venv/
 *.joblib
 glove*.txt
 glove*.zip
+inference/model/
 
 # Editors and OS
 .vscode/
