@@ -86,42 +86,16 @@ The text is cleaned with `clean_text` (the same function as `ml/01_data_prep.ipy
 
 `text` must be at most 5,000 characters and must not be empty after cleaning.
 
+## Classify a batch
 
+`POST /classify/batch` takes up to 32 texts, for the seeding script:
 
-def post_batch(client, body, key=KEY):
-    headers = {} if key is None else {"X-Service-Key": key}
-    return client.post("/classify/batch", json=body, headers=headers)
+```powershell
+Invoke-RestMethod http://localhost:8000/classify/batch -Method Post -Headers $headers -ContentType "application/json" -Body '{"texts": ["Very professional, I will hire him again.", "He never came back to finish the job."]}'
+```
 
+It returns `{ "results": [...] }`, one result per text in the same order, each with the same fields `/classify` gives. Each text is classified on its own, so a result is identical to sending that text to `/classify`. The request is rejected with 422 if the list is empty, has more than 32 texts, or any text is over 5,000 characters or empty after cleaning; the message names the item.
 
-def test_batch_matches_classify_in_input_order(client):
-    texts = [param.values[0] for param in CANONICAL] + ["Good work, but he left the gate open."]
-    response = post_batch(client, {"texts": texts})
-    assert response.status_code == 200
-    results = response.json()["results"]
-    assert len(results) == len(texts)
-    for text, result in zip(texts, results):
-        single = post_classify(client, {"text": text}).json()
-        # latency_ms is timed per call, so it is the only field allowed to differ.
-        single.pop("latency_ms")
-        result.pop("latency_ms")
-        assert result == single
-
-
-def test_batch_without_key_gets_401(client):
-    response = post_batch(client, {"texts": ["Good work."]}, key=None)
-    assert response.status_code == 401
-
-
-@pytest.mark.parametrize(
-    "texts",
-    [[], ["Good work."] * (MAX_BATCH + 1), ["Good work.", "   "], ["Good work.", "a" * (MAX_TEXT_CHARS + 1)]],
-    ids=["empty-list", "over-the-cap", "empty-item", "over-long-item"],
-)
-def test_batch_bad_input_gets_422(client, texts):
-    response = post_batch(client, {"texts": texts})
-    assert response.status_code == 422
-    assert response.json()["error"]["code"] == "invalid_request"
-    assert response.json()["error"]["message"].startswith("texts")
 
 ## Tests
 
