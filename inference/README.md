@@ -86,6 +86,17 @@ The text is cleaned with `clean_text` (the same function as `ml/01_data_prep.ipy
 
 `text` must be at most 5,000 characters and must not be empty after cleaning.
 
+## Classify a batch
+
+`POST /classify/batch` takes up to 32 texts, for the seeding script:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/classify/batch -Method Post -Headers $headers -ContentType "application/json" -Body '{"texts": ["Very professional, I will hire him again.", "He never came back to finish the job."]}'
+```
+
+It returns `{ "results": [...] }`, one result per text in the same order, each with the same fields `/classify` gives. Each text is classified on its own, so a result is identical to sending that text to `/classify`. The request is rejected with 422 if the list is empty, has more than 32 texts, or any text is over 5,000 characters or empty after cleaning; the message names the item.
+
+
 ## Tests
 
 ```powershell
