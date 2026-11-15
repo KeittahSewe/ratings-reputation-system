@@ -86,6 +86,8 @@ The text is cleaned with `clean_text` (the same function as `ml/01_data_prep.ipy
 
 `text` must be at most 5,000 characters and must not be empty after cleaning.
 
+With `"sentences": true` in the body, the response also has `sentences`: one entry per sentence with its cleaned `text`, `label` and `confidence`, for the insights theme extraction. A sentence ends at `.`, `!` or `?` followed by a space; short forms such as `mr.` do not end one. `/classify/batch` takes the same flag.
+
 ## Classify a batch
 
 `POST /classify/batch` takes up to 32 texts, for the seeding script:
