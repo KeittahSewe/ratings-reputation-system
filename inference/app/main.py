@@ -111,7 +111,7 @@ ReviewText = Annotated[str, Field(max_length=MAX_TEXT_CHARS)]
 
 class ClassifyRequest(BaseModel):
     text: ReviewText
-
+    sentences: bool = False
     @field_validator("text")
     @classmethod
     def not_empty_after_cleaning(cls, value):
@@ -122,7 +122,7 @@ class ClassifyRequest(BaseModel):
 
 class BatchRequest(BaseModel):
     texts: list[ReviewText] = Field(min_length=1, max_length=MAX_BATCH)
-
+    sentences: bool = False
     @field_validator("texts")
     @classmethod
     def none_empty_after_cleaning(cls, values):
@@ -139,7 +139,7 @@ def health(request: Request):
 
 @app.post("/classify")
 def classify_review(body: ClassifyRequest, request: Request):
-    return classify(request.app.state.model, body.text)
+      return classify(request.app.state.model, body.text, sentences=body.sentences)
 
 
 @app.post("/classify/batch")
@@ -147,4 +147,4 @@ def classify_batch(body: BatchRequest, request: Request):
     # One text at a time, exactly as /classify does it, so every result is
     # identical to classifying that text on its own. Order follows the input.
     model = request.app.state.model
-    return {"results": [classify(model, text) for text in body.texts]}
+    return {"results": [classify(model, text, sentences=body.sentences) for text in body.texts]}

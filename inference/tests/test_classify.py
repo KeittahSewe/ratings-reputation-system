@@ -4,12 +4,16 @@ Needs HF_REPO_ID and HF_REVISION set, as for running the service. The model is
 loaded once for the whole file.
 """
 
+import csv
 import os
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
+from app.classify import split_sentences
 from app.main import MAX_BATCH, MAX_TEXT_CHARS, app
+from app.text import clean_text
 KEY = "test-key"
 
 # One clear case per class, in the style of the marketplace reviews. The
@@ -141,3 +145,35 @@ def test_batch_bad_input_gets_422(client, texts):
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "invalid_request"
     assert response.json()["error"]["message"].startswith("texts")   
+
+    
+
+def multi_sentence_reviews(count=5):
+    path = Path(__file__).resolve().parents[2] / "ml" / "data" / "market_test.csv"
+    with open(path, encoding="utf-8", newline="") as f:
+        texts = [row["text"] for row in csv.DictReader(f)]
+    return [t for t in texts if len(split_sentences(clean_text(t))) >= 2][:count]
+
+
+def test_sentences_are_off_by_default(client):
+    body = post_classify(client, {"text": "Good work. Fair price."}).json()
+    assert "sentences" not in body
+
+
+def test_multi_sentence_reviews_return_one_result_per_sentence(client):
+    for text in multi_sentence_reviews():
+        body = post_classify(client, {"text": text, "sentences": True}).json()
+        expected = split_sentences(clean_text(text))
+        assert [s["text"] for s in body["sentences"]] == expected
+        for sentence in body["sentences"]:
+            alone = post_classify(client, {"text": sentence["text"]}).json()
+            assert sentence["label"] == alone["label"]
+            assert sentence["confidence"] == alone["confidence"]
+
+
+def test_batch_returns_sentences_when_asked(client):
+    texts = multi_sentence_reviews(3)
+    results = post_batch(client, {"texts": texts, "sentences": True}).json()["results"]
+    for text, result in zip(texts, results):
+        single = post_classify(client, {"text": text, "sentences": True}).json()
+        assert result["sentences"] == single["sentences"]
