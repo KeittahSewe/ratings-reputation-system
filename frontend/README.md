@@ -25,10 +25,10 @@ Copy-Item .env.example .env
 | Variable | What it is |
 |---|---|
 | `VITE_SUPABASE_URL` | URL of the Supabase project |
-| `VITE_SUPABASE_ANON_KEY` | Public anon key of the Supabase project |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Publishable key of the Supabase project, starting `sb_publishable_`. Used only for sign-up and sign-in; it can read no table. |
 | `VITE_API_BASE_URL` | Base URL of the Express API, ending in `/api` |
 
-Never commit `.env`. Only variables that start with `VITE_` are visible in the browser, so never put a secret such as the service role key here.
+Never commit `.env`. Only variables that start with `VITE_` are visible in the browser, so never put a secret such as the Supabase secret key here.
 
 ## Run
 
