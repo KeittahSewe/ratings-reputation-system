@@ -67,3 +67,19 @@ Every error response uses the same format:
 ```
 
 An unknown route returns 404 with code `not_found`. An unexpected server error returns 500 with code `internal_error`.
+
+## Database
+
+The schema lives in `supabase/migrations/` as SQL files and is applied to the hosted Supabase project with the Supabase CLI, installed here as a dev dependency.
+
+| Command | What it does |
+|---|---|
+| `npx supabase login` | Signs the CLI in to your Supabase account, once per laptop |
+| `npx supabase link --project-ref <ref>` | Points the CLI at the hosted project, once per laptop |
+| `npx supabase migration new <name>` | Creates an empty, timestamped migration file |
+| `npx supabase db push --remote --dry-run` | Lists migrations not yet applied to the hosted project |
+| `npx supabase db push --remote` | Applies them |
+
+Without `--remote` the CLI targets a local Docker database, which this project does not use.
+
+`20261116180836_create_core_tables.sql` creates the six tables with row level security on and no policies yet. Only `service_role`, which this API uses through the secret key, has table privileges, so the publishable key in the browser cannot read or write any table.
