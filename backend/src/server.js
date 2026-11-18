@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { createApp } from './app.js'
 import { createTokenVerifier, remoteKeySet, supabaseIssuer } from './auth/tokens.js'
+import { createJobsRepo } from './db/jobs.js'
 import { createReputationRepo } from './db/reputation.js'
 import { createReviewsRepo } from './db/reviews.js'
 import { createSkillsRepo } from './db/skills.js'
@@ -34,6 +35,7 @@ const app = createApp({
   skills: createSkillsRepo(supabase),
   reputation: createReputationRepo(supabase),
   reviews: createReviewsRepo(supabase),
+  jobs: createJobsRepo(supabase),
 })
 
 app.listen(port, () => {

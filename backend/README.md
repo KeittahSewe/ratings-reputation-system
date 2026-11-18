@@ -67,10 +67,13 @@ This returns `{ "status": "ok" }`.
 | `src/db/skills.js` | Every query on `public.skills` |
 | `src/db/reputation.js` | Reads from `public.reputation_scores` |
 | `src/db/reviews.js` | Reads received reviews, with reviewer, job and sentiment, for profiles |
+| `src/db/jobs.js` | Every query on `public.jobs`, including the conditional update behind each status change |
+| `src/jobs/status.js` | The five job actions with their roles and statuses, and the timeline steps |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
 | `src/routes/me.js` | `POST /api/me/bootstrap`, `GET /api/me`, `PATCH /api/me` |
 | `src/routes/users.js` | `GET /api/users/:id` |
 | `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
+| `src/routes/jobs.js` | Job create, list, available, detail, and the five status changes |
 
 `createApp()` takes the token checker and the data access as arguments, so tests pass in fakes and import the app without starting a server.
 
@@ -116,6 +119,7 @@ Without `--remote` the CLI targets a local Docker database, which this project d
 |---|---|
 | `20261116180836_create_core_tables.sql` | Creates the six tables with row level security on and no policies. Only `service_role` has table privileges. |
 | `20261116200000_lock_browser_roles.sql` | Makes anything a later migration creates in `public` start closed to `anon` and `authenticated`, and stops the push if any table has RLS off or grants anything to those roles. |
+| `20261118160000_add_job_timeline.sql` | Adds `assigned_at`, `accepted_at` and `cancelled_at` to `jobs` for the Figure 4.9 timeline, each tied to the job's status by a CHECK. |
 
 The browser never queries a table. The publishable key is used only for Supabase Auth sign-up and sign-in, and every read and write goes through this API as `service_role`, which bypasses row level security. So there are no RLS policies: `anon` and `authenticated` hold no privileges on any table, and RLS stays on with no policies so that a privilege granted by mistake still exposes no rows. Supabase's security advisor reports "RLS enabled, no policy" on all six tables; that is intended.
 
@@ -205,3 +209,61 @@ Another user's public profile, for any signed-in user with a `users` row. Return
 - A review is visible once the person reviewed has also reviewed the same job, or 14 days after it was submitted, whichever comes first. Until then it is left out of both fields.
 - `sentiment` is `null` while a review is waiting for classification.
 - An unknown or malformed id gets 404.
+
+## Jobs
+
+Every route here needs the caller's `users` row.
+
+### Statuses
+
+| Action | Who | From | To | Sets |
+|---|---|---|---|---|
+| `POST /api/jobs/:id/assign` | the job's client | open | assigned | `worker_id`, `assigned_at` |
+| `POST /api/jobs/:id/accept` | the assigned worker | assigned | in_progress | `accepted_at` |
+| `POST /api/jobs/:id/submit` | the assigned worker | in_progress | in_progress | `submitted_at` |
+| `POST /api/jobs/:id/complete` | the job's client | in_progress, once submitted | completed | `completed_at` |
+| `POST /api/jobs/:id/cancel` | the job's client | open or assigned | cancelled | `cancelled_at` |
+
+Each returns 200 with the job as `GET /api/jobs/:id` gives it. Checks run in this order:
+
+1. 404 `not_found` if the job does not exist or the caller cannot see it.
+2. 403 `wrong_role` if the caller has the other role.
+3. 403 `not_your_job` if the caller can see the job but is not its client or worker, such as a worker trying to accept an open job.
+4. 400 `validation_failed` for a bad body. Assign takes `{ "worker_id": "<uuid>" }`, which must be a worker account.
+5. 409 for the status rules: `invalid_transition` for a move plan 3.1 does not allow, `already_submitted` for a second submit, `not_submitted` for completing before the worker submits, and `worker_unavailable` for assigning a worker whose availability is off.
+
+The update only applies if the job is still in the status that was read, so two requests racing on one job cannot both succeed. The loser gets 409 `job_changed`.
+
+A job cancelled while assigned keeps its worker, so it stays in that worker's history.
+
+### POST /api/jobs (clients)
+
+Body: `{ "title", "description", "category", "required_skills": [...] }`. Title 1 to 120 characters, description 1 to 4000, category one of the six, and up to 10 required skills of 1 to 60 characters each. Skill names are cleaned the same way as profile skills, and repeats that differ only in capitals are dropped. Returns 201 `{ "job": {...} }` with status `open`.
+
+### GET /api/jobs
+
+A client gets their own jobs; a worker gets the jobs assigned to them, including cancelled ones. Newest first. Optional query: `status`, `category`, and `q` to search titles.
+
+### GET /api/jobs/available (workers)
+
+Every open job, newest first. Optional query: `category` and `q`.
+
+### GET /api/jobs/:id
+
+Visible to the job's client, its worker, and any worker while the job is open. Returns the job's columns plus:
+
+```json
+{
+  "client": { "id", "name", "company_name" },
+  "worker": { "id", "name" } or null,
+  "timeline": [
+    { "step": "posted", "at": "..." },
+    { "step": "assigned", "at": "..." or null },
+    { "step": "accepted", "at": null },
+    { "step": "submitted", "at": null },
+    { "step": "completed", "at": null }
+  ]
+}
+```
+
+A cancelled job has a sixth step, `cancelled`.
