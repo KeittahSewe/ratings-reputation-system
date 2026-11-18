@@ -57,11 +57,20 @@ This returns `{ "status": "ok" }`.
 |---|---|
 | `src/app.js` | `createApp()` builds the Express app: JSON parsing, routes, 404 handler and error handler |
 | `src/server.js` | Checks the environment, creates the Supabase client and token checker, and starts listening on `PORT` |
-| `src/errors.js` | `ApiError`, thrown by routes and middleware for any error the API means to send |
+| `src/errors.js` | `ApiError`, thrown by routes and middleware for any error the API means to send, and `validationError` for 400s |
+| `src/ids.js` | The UUID check used before any id reaches the database |
+| `src/categories.js` | The six service categories, matching the database CHECK constraints |
 | `src/auth/tokens.js` | Checks a Supabase access token against the project's public keys |
 | `src/auth/authenticate.js` | Middleware that requires `Authorization: Bearer <token>` and sets `req.auth` |
+| `src/auth/requireUser.js` | `requireUser` loads the caller's `users` row into `req.user`; `requireRole` lets one role through |
 | `src/db/users.js` | Every query on `public.users` |
-| `src/routes/me.js` | `POST /api/me/bootstrap` |
+| `src/db/skills.js` | Every query on `public.skills` |
+| `src/db/reputation.js` | Reads from `public.reputation_scores` |
+| `src/db/reviews.js` | Reads received reviews, with reviewer, job and sentiment, for profiles |
+| `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
+| `src/routes/me.js` | `POST /api/me/bootstrap`, `GET /api/me`, `PATCH /api/me` |
+| `src/routes/users.js` | `GET /api/users/:id` |
+| `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
 
 `createApp()` takes the token checker and the data access as arguments, so tests pass in fakes and import the app without starting a server.
 
@@ -80,8 +89,11 @@ Every error response uses the same format:
 | 401 | `missing_token` | No `Authorization: Bearer <token>` header |
 | 401 | `invalid_token` | Bad signature, wrong project, wrong audience, anonymous user or not a token |
 | 401 | `token_expired` | The access token has expired; the frontend refreshes it or signs in again |
-| 404 | `not_found` | No route matches (with a valid token; without one, `/api` routes answer 401 first) |
+| 403 | `not_bootstrapped` | The account has no `users` row yet; call `POST /api/me/bootstrap` first |
+| 403 | `wrong_role` | The route is for the other role, such as a client calling a skills route |
+| 404 | `not_found` | No route matches (with a valid token; without one, `/api` routes answer 401 first), or the user or skill does not exist |
 | 409 | `email_in_use` | Bootstrap found another account with the same email |
+| 409 | `skill_exists` | The worker already lists this skill, ignoring capitals |
 | 413 | `body_too_large` | The body is over 100 kB |
 | 500 | `internal_error` | Anything unexpected; details go to the server log only |
 | 503 | `auth_unavailable` | The project's public keys could not be fetched |
@@ -128,3 +140,68 @@ Body: `{ "name": "Peter Mwangi", "role": "worker" }`, or for a client `{ "name":
 - New workers start with `availability` true; clients have none.
 - The first call returns 201 with `{ "user": { ... } }`. Later calls return 200 with the existing row and ignore the body, so a role cannot be changed this way.
 - `auth_id` is never returned.
+
+## Profile and skills
+
+Every route here needs the caller's `users` row, so an account that has not bootstrapped gets 403 `not_bootstrapped`.
+
+### GET /api/me
+
+Returns `{ "user": {...}, "skills": [...], "reputation": {...} }`.
+
+- `skills` is the worker's list, sorted by name, each `{ id, skill_name, category }`. It is always `[]` for clients.
+- `reputation` is `{ score, ratings_component, sentiment_component, history_component, last_updated }`, or `null` until the user's first review has been classified.
+
+### PATCH /api/me
+
+Send only the fields to change. Returns `{ "user": {...} }`.
+
+| Field | Who | Rule |
+|---|---|---|
+| `name` | both | 1 to 100 characters after trimming |
+| `bio` | both | Up to 1000 characters; blank or `null` clears it |
+| `availability` | workers | `true` or `false` |
+| `company_name` | clients | Up to 120 characters; blank or `null` clears it |
+
+Any other field, including `email` and `role`, is rejected with 400. Email belongs to Supabase Auth, and role is fixed at bootstrap.
+
+### /api/me/skills (workers only)
+
+| Method | Path | Body | Success |
+|---|---|---|---|
+| GET | `/api/me/skills` | none | 200 `{ "skills": [...] }` |
+| POST | `/api/me/skills` | `{ "skill_name": "Pipe fitting and repair", "category": "plumbing" }` | 201 `{ "skill": {...} }` |
+| DELETE | `/api/me/skills/:id` | none | 204 |
+
+- `skill_name` is trimmed, runs of spaces become one, and it must be 1 to 60 characters.
+- `category` is one of plumbing, painting, electrical, carpentry, cleaning or tutoring.
+- A skill that matches one already listed, ignoring capitals, gets 409 `skill_exists`.
+- Deleting another worker's skill gets the same 404 as a skill that does not exist.
+- Clients get 403 `wrong_role` on all three.
+
+### GET /api/users/:id
+
+Another user's public profile, for any signed-in user with a `users` row. Returns:
+
+```json
+{
+  "user": { "id", "name", "role", "company_name", "bio", "availability", "created_at" },
+  "skills": [...],
+  "reputation": { ... } or null,
+  "review_count": 2,
+  "reviews": [
+    {
+      "id", "rating", "review_text", "created_at",
+      "reviewer": { "id", "name", "role" },
+      "job": { "id", "title" },
+      "sentiment": { "label", "confidence_score" } or null
+    }
+  ]
+}
+```
+
+- `email` is never included; users see their own through `GET /api/me`.
+- `reviews` holds the 10 newest visible reviews the user has received. `review_count` counts all visible ones.
+- A review is visible once the person reviewed has also reviewed the same job, or 14 days after it was submitted, whichever comes first. Until then it is left out of both fields.
+- `sentiment` is `null` while a review is waiting for classification.
+- An unknown or malformed id gets 404.

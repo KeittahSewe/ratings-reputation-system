@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { createApp } from './app.js'
 import { createTokenVerifier, remoteKeySet, supabaseIssuer } from './auth/tokens.js'
+import { createReputationRepo } from './db/reputation.js'
+import { createReviewsRepo } from './db/reviews.js'
+import { createSkillsRepo } from './db/skills.js'
 import { createUsersRepo } from './db/users.js'
 
 const { SUPABASE_URL, SUPABASE_SECRET_KEY } = process.env
@@ -28,6 +31,9 @@ const issuer = supabaseIssuer(SUPABASE_URL)
 const app = createApp({
   verifyToken: createTokenVerifier({ issuer, keySet: remoteKeySet(issuer) }),
   users: createUsersRepo(supabase),
+  skills: createSkillsRepo(supabase),
+  reputation: createReputationRepo(supabase),
+  reviews: createReviewsRepo(supabase),
 })
 
 app.listen(port, () => {

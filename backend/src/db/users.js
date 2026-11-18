@@ -4,6 +4,9 @@
 // auth_id stays on the server; the API never returns it.
 const COLUMNS = 'id, name, email, role, company_name, bio, availability, created_at'
 
+// What other users may see: no email.
+const PUBLIC_COLUMNS = 'id, name, role, company_name, bio, availability, created_at'
+
 const UNIQUE_VIOLATION = '23505'
 
 export function createUsersRepo(supabase) {
@@ -18,11 +21,24 @@ export function createUsersRepo(supabase) {
       return data
     },
 
+    async findPublicById(id) {
+      const { data, error } = await supabase.from('users').select(PUBLIC_COLUMNS).eq('id', id).maybeSingle()
+      if (error) throw error
+      return data
+    },
+
     // Returns the new row, or null if a row with this auth_id or email
     // already exists.
     async insert(row) {
       const { data, error } = await supabase.from('users').insert(row).select(COLUMNS).single()
       if (error?.code === UNIQUE_VIOLATION) return null
+      if (error) throw error
+      return data
+    },
+
+    // Applies the given column values to one user and returns the updated row.
+    async update(id, fields) {
+      const { data, error } = await supabase.from('users').update(fields).eq('id', id).select(COLUMNS).single()
       if (error) throw error
       return data
     },

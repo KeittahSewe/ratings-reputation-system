@@ -7,3 +7,8 @@ export class ApiError extends Error {
     this.code = code
   }
 }
+
+// A 400 for a body or parameter that fails a check. The message names the field.
+export function validationError(message) {
+  return new ApiError(400, 'validation_failed', message)
+}
