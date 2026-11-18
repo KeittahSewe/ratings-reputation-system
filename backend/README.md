@@ -27,8 +27,8 @@ Copy-Item .env.example .env
 | `PORT` | Port the API listens on. Defaults to 3000. |
 | `SUPABASE_URL` | URL of the Supabase project |
 | `SUPABASE_SECRET_KEY` | Secret key, starting `sb_secret_`. It acts as `service_role`, which bypasses row level security, so it stays on the server only. The API refuses to start without it. |
-| `INFERENCE_URL` | Base URL of the FastAPI inference service |
-| `INFERENCE_SERVICE_KEY` | Shared key the API sends to the inference service |
+| `INFERENCE_URL` | Base URL of the FastAPI inference service, such as `http://localhost:8000`. The API refuses to start without it. |
+| `INFERENCE_SERVICE_KEY` | Shared key the API sends in the `X-Service-Key` header. It must equal the inference service's own `INFERENCE_SERVICE_KEY`. The API refuses to start without it. |
 | `CORS_ORIGIN` | Frontend URL allowed to call the API |
 
 No JWT secret is needed: access tokens are checked against the project's public keys (see Authentication).
@@ -66,9 +66,12 @@ This returns `{ "status": "ok" }`.
 | `src/db/users.js` | Every query on `public.users` |
 | `src/db/skills.js` | Every query on `public.skills` |
 | `src/db/reputation.js` | Reads and writes `public.reputation_scores`, adding `provisional` on the way out |
-| `src/db/reviews.js` | Reads received reviews, with reviewer, job and sentiment, for profiles |
+| `src/db/reviews.js` | Every query on `public.reviews` and `public.sentiment_results` |
 | `src/db/jobs.js` | Every query on `public.jobs`, including the conditional update behind each status change |
 | `src/jobs/status.js` | The five job actions with their roles and statuses, and the timeline steps |
+| `src/jobs/access.js` | Who may see a job, and who its two parties are |
+| `src/inference/client.js` | Calls `POST /classify` on the inference service with a 5 second timeout and two retries |
+| `src/reviews/classification.js` | Classifies a review on submit, stores the result, and retries pending reviews every minute |
 | `src/reputation/score.js` | The reputation formula from plan 3.4: R, S, H and the 40/40/20 score, with no database access |
 | `src/reputation/recompute.js` | Reads a user's counted reviews and finished jobs, computes the score and stores it |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
@@ -76,8 +79,9 @@ This returns `{ "status": "ok" }`.
 | `src/routes/users.js` | `GET /api/users/:id` |
 | `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
 | `src/routes/jobs.js` | Job create, list, available, detail, and the five status changes |
+| `src/routes/reviews.js` | `POST` and `GET /api/jobs/:id/reviews` |
 
-`createApp()` takes the token checker, the data access and the reputation service as arguments, so tests pass in fakes and import the app without starting a server.
+`createApp()` takes the token checker, the data access, the reputation service and the classification service as arguments, so tests pass in fakes and import the app without starting a server.
 
 ## Errors
 
@@ -99,6 +103,8 @@ Every error response uses the same format:
 | 404 | `not_found` | No route matches (with a valid token; without one, `/api` routes answer 401 first), or the user or skill does not exist |
 | 409 | `email_in_use` | Bootstrap found another account with the same email |
 | 409 | `skill_exists` | The worker already lists this skill, ignoring capitals |
+| 409 | `job_not_completed` | A review was sent for a job that is not completed |
+| 409 | `already_reviewed` | The caller has already reviewed this job |
 | 413 | `body_too_large` | The body is over 100 kB |
 | 500 | `internal_error` | Anything unexpected; details go to the server log only |
 | 503 | `auth_unavailable` | The project's public keys could not be fetched |
@@ -274,6 +280,79 @@ Visible to the job's client, its worker, and any worker while the job is open. R
 
 A cancelled job has a sixth step, `cancelled`.
 
+## Reviews
+
+After a job is completed, its client and its worker review each other once. Every review is classified by the inference service (plan 3.6), and the result goes in `sentiment_results` with the model version that produced it.
+
+### POST /api/jobs/:id/reviews
+
+Body: `{ "rating": 5, "review_text": "Peter was punctual and professional. I would hire him again." }`. The reviewee is the other party on the job.
+
+Checks run in this order:
+
+1. 404 `not_found` if the job does not exist or the caller cannot see it.
+2. 403 `not_your_job` if the caller can see the job but is not its client or worker.
+3. 400 `validation_failed`: `rating` must be a whole number from 1 to 5, and `review_text` 1 to 5000 characters after trimming with at least one letter or number outside HTML tags. Text with none would be empty after the inference service cleans it, and could never be classified.
+4. 409 `job_not_completed` unless the job is completed.
+5. 409 `already_reviewed` if the caller has reviewed this job before. A review cannot be changed.
+
+Then:
+
+1. The review is saved with `pending_classification` true.
+2. If the other party reviewed this job first, the caller's reputation is recomputed, because the review they received has just become visible.
+3. The API calls `POST /classify` with `sentences: true`, a 5 second timeout per attempt and two retries, half a second and then one second apart. Unreachable, timed out, 5xx and 429 answers are retried; any other 4xx is not.
+4. On success, the label, confidence, model version and per-sentence results are stored in `sentiment_results`, the pending flag is cleared, and the reviewee's reputation is recomputed.
+5. If every attempt fails, the review stays saved as pending with no `sentiment_results` row, and the retry below picks it up.
+
+Returns 201 `{ "review": {...} }` either way:
+
+```json
+{
+  "id", "job_id", "reviewer_id", "reviewee_id", "rating", "review_text",
+  "pending_classification": false,
+  "created_at": "...",
+  "sentiment": { "label", "confidence_score", "model_version", "analyzed_at" } or null
+}
+```
+
+`sentiment` is `null` and `pending_classification` is true when the classifier could not be reached.If the inference service does not answer, the request takes up to about 16 seconds; if it refuses the connection, as a stopped local service does, it answers within a few seconds.
+
+### GET /api/jobs/:id/reviews
+
+For the job's client and worker only. Returns both sides from the caller's point of view:
+
+```json
+{
+  "job_id": "...",
+  "can_review": true,
+  "written": { ...the caller's own review, as above } or null,
+  "received": { "status": "none" }
+}
+```
+
+`received` is one of:
+
+| `status` | Meaning |
+|---|---|
+| `none` | The other party has not reviewed this job |
+| `hidden` | They have, but the caller has not reviewed yet. `visible_at` says when it shows anyway (14 days after it was written). Its text, rating and sentiment are not sent. |
+| `visible` | The caller has reviewed too, or 14 days have passed. `review` holds it. |
+
+`can_review` is true when the job is completed and the caller has not reviewed it.
+
+### Classification retry
+
+`src/server.js` starts a timer when the API starts listening. It runs once at startup and then every minute:
+
+- It takes up to 20 reviews still pending, oldest first, leaving out any younger than 30 seconds, whose own submit request may still be classifying them.
+- Each gets one attempt. On success it is stored and the reviewee recomputed, as on submit.
+- The first failure that means the service is down (unreachable, timeout, 5xx, 401) ends the tick, so a stopped classifier gets one call a minute. A 422 for one text is logged and skipped.
+- Each tick that finds pending reviews logs one line, such as `Classification retry: 1 of 1 pending reviews classified.`
+
+On Render's free tier the first call after the inference service has slept wakes it, which takes longer than 5 seconds. That review stays pending and the next tick, a minute later, classifies it.
+
+Writing `sentiment_results` and clearing the flag are two requests, because supabase-js cannot run a transaction. If a sentiment row already exists for the review, it is kept and the flag is cleared, so a crash between the two writes or two attempts racing on one review leaves one row.
+
 ## Reputation score
 
 Plan 3.4, with the job history rule from the change log of 18 November. The code is in `src/reputation/score.js`.
@@ -282,8 +361,8 @@ Plan 3.4, with the job history rule from the change log of 18 November. The code
 |---|---|---|
 | R, ratings | 40% | Mean star rating of the reviews counted |
 | S, sentiment | 40% | Mean of the labels mapped positive 5, neutral 3, negative 1. While fewer than three reviews count, one neutral review is added. Confidence is not used. |
-| H, job history, worker | 20% | 5 Ã— min(1, completed / 10). Workers cannot cancel, so no cancellation counts against them. |
-| H, job history, client | 20% | 5 Ã— max(0, 1 âˆ’ 2 Ã— cancelled / (completed + cancelled)) Ã— min(1, completed / 10), where cancelled counts only jobs cancelled after a worker was assigned. Cancelling an open job costs nothing. |
+| H, job history, worker | 20% | 5 x min(1, completed / 10). Workers cannot cancel, so no cancellation counts against them. |
+| H, job history, client | 20% | 5 x max(0, 1 - 2 x cancelled / (completed + cancelled)) x min(1, completed / 10), where cancelled counts only jobs cancelled after a worker was assigned. Cancelling an open job costs nothing. |
 
 Each part is stored to two decimals, and the score is 0.4 R + 0.4 S + 0.2 H worked out from those stored parts, so the breakdown on screen always reproduces the score. Screens show one decimal.
 
@@ -305,6 +384,12 @@ A user has no `reputation_scores` row, and `reputation` is `null`, until at leas
 
 `provisional` is true while `review_count` is under three. It is worked out from `review_count` when the row is read, not stored.
 
-A score is recomputed when a job is completed or cancelled, for both parties. Reviews will trigger it too once reviews are submitted (#50). A review that becomes visible because 14 days passed has no request to trigger a recompute; the sweep for that comes with #53.
+A score is recomputed:
 
-Worked example, Peter Mwangi: 41 reviews counted, ratings 201 / 41 = 4.90, labels 32 positive, 6 neutral and 3 negative giving 181 / 41 = 4.41, and 41 completed jobs giving H = 5.00. Score 0.4 Ã— 4.90 + 0.4 Ã— 4.41 + 0.2 Ã— 5.00 = 4.724, stored 4.72 and shown 4.7. `test/reputation.test.js` checks this.
+- for both parties, when a job is completed or cancelled;
+- for the reviewee, when their review is classified, on submit or by the retry;
+- for the reviewer, when their review completes the pair, because the review they received earlier has just become visible.
+
+A review that becomes visible because 14 days passed has no request to trigger a recompute; the sweep for that comes with #53, on the same one-minute timer as the classification retry.
+
+Worked example, Peter Mwangi: 41 reviews counted, ratings 201 / 41 = 4.90, labels 32 positive, 6 neutral and 3 negative giving 181 / 41 = 4.41, and 41 completed jobs giving H = 5.00. Score 0.4 x 4.90 + 0.4 x 4.41 + 0.2 x 5.00 = 4.724, stored 4.72 and shown 4.7. `test/reputation.test.js` checks this.
