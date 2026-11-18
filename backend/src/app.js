@@ -3,6 +3,7 @@ import { authenticate } from './auth/authenticate.js'
 import { ApiError } from './errors.js'
 import { jobsRouter } from './routes/jobs.js'
 import { meRouter } from './routes/me.js'
+import { reviewsRouter } from './routes/reviews.js'
 import { skillsRouter } from './routes/skills.js'
 import { usersRouter } from './routes/users.js'
 
@@ -11,7 +12,8 @@ import { usersRouter } from './routes/users.js'
 //   verifyToken: async (token) => ({ authId, email }), throws ApiError if bad
 //   users, skills, reputation, reviews, jobs: the repositories from db/
 //   scoring: the reputation service from reputation/recompute.js
-export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring }) {
+//   classification: the service from reviews/classification.js
+export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring, classification }) {
   const app = express()
   app.use(express.json({ limit: '100kb' }))
 
@@ -26,6 +28,7 @@ export function createApp({ verifyToken, users, skills, reputation, reviews, job
   app.use('/api', skillsRouter({ users, skills }))
   app.use('/api', usersRouter({ users, skills, reputation, reviews }))
   app.use('/api', jobsRouter({ users, jobs, scoring }))
+  app.use('/api', reviewsRouter({ users, jobs, reviews, scoring, classification }))
 
   // Any request that did not match a route above ends up here.
   app.use((req, res) => {

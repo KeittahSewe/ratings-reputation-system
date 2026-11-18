@@ -3,6 +3,7 @@ import { requireRole, requireUser } from '../auth/requireUser.js'
 import { CATEGORIES } from '../categories.js'
 import { ApiError, validationError as invalid } from '../errors.js'
 import { UUID } from '../ids.js'
+import { canSee } from '../jobs/access.js'
 import { ACTIONS, STATUSES, timeline } from '../jobs/status.js'
 
 const MAX_REQUIRED_SKILLS = 10
@@ -60,13 +61,6 @@ function parseFilters(query, { allowStatus }) {
     if (q) filters.q = q
   }
   return filters
-}
-
-// Who may see a job: its client, its worker, and any worker while it is open
-// (so the available jobs list can link to it). Anyone else gets the same 404
-// as a missing job, so ids cannot be probed.
-function canSee(job, user) {
-  return job.client_id === user.id || job.worker_id === user.id || (job.status === 'open' && user.role === 'worker')
 }
 
 function withTimeline(job) {
