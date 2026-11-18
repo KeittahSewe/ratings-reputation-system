@@ -103,10 +103,18 @@ describe('jobs', () => {
   let db
   let app
   let token
+  let recomputed
 
   beforeEach(async () => {
     db = fakeDb()
-    app = createApp({ verifyToken, users: db.users, jobs: db.jobs })
+    // Records which jobs the reputation service was asked about.
+    recomputed = []
+    const scoring = {
+      async recomputeParties(job) {
+        recomputed.push({ client_id: job.client_id, worker_id: job.worker_id, status: job.status })
+      },
+    }
+    app = createApp({ verifyToken, users: db.users, jobs: db.jobs, scoring })
     token = {}
     for (const [name, sub] of Object.entries(AUTH)) {
       token[name] = 'Bearer ' + (await makeToken({ claims: { sub, email: `${name}@example.com` } }))
@@ -217,6 +225,33 @@ describe('jobs', () => {
       const res = await post(`/jobs/${id}/cancel`, 'amina')
       assert.equal(res.body.job.status, 'cancelled')
       assert.equal(res.body.job.worker_id, ID.peter)
+    })
+  })
+
+  describe('reputation recompute (#49)', () => {
+    it('recomputes both parties once a job is completed', async () => {
+      await jobAt('completed')
+      assert.deepEqual(recomputed, [{ client_id: ID.amina, worker_id: ID.peter, status: 'completed' }])
+    })
+
+    it('recomputes the parties of a cancelled job, with no worker if it was open', async () => {
+      await post(`/jobs/${await jobAt('open')}/cancel`, 'amina')
+      await post(`/jobs/${await jobAt('assigned')}/cancel`, 'amina')
+      assert.deepEqual(recomputed, [
+        { client_id: ID.amina, worker_id: null, status: 'cancelled' },
+        { client_id: ID.amina, worker_id: ID.peter, status: 'cancelled' },
+      ])
+    })
+
+    it('does not recompute for assign, accept or submit', async () => {
+      await jobAt('submitted')
+      assert.deepEqual(recomputed, [])
+    })
+
+    it('does not recompute when the status change is refused', async () => {
+      const id = await jobAt('in_progress')
+      assert.equal((await post(`/jobs/${id}/complete`, 'amina')).status, 409)
+      assert.deepEqual(recomputed, [])
     })
   })
 
