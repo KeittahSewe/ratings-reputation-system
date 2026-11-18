@@ -6,6 +6,7 @@ import { createReputationRepo } from './db/reputation.js'
 import { createReviewsRepo } from './db/reviews.js'
 import { createSkillsRepo } from './db/skills.js'
 import { createUsersRepo } from './db/users.js'
+import { createReputationService } from './reputation/recompute.js'
 
 const { SUPABASE_URL, SUPABASE_SECRET_KEY } = process.env
 const port = process.env.PORT || 3000
@@ -29,13 +30,17 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY, {
 })
 
 const issuer = supabaseIssuer(SUPABASE_URL)
-const app = createApp({
-  verifyToken: createTokenVerifier({ issuer, keySet: remoteKeySet(issuer) }),
+const repos = {
   users: createUsersRepo(supabase),
   skills: createSkillsRepo(supabase),
   reputation: createReputationRepo(supabase),
   reviews: createReviewsRepo(supabase),
   jobs: createJobsRepo(supabase),
+}
+const app = createApp({
+  verifyToken: createTokenVerifier({ issuer, keySet: remoteKeySet(issuer) }),
+  ...repos,
+  scoring: createReputationService(repos),
 })
 
 app.listen(port, () => {

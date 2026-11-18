@@ -73,7 +73,9 @@ function withTimeline(job) {
   return { ...job, timeline: timeline(job) }
 }
 
-export function jobsRouter({ users, jobs }) {
+// scoring: the reputation service. Completing or cancelling a job changes
+// the job history (H) of both parties, so both are recomputed.
+export function jobsRouter({ users, jobs, scoring }) {
   const router = Router()
   const signedIn = requireUser(users)
 
@@ -154,6 +156,7 @@ export function jobsRouter({ users, jobs }) {
       if (!updated) throw new ApiError(409, 'job_changed', 'This job changed while you were updating it. Reload and try again.')
 
       const fresh = await jobs.findById(job.id)
+      if (action === 'complete' || action === 'cancel') await scoring.recomputeParties(fresh)
       res.status(200).json({ job: withTimeline(fresh) })
     })
   }

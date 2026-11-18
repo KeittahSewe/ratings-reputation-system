@@ -10,7 +10,8 @@ import { usersRouter } from './routes/users.js'
 // fake token check and fake data access.
 //   verifyToken: async (token) => ({ authId, email }), throws ApiError if bad
 //   users, skills, reputation, reviews, jobs: the repositories from db/
-export function createApp({ verifyToken, users, skills, reputation, reviews, jobs }) {
+//   scoring: the reputation service from reputation/recompute.js
+export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring }) {
   const app = express()
   app.use(express.json({ limit: '100kb' }))
 
@@ -24,7 +25,7 @@ export function createApp({ verifyToken, users, skills, reputation, reviews, job
   app.use('/api', meRouter({ users, skills, reputation }))
   app.use('/api', skillsRouter({ users, skills }))
   app.use('/api', usersRouter({ users, skills, reputation, reviews }))
-  app.use('/api', jobsRouter({ users, jobs }))
+  app.use('/api', jobsRouter({ users, jobs, scoring }))
 
   // Any request that did not match a route above ends up here.
   app.use((req, res) => {

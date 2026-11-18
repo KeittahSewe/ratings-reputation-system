@@ -16,7 +16,7 @@ function fakeDb() {
     { id: 'u-amina', auth_id: AMINA.sub, email: AMINA.email, name: 'Amina Wanjiru', role: 'client', company_name: 'Wanjiru Interiors Ltd', bio: null, availability: null, created_at: '2026-11-16T19:50:00Z' },
   ]
   const skills = []
-  const scores = { 'u-amina': { score: 4.7, ratings_component: 4.7, sentiment_component: 4.5, history_component: 5, last_updated: '2026-11-16T20:00:00Z' } }
+  const scores = { 'u-amina': { score: 4.7, ratings_component: 4.7, sentiment_component: 4.5, history_component: 5, review_count: 12, provisional: false, last_updated: '2026-11-16T20:00:00Z' } }
   const hide = ({ auth_id, ...rest }) => rest
   const skillView = ({ user_id, ...rest }) => rest
 
@@ -97,7 +97,7 @@ describe('profile and skills', () => {
       assert.equal(res.status, 200)
       assert.deepEqual(res.body.skills, [])
       assert.deepEqual(Object.keys(res.body.reputation), [
-        'score', 'ratings_component', 'sentiment_component', 'history_component', 'last_updated',
+        'score', 'ratings_component', 'sentiment_component', 'history_component', 'review_count', 'provisional', 'last_updated',
       ])
     })
 
