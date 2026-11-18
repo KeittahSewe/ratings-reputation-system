@@ -1,6 +1,7 @@
 import express from 'express'
 import { authenticate } from './auth/authenticate.js'
 import { ApiError } from './errors.js'
+import { jobsRouter } from './routes/jobs.js'
 import { meRouter } from './routes/me.js'
 import { skillsRouter } from './routes/skills.js'
 import { usersRouter } from './routes/users.js'
@@ -8,8 +9,8 @@ import { usersRouter } from './routes/users.js'
 // Builds the Express app without starting a server, so tests can pass in a
 // fake token check and fake data access.
 //   verifyToken: async (token) => ({ authId, email }), throws ApiError if bad
-//   users, skills, reputation, reviews: the repositories from db/
-export function createApp({ verifyToken, users, skills, reputation, reviews }) {
+//   users, skills, reputation, reviews, jobs: the repositories from db/
+export function createApp({ verifyToken, users, skills, reputation, reviews, jobs }) {
   const app = express()
   app.use(express.json({ limit: '100kb' }))
 
@@ -23,6 +24,7 @@ export function createApp({ verifyToken, users, skills, reputation, reviews }) {
   app.use('/api', meRouter({ users, skills, reputation }))
   app.use('/api', skillsRouter({ users, skills }))
   app.use('/api', usersRouter({ users, skills, reputation, reviews }))
+  app.use('/api', jobsRouter({ users, jobs }))
 
   // Any request that did not match a route above ends up here.
   app.use((req, res) => {
