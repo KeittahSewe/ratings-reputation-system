@@ -65,17 +65,19 @@ This returns `{ "status": "ok" }`.
 | `src/auth/requireUser.js` | `requireUser` loads the caller's `users` row into `req.user`; `requireRole` lets one role through |
 | `src/db/users.js` | Every query on `public.users` |
 | `src/db/skills.js` | Every query on `public.skills` |
-| `src/db/reputation.js` | Reads from `public.reputation_scores` |
+| `src/db/reputation.js` | Reads and writes `public.reputation_scores`, adding `provisional` on the way out |
 | `src/db/reviews.js` | Reads received reviews, with reviewer, job and sentiment, for profiles |
 | `src/db/jobs.js` | Every query on `public.jobs`, including the conditional update behind each status change |
 | `src/jobs/status.js` | The five job actions with their roles and statuses, and the timeline steps |
+| `src/reputation/score.js` | The reputation formula from plan 3.4: R, S, H and the 40/40/20 score, with no database access |
+| `src/reputation/recompute.js` | Reads a user's counted reviews and finished jobs, computes the score and stores it |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
 | `src/routes/me.js` | `POST /api/me/bootstrap`, `GET /api/me`, `PATCH /api/me` |
 | `src/routes/users.js` | `GET /api/users/:id` |
 | `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
 | `src/routes/jobs.js` | Job create, list, available, detail, and the five status changes |
 
-`createApp()` takes the token checker and the data access as arguments, so tests pass in fakes and import the app without starting a server.
+`createApp()` takes the token checker, the data access and the reputation service as arguments, so tests pass in fakes and import the app without starting a server.
 
 ## Errors
 
@@ -120,6 +122,7 @@ Without `--remote` the CLI targets a local Docker database, which this project d
 | `20261116180836_create_core_tables.sql` | Creates the six tables with row level security on and no policies. Only `service_role` has table privileges. |
 | `20261116200000_lock_browser_roles.sql` | Makes anything a later migration creates in `public` start closed to `anon` and `authenticated`, and stops the push if any table has RLS off or grants anything to those roles. |
 | `20261118160000_add_job_timeline.sql` | Adds `assigned_at`, `accepted_at` and `cancelled_at` to `jobs` for the Figure 4.9 timeline, each tied to the job's status by a CHECK. |
+| `20261118200000_add_reputation_review_count.sql` | Adds `review_count` to `reputation_scores`: how many reviews the stored score was built from. |
 
 The browser never queries a table. The publishable key is used only for Supabase Auth sign-up and sign-in, and every read and write goes through this API as `service_role`, which bypasses row level security. So there are no RLS policies: `anon` and `authenticated` hold no privileges on any table, and RLS stays on with no policies so that a privilege granted by mistake still exposes no rows. Supabase's security advisor reports "RLS enabled, no policy" on all six tables; that is intended.
 
@@ -208,6 +211,7 @@ Another user's public profile, for any signed-in user with a `users` row. Return
 - `reviews` holds the 10 newest visible reviews the user has received. `review_count` counts all visible ones.
 - A review is visible once the person reviewed has also reviewed the same job, or 14 days after it was submitted, whichever comes first. Until then it is left out of both fields.
 - `sentiment` is `null` while a review is waiting for classification.
+- `reputation` is described under Reputation score below.
 - An unknown or malformed id gets 404.
 
 ## Jobs
@@ -235,6 +239,8 @@ Each returns 200 with the job as `GET /api/jobs/:id` gives it. Checks run in thi
 The update only applies if the job is still in the status that was read, so two requests racing on one job cannot both succeed. The loser gets 409 `job_changed`.
 
 A job cancelled while assigned keeps its worker, so it stays in that worker's history.
+
+Completing or cancelling a job recomputes the reputation of both parties, because their job history may have changed. The status change is saved first, so if a recompute fails it is logged and the request still returns 200.
 
 ### POST /api/jobs (clients)
 
@@ -267,3 +273,38 @@ Visible to the job's client, its worker, and any worker while the job is open. R
 ```
 
 A cancelled job has a sixth step, `cancelled`.
+
+## Reputation score
+
+Plan 3.4, with the job history rule from the change log of 18 November. The code is in `src/reputation/score.js`.
+
+| Part | Weight | How it is worked out |
+|---|---|---|
+| R, ratings | 40% | Mean star rating of the reviews counted |
+| S, sentiment | 40% | Mean of the labels mapped positive 5, neutral 3, negative 1. While fewer than three reviews count, one neutral review is added. Confidence is not used. |
+| H, job history, worker | 20% | 5 Ã— min(1, completed / 10). Workers cannot cancel, so no cancellation counts against them. |
+| H, job history, client | 20% | 5 Ã— max(0, 1 âˆ’ 2 Ã— cancelled / (completed + cancelled)) Ã— min(1, completed / 10), where cancelled counts only jobs cancelled after a worker was assigned. Cancelling an open job costs nothing. |
+
+Each part is stored to two decimals, and the score is 0.4 R + 0.4 S + 0.2 H worked out from those stored parts, so the breakdown on screen always reproduces the score. Screens show one decimal.
+
+Which reviews count: only reviews that are visible (see `GET /api/users/:id`) and classified. A hidden review that moved the score would give itself away, because the reviewee could work out its stars from the change in R.
+
+A user has no `reputation_scores` row, and `reputation` is `null`, until at least one review counts. After that, `reputation` is:
+
+```json
+{
+  "score": 4.72,
+  "ratings_component": 4.9,
+  "sentiment_component": 4.41,
+  "history_component": 5,
+  "review_count": 41,
+  "provisional": false,
+  "last_updated": "..."
+}
+```
+
+`provisional` is true while `review_count` is under three. It is worked out from `review_count` when the row is read, not stored.
+
+A score is recomputed when a job is completed or cancelled, for both parties. Reviews will trigger it too once reviews are submitted (#50). A review that becomes visible because 14 days passed has no request to trigger a recompute; the sweep for that comes with #53.
+
+Worked example, Peter Mwangi: 41 reviews counted, ratings 201 / 41 = 4.90, labels 32 positive, 6 neutral and 3 negative giving 181 / 41 = 4.41, and 41 completed jobs giving H = 5.00. Score 0.4 Ã— 4.90 + 0.4 Ã— 4.41 + 0.2 Ã— 5.00 = 4.724, stored 4.72 and shown 4.7. `test/reputation.test.js` checks this.
