@@ -58,6 +58,19 @@ export function createJobsRepo(supabase) {
       return data
     },
 
+    // The finished jobs behind a user's job history (H): completed and
+    // cancelled jobs where the user is the worker or, for clients, the client.
+    async historyFor(userId, role) {
+      const column = role === 'worker' ? 'worker_id' : 'client_id'
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('status, assigned_at')
+        .eq(column, userId)
+        .in('status', ['completed', 'cancelled'])
+      if (error) throw error
+      return data
+    },
+
     // Applies fields to the job only if it is still in the status the caller
     // read, and for a submit only if it has not been submitted. Two requests
     // racing on the same job cannot both succeed. Returns the updated row, or
