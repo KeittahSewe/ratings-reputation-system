@@ -2,12 +2,14 @@ import express from 'express'
 import { authenticate } from './auth/authenticate.js'
 import { ApiError } from './errors.js'
 import { meRouter } from './routes/me.js'
+import { skillsRouter } from './routes/skills.js'
+import { usersRouter } from './routes/users.js'
 
 // Builds the Express app without starting a server, so tests can pass in a
 // fake token check and fake data access.
 //   verifyToken: async (token) => ({ authId, email }), throws ApiError if bad
-//   users: the repository from db/users.js
-export function createApp({ verifyToken, users }) {
+//   users, skills, reputation, reviews: the repositories from db/
+export function createApp({ verifyToken, users, skills, reputation, reviews }) {
   const app = express()
   app.use(express.json({ limit: '100kb' }))
 
@@ -18,7 +20,9 @@ export function createApp({ verifyToken, users }) {
 
   // Every /api route below this line needs a valid Supabase access token.
   app.use('/api', authenticate(verifyToken))
-  app.use('/api', meRouter({ users }))
+  app.use('/api', meRouter({ users, skills, reputation }))
+  app.use('/api', skillsRouter({ users, skills }))
+  app.use('/api', usersRouter({ users, skills, reputation, reviews }))
 
   // Any request that did not match a route above ends up here.
   app.use((req, res) => {
