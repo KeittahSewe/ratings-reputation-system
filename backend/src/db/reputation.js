@@ -33,6 +33,21 @@ export function createReputationRepo(supabase) {
       return view(data)
     },
 
+    // The reputation rows of several users in one query, as a Map from user
+    // id to the same object findForUser returns. Users with no row are left
+    // out of the Map.
+    async findForUsers(userIds) {
+      const byUser = new Map()
+      if (userIds.length === 0) return byUser
+      const { data, error } = await supabase
+        .from('reputation_scores')
+        .select(`user_id, ${COLUMNS}`)
+        .in('user_id', userIds)
+      if (error) throw error
+      for (const { user_id, ...row } of data) byUser.set(user_id, view(row))
+      return byUser
+    },
+
     // result: the object from computeReputation(). One row per user, so a
     // recompute replaces the previous one.
     async save(userId, result, at = new Date()) {
