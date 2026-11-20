@@ -1,6 +1,7 @@
 import express from 'express'
 import { authenticate } from './auth/authenticate.js'
 import { ApiError } from './errors.js'
+import { insightsRouter } from './routes/insights.js'
 import { jobsRouter } from './routes/jobs.js'
 import { meRouter } from './routes/me.js'
 import { recommendationsRouter } from './routes/recommendations.js'
@@ -31,6 +32,7 @@ export function createApp({ verifyToken, users, skills, reputation, reviews, job
   app.use('/api', jobsRouter({ users, jobs, scoring }))
   app.use('/api', reviewsRouter({ users, jobs, reviews, scoring, classification }))
   app.use('/api', recommendationsRouter({ users, jobs, skills, reputation }))
+  app.use('/api', insightsRouter({ users, reviews, jobs, reputation }))
 
   // Any request that did not match a route above ends up here.
   app.use((req, res) => {
