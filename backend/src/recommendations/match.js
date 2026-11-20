@@ -15,6 +15,7 @@
 // wiring" holds "electrical wiring", but "Basic electrical" does not.
 
 import { oneDecimal, twoDecimals } from '../reputation/score.js'
+import { containsPhrase } from '../text/phrases.js'
 
 export const MATCH_WEIGHTS = { skill: 0.5, reputation: 0.4, hiredBefore: 0.1 }
 
@@ -22,22 +23,12 @@ export const DISCLOSURE =
   'Ranked by the recommendation engine from skill match, reputation score and whether you have hired the worker before. ' +
   'It is not a paid placement and no worker can pay to appear higher.'
 
-// Lower-case words, splitting on anything that is not a letter or a digit.
-function words(text) {
-  return text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean)
-}
-
 // Whether the worker's skill contains the required skill as a run of whole
 // words, so "electrical wiring" is in "Basic electrical wiring" but "wiring"
-// is not in "Rewiring".
+// is not in "Rewiring". The matching lives in src/text/phrases.js, shared
+// with the insights theme lexicon.
 export function holdsSkill(workerSkill, requiredSkill) {
-  const have = words(workerSkill)
-  const need = words(requiredSkill)
-  if (need.length === 0) return false
-  for (let i = 0; i + need.length <= have.length; i++) {
-    if (need.every((word, k) => have[i + k] === word)) return true
-  }
-  return false
+  return containsPhrase(workerSkill, requiredSkill)
 }
 
 // job: { category, required_skills }. skills: the worker's [{ skill_name, category }].

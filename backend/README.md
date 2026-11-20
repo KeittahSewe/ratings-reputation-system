@@ -76,12 +76,19 @@ This returns `{ "status": "ok" }`.
 | `src/reputation/recompute.js` | Reads a user's counted reviews and finished jobs, computes the score and stores it |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
 | `src/recommendations/match.js` | The match score from plan 3.5, the skill rule, the ranking order and each card's explanation, with no database access |
+| `src/text/phrases.js` | Whole-phrase matching ignoring capitals, shared by the skill rule and the theme lexicon |
+| `src/insights/lexicon.js` | The worker and client themes, their triggers and the fixed advice for each polarity |
+| `src/insights/months.js` | Calendar months in Africa/Nairobi for the 3m and 6m periods |
+| `src/insights/themes.js` | Finds themes in sentences, decides each review's sentiment per theme, and counts them |
+| `src/insights/guidance.js` | Picks up to three suggestions and fills their fixed text with the counts |
+| `src/insights/build.js` | Builds the whole insights response from rows already read, with no database access |
 | `src/routes/me.js` | `POST /api/me/bootstrap`, `GET /api/me`, `PATCH /api/me` |
 | `src/routes/users.js` | `GET /api/users/:id` |
 | `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
 | `src/routes/jobs.js` | Job create, list, available, detail, and the five status changes |
 | `src/routes/reviews.js` | `POST` and `GET /api/jobs/:id/reviews` |
 | `src/routes/recommendations.js` | `GET /api/jobs/:id/recommendations` |
+| `src/routes/insights.js` | `GET /api/me/insights` |
 
 `createApp()` takes the token checker, the data access, the reputation service and the classification service as arguments, so tests pass in fakes and import the app without starting a server.
 
@@ -469,3 +476,76 @@ Worked example, Figure 4.11, "Rewire reception lighting" (electrical; requires E
 | 4 | Grace Otieno | 0.5 = 25 | 4.53 = 36.24 | no | 61 |
 
 Grace has a higher reputation than Samuel but ranks below him, because she lists an electrical skill and neither of the two the job needs. `test/recommendations.test.js` builds each worker's reputation from raw reviews and jobs with the real formula, then ranks them, and checks these numbers.
+
+## Insights
+
+### GET /api/me/insights
+
+The signed-in user's dashboard, as on Figure 4.12, for workers and clients. Nothing is stored; it is worked out from the reviews and jobs on every request.
+
+`period` is `3m` or `6m` (the default). Anything else gets 400 `validation_failed`.
+
+**Which reviews count.** The same reviews as the reputation score: those the user received that are visible and classified. A hidden review is dropped before any of its sentences are read, so no count, chart column or theme can give it away before the user is allowed to read it. Visible reviews still waiting for a classification are left out and counted in `pending`.
+
+**Periods.** Calendar months in Africa/Nairobi (UTC+03:00, no daylight saving). `6m` is the current month and the five before it, `3m` the current month and the two before it. The current month is marked `partial`. A review belongs to the month it was written in, so a review that turns visible after 14 days lands in an earlier month's column.
+
+**Scope.** The period sets the chart, the themes and the guidance. The summary cards are all-time, each with its value at the start of the period. The reputation card is the stored score.
+
+Returns 200:
+
+```json
+{
+  "role": "worker",
+  "period": { "key": "6m", "time_zone": "Africa/Nairobi", "from": "2026-02-28T21:00:00.000Z", "months": ["2026-03", "...", "2026-08"] },
+  "summary": {
+    "reputation": { ...as GET /api/me gives it } or null,
+    "reviews": { "count": 41, "at_period_start": 0, "pending": 0 },
+    "average_rating": { "value": 4.9, "at_period_start": null },
+    "jobs_completed": { "count": 41, "at_period_start": 0 }
+  },
+  "sentiment_by_month": [
+    { "month": "2026-03", "partial": false, "total": 6,
+      "counts": { "positive": 3, "neutral": 1, "negative": 2 },
+      "percent": { "positive": 50, "neutral": 17, "negative": 33 } }
+  ],
+  "themes": [
+    { "key": "advance_notice", "name": "Advance notice of delays", "reviews": 9, "of": 41,
+      "sentiment": "negative", "counts": { "positive": 0, "neutral": 0, "negative": 9 },
+      "negative_with_4_or_5_stars": 9, "by_month": [0, 0, 0, 0, 2, 7] }
+  ],
+  "guidance": [
+    { "kind": "theme_negative", "theme": "advance_notice",
+      "title": "Tell clients about a delay as soon as you know about it.",
+      "detail": "Advance notice of delays comes up negative in 9 of your 41 reviews. All 9 of those reviews still gave you four or five stars." }
+  ],
+  "guidance_note": "Each suggestion comes from a theme or from your sentiment trend above. Nothing here affects your score.",
+  "model_versions": ["distilbert-sst5-3cls-v1.0-20261111-seed43-onnx-int8"]
+}
+```
+
+`percent` adds up to 100 by largest remainder and is `null` for a month with no reviews, so the chart draws a gap rather than an empty column. `average_rating.value` is the same mean as the ratings component of the score. The response never carries review or sentence text.
+
+#### Themes
+
+A theme is found in a sentence when the sentence contains one of its triggers as a whole phrase, ignoring capitals (the same rule as the recommendation skill match, in `src/text/phrases.js`). There is no stemming, so every form is listed. A trigger decides only the topic. The polarity comes from that sentence's DistilBERT label in `sentiment_results.sentences`, so there is no negation list: "did not reply" and "replied quickly" both mark communication, and the model reads one negative and the other positive.
+
+| Role | Themes |
+|---|---|
+| worker | punctuality, tidiness, communication, quality, pricing, advance_notice (plan C1) |
+| client | payment, instructions, communication, scope (the labelling guideline's rule on reviews of clients) |
+
+The triggers are in `src/insights/lexicon.js`. One sentence can mark two themes. A known false hit is "late" in "late afternoon".
+
+A theme counts once per review. The review's sentiment for the theme comes from the sentences that mention it: neutral when a positive and a negative sentence both do (praise and complaint cancel, as in rule 4 of the labelling guideline), otherwise the positive or negative label if there is one, otherwise neutral. Across reviews, `sentiment` is the label with the most reviews, or `mixed` when the top two are level. `counts` gives all three, because the deployed model leans negative and a reader should see the split, not just the winner. `negative_with_4_or_5_stars` counts the negative mentions in reviews that still gave four or five stars, which is where that lean shows. Themes are listed most mentioned first; only themes mentioned at least once appear.
+
+#### Guidance
+
+At most three items, each a fixed sentence filled with counts:
+
+1. `theme_negative`: each theme whose sentiment is negative with at least 3 negative mentions, most first.
+2. `theme_positive`: the positive theme with the most positive mentions, if it has at least 3.
+3. `trend`: the change in negative share between the first and last months of the period that each hold at least 3 reviews.
+
+3 is the same threshold as Provisional. A user with fewer counted reviews gets no guidance.
+
+Worked example, Figure 4.12: `test/insights.test.js` builds 41 reviews of Peter Mwangi between March and August 2026 and gets the figure's themes, punctuality 27, tidiness 19, communication 14 (the figure's "Explaining the problem before starting") and advance notice 9 negative, all out of 41, with the three guidance items. The figure's chart cannot come from 41 reviews: its rounded shares need at least 204 reviews with 15 negatives.

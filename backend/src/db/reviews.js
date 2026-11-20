@@ -13,10 +13,17 @@ const RECEIVED = [
 
 const COLUMNS = 'id, job_id, reviewer_id, reviewee_id, rating, review_text, pending_classification, created_at'
 
-// sentences stays out: it is read only by the insights endpoint.
+// sentences stays out: it is read only by the insights endpoint, through
+// listReceivedForInsights.
 const WITH_SENTIMENT = `${COLUMNS}, sentiment:sentiment_results(label, confidence_score, model_version, analyzed_at)`
 
 const SENTIMENT_COLUMNS = 'label, confidence_score, model_version, analyzed_at'
+
+// What GET /api/me/insights needs from each review received: enough to
+// decide visibility (job_id, created_at), the stars, and the sentiment with
+// its per-sentence results. No review text and no reviewer: the dashboard
+// shows counts, never quotes.
+const FOR_INSIGHTS = 'id, job_id, rating, created_at, sentiment:sentiment_results(label, model_version, sentences)'
 
 // A one-to-one join can come back as an object or a one-item array.
 function oneToOne(value) {
@@ -44,6 +51,18 @@ export function createReviewsRepo(supabase) {
         .order('created_at', { ascending: false })
       if (error) throw error
       return data.map(withSentiment)
+    },
+
+    // Every review the user has received, visible or not, with sentences.
+    // The caller filters by visibility before reading any of it.
+    async listReceivedForInsights(userId) {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select(FOR_INSIGHTS)
+        .eq('reviewee_id', userId)
+        .order('created_at', { ascending: true })
+      if (error) throw error
+      return data.map((row) => ({ ...row, sentiment: oneToOne(row.sentiment) }))
     },
 
     // Of the given jobs, the ones this user has written a review for.

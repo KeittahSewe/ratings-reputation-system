@@ -60,11 +60,12 @@ export function createJobsRepo(supabase) {
 
     // The finished jobs behind a user's job history (H): completed and
     // cancelled jobs where the user is the worker or, for clients, the client.
+    // completed_at is for the insights jobs card.
     async historyFor(userId, role) {
       const column = role === 'worker' ? 'worker_id' : 'client_id'
       const { data, error } = await supabase
         .from('jobs')
-        .select('status, assigned_at')
+        .select('status, assigned_at, completed_at')
         .eq(column, userId)
         .in('status', ['completed', 'cancelled'])
       if (error) throw error
