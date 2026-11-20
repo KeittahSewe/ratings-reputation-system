@@ -27,6 +27,19 @@ export function createUsersRepo(supabase) {
       return data
     },
 
+    // Workers taking jobs at the moment: the recommendation engine's
+    // candidates for any open job.
+    async listAvailableWorkers() {
+      const { data, error } = await supabase
+        .from('users')
+        .select(PUBLIC_COLUMNS)
+        .eq('role', 'worker')
+        .eq('availability', true)
+        .order('name')
+      if (error) throw error
+      return data
+    },
+
     // Returns the new row, or null if a row with this auth_id or email
     // already exists.
     async insert(row) {

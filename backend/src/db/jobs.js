@@ -71,6 +71,33 @@ export function createJobsRepo(supabase) {
       return data
     },
 
+    // How many jobs each of the given workers has completed, as a Map from
+    // worker id to the count. Workers with none are left out of the Map.
+    async completedCountsFor(workerIds) {
+      const counts = new Map()
+      if (workerIds.length === 0) return counts
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('worker_id')
+        .eq('status', 'completed')
+        .in('worker_id', workerIds)
+      if (error) throw error
+      for (const { worker_id } of data) counts.set(worker_id, (counts.get(worker_id) ?? 0) + 1)
+      return counts
+    },
+
+    // The workers this client has completed at least one job with. A
+    // cancelled job does not count as a hire.
+    async workersHiredBy(clientId) {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('worker_id')
+        .eq('client_id', clientId)
+        .eq('status', 'completed')
+      if (error) throw error
+      return new Set(data.map((j) => j.worker_id))
+    },
+
     // Applies fields to the job only if it is still in the status the caller
     // read, and for a submit only if it has not been submitted. Two requests
     // racing on the same job cannot both succeed. Returns the updated row, or
