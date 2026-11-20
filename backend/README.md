@@ -75,11 +75,13 @@ This returns `{ "status": "ok" }`.
 | `src/reputation/score.js` | The reputation formula from plan 3.4: R, S, H and the 40/40/20 score, with no database access |
 | `src/reputation/recompute.js` | Reads a user's counted reviews and finished jobs, computes the score and stores it |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
+| `src/recommendations/match.js` | The match score from plan 3.5, the skill rule, the ranking order and each card's explanation, with no database access |
 | `src/routes/me.js` | `POST /api/me/bootstrap`, `GET /api/me`, `PATCH /api/me` |
 | `src/routes/users.js` | `GET /api/users/:id` |
 | `src/routes/skills.js` | `GET`, `POST /api/me/skills` and `DELETE /api/me/skills/:id` |
 | `src/routes/jobs.js` | Job create, list, available, detail, and the five status changes |
 | `src/routes/reviews.js` | `POST` and `GET /api/jobs/:id/reviews` |
+| `src/routes/recommendations.js` | `GET /api/jobs/:id/recommendations` |
 
 `createApp()` takes the token checker, the data access, the reputation service and the classification service as arguments, so tests pass in fakes and import the app without starting a server.
 
@@ -105,6 +107,7 @@ Every error response uses the same format:
 | 409 | `skill_exists` | The worker already lists this skill, ignoring capitals |
 | 409 | `job_not_completed` | A review was sent for a job that is not completed |
 | 409 | `already_reviewed` | The caller has already reviewed this job |
+| 409 | `job_not_open` | Recommendations were asked for a job that is not open |
 | 413 | `body_too_large` | The body is over 100 kB |
 | 500 | `internal_error` | Anything unexpected; details go to the server log only |
 | 503 | `auth_unavailable` | The project's public keys could not be fetched |
@@ -315,7 +318,7 @@ Returns 201 `{ "review": {...} }` either way:
 }
 ```
 
-`sentiment` is `null` and `pending_classification` is true when the classifier could not be reached.If the inference service does not answer, the request takes up to about 16 seconds; if it refuses the connection, as a stopped local service does, it answers within a few seconds.
+`sentiment` is `null` and `pending_classification` is true when the classifier could not be reached. If the inference service does not answer, the request takes up to about 16 seconds; if it refuses the connection, as a stopped local service does, it answers within a few seconds.
 
 ### GET /api/jobs/:id/reviews
 
@@ -393,3 +396,76 @@ A score is recomputed:
 A review that becomes visible because 14 days passed has no request to trigger a recompute; the sweep for that comes with #53, on the same one-minute timer as the classification retry.
 
 Worked example, Peter Mwangi: 41 reviews counted, ratings 201 / 41 = 4.90, labels 32 positive, 6 neutral and 3 negative giving 181 / 41 = 4.41, and 41 completed jobs giving H = 5.00. Score 0.4 x 4.90 + 0.4 x 4.41 + 0.2 x 5.00 = 4.724, stored 4.72 and shown 4.7. `test/reputation.test.js` checks this.
+
+## Recommendations
+
+### GET /api/jobs/:id/recommendations (clients)
+
+Ranks the workers available now for one of the caller's open jobs, as on Figure 4.11. Rankings are worked out on every request and never stored.
+
+Checks run in this order:
+
+1. 403 `wrong_role` for a worker.
+2. 404 `not_found` if the job does not exist or is another client's.
+3. 409 `job_not_open` unless the job is open.
+
+Every worker whose availability is on is ranked, including workers with no skill in the job's category. The match follows plan 3.5:
+
+```
+match = 100 x (0.5 x skill + 0.4 x reputation / 5 + 0.1 x hired_before)
+```
+
+| Term | Points | How it is worked out |
+|---|---|---|
+| skill | up to 50 | 0 if the worker lists no skill in the job's category. Otherwise 0.5 + 0.5 x (required skills held / required skills on the job), or 1 when the job names no required skills. |
+| reputation | up to 40 | The stored two-decimal score, so 4.72 and not the 4.7 on screen. A worker with no reputation row scores 0 here. |
+| hired_before | 0 or 10 | 10 if the caller has a completed job with this worker. A cancelled job is not a hire. |
+
+A worker holds a required skill when one of their skills in the job's category contains it as a whole phrase, ignoring capitals. "Basic electrical wiring" holds "electrical wiring". "Basic electrical", "Electrical installation" and "Rewiring" do not. A matching skill listed under another category does not count.
+
+Order: workers with a reputation row come first, then workers with none (plan 3.4's cold-start rule), whatever their match. Within each group the order is by unrounded match, then stored score, then completed jobs, then name. A Provisional worker ranks on their score like anyone else, because the neutral prior already stops one review from producing a high score. The match is shown as a whole number, rounded half up.
+
+Returns 200:
+
+```json
+{
+  "job": { "id", "title", "category", "required_skills": [...] },
+  "total": 31,
+  "recommendations": [
+    {
+      "rank": 2,
+      "worker": { "id", "name": "Peter Mwangi" },
+      "skills": [{ "id", "skill_name", "category" }, ...],
+      "completed_jobs": 41,
+      "reputation": { ...as GET /api/users/:id gives it } or null,
+      "match": 85,
+      "match_points": { "skill": 37.5, "reputation": 37.76, "hired_before": 10 },
+      "skill_match": 0.75,
+      "skills_held": [{ "required": "Electrical wiring", "listed_as": "Basic electrical wiring" }],
+      "skills_missing": ["Lighting installation"],
+      "hired_before": true,
+      "explanation": [
+        "Peter holds 1 of the 2 skills this job needs: Electrical wiring (listed as Basic electrical wiring), not Lighting installation.",
+        "Reputation score 4.7 from 41 reviews.",
+        "You have hired this worker before."
+      ]
+    }
+  ],
+  "disclosure": "Ranked by the recommendation engine from skill match, reputation score and whether you have hired the worker before. It is not a paid placement and no worker can pay to appear higher."
+}
+```
+
+Each card's skills list its skills in the job's category first. `explanation` always holds three sentences, one per term, in the order of the table above. A worker with no reviews gets "No reviews yet, so reputation adds nothing and Daniel is listed after every worker with a score." A Provisional one gets, for example, "Reputation score 3.3, Provisional because it rests on 1 review."
+
+The route makes five queries whatever the number of workers: the available workers, then their skills, reputation rows and completed job counts, and the caller's past hires. The counts query returns one row per completed job, which stays under Supabase's default limit of 1,000 rows for the phase 6 dataset of about 250 completed jobs.
+
+Worked example, Figure 4.11, "Rewire reception lighting" (electrical; requires Electrical wiring and Lighting installation), for Amina Wanjiru:
+
+| Rank | Worker | Skill | Reputation | Hired before | Match |
+|---|---|---|---|---|---|
+| 1 | Esther Njeri | 1.0 = 50 | 4.80 = 38.40 | no | 88 |
+| 2 | Peter Mwangi | 0.75 = 37.5 | 4.72 = 37.76 | yes = 10 | 85 |
+| 3 | Samuel Kariuki | 0.75 = 37.5 | 4.33 = 34.64 | no | 72 |
+| 4 | Grace Otieno | 0.5 = 25 | 4.53 = 36.24 | no | 61 |
+
+Grace has a higher reputation than Samuel but ranks below him, because she lists an electrical skill and neither of the two the job needs. `test/recommendations.test.js` builds each worker's reputation from raw reviews and jobs with the real formula, then ranks them, and checks these numbers.
