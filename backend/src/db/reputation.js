@@ -4,7 +4,10 @@
 
 import { PROVISIONAL_BELOW } from '../reputation/score.js'
 
-const COLUMNS = 'score, ratings_component, sentiment_component, history_component, review_count, last_updated'
+const COLUMNS = [
+  'score, ratings_component, sentiment_component, history_component, review_count',
+  'positive_count, neutral_count, negative_count, last_updated',
+].join(', ')
 
 // numeric columns can arrive as strings; the API always sends numbers.
 // provisional is derived from review_count, so it can never disagree with it.
@@ -17,6 +20,12 @@ function view(row) {
     history_component: Number(row.history_component),
     review_count: row.review_count,
     provisional: row.review_count < PROVISIONAL_BELOW,
+    // null for a row written before #84 and not recomputed since
+    // (npm run recompute:all fills them).
+    sentiment_counts:
+      row.positive_count === null
+        ? null
+        : { positive: row.positive_count, neutral: row.neutral_count, negative: row.negative_count },
     last_updated: row.last_updated,
   }
 }
@@ -48,6 +57,13 @@ export function createReputationRepo(supabase) {
       return byUser
     },
 
+    // Every user who has a reputation row, for npm run recompute:all.
+    async listUserIds() {
+      const { data, error } = await supabase.from('reputation_scores').select('user_id')
+      if (error) throw error
+      return data.map((row) => row.user_id)
+    },
+
     // result: the object from computeReputation(). One row per user, so a
     // recompute replaces the previous one.
     async save(userId, result, at = new Date()) {
@@ -61,6 +77,9 @@ export function createReputationRepo(supabase) {
             sentiment_component: result.sentiment_component,
             history_component: result.history_component,
             review_count: result.review_count,
+            positive_count: result.sentiment_counts.positive,
+            neutral_count: result.sentiment_counts.neutral,
+            negative_count: result.sentiment_counts.negative,
             last_updated: at.toISOString(),
           },
           { onConflict: 'user_id' },
