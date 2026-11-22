@@ -1,0 +1,52 @@
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--space-4);
+  background: var(--color-page);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 200px;
+}
+
+.name {
+  font-weight: var(--font-weight-semibold);
+  line-height: 17px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+.job,
+.date {
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+  color: var(--color-text-secondary);
+}
+
+.text {
+  margin: 0;
+  line-height: 17px;
+  white-space: pre-line;
+}
+
+.date {
+  margin: 0;
+}

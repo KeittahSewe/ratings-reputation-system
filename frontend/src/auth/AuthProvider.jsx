@@ -80,7 +80,9 @@ export function AuthProvider({ children }) {
   }, [])
 
   const reloadMe = useCallback(() => setAttempt((n) => n + 1), [])
-  const setMe = useCallback((me) => setState((s) => ({ ...s, me })), [])
+  // Takes the new GET /api/me body, or a function from the current one to the
+  // next, after the user changes their own profile.
+  const setMe = useCallback((next) => setState((s) => ({ ...s, me: typeof next === 'function' ? next(s.me) : next })), [])
 
   const value = useMemo(() => {
     let current

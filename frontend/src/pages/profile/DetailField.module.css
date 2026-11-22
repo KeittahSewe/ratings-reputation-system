@@ -1,0 +1,28 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+}
+
+.value {
+  min-height: 41px;
+  padding: 11px 14px;
+  line-height: 17px;
+  background: var(--color-page);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
+.multiline {
+  white-space: pre-line;
+}
+
+.empty {
+  color: var(--color-text-secondary);
+}

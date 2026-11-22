@@ -17,3 +17,7 @@
 .ai {
   background: var(--color-ai-accent);
 }
+
+.quiet {
+  font-weight: var(--font-weight-regular);
+}
