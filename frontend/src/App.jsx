@@ -6,7 +6,7 @@ import { AppLayout } from './layout/AppLayout.jsx'
 import { LoginPage } from './pages/LoginPage.jsx'
 import { NotFoundPage } from './pages/NotFoundPage.jsx'
 import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
-import { RegisterPlaceholder } from './pages/RegisterPlaceholder.jsx'
+import { RegisterPage } from './pages/RegisterPage.jsx'
 import { StatusPage } from './pages/StatusPage.jsx'
 import { PublicOnly } from './routes/PublicOnly.jsx'
 import { RequireAuth } from './routes/RequireAuth.jsx'
@@ -37,7 +37,7 @@ export default function App() {
             path="/register"
             element={
               <PublicOnly>
-                <RegisterPlaceholder />
+                <RegisterPage />
               </PublicOnly>
             }
           />

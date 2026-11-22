@@ -32,3 +32,8 @@
   color: var(--color-page);
   background: var(--color-negative);
 }
+
+.large {
+  width: 100%;
+  min-height: 48px;
+}
