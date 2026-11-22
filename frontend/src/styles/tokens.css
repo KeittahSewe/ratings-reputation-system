@@ -74,6 +74,10 @@ body {
   background: var(--color-page);
 }
 
+a {
+  color: var(--color-primary);
+}
+
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: 2px;

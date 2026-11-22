@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formError {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-page);
+  border-left: var(--rule-width) solid var(--color-negative);
+  border-radius: var(--radius-sm);
+}

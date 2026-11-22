@@ -39,6 +39,7 @@ Never commit `.env`. Only variables that start with `VITE_` are visible in the b
 | `npm run preview` | Serves the built `dist/` folder locally to check the build |
 | `npm run lint` | Checks the code with oxlint |
 | `npm run check:design` | Checks the colour rules (see Design check) |
+| `npm test` | Runs the tests of plain JavaScript modules (`src/**/*.test.js`) with Node's built-in test runner |
 
 ## Structure
 
