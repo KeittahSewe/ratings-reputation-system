@@ -14,3 +14,69 @@
   font-size: var(--font-size-body);
   color: var(--color-text-secondary);
 }
+
+.card {
+  max-width: 640px;
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
+}
+
+.sectionHeading {
+  margin: 0 0 16px;
+  font-size: var(--font-size-section-heading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.statusList {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.statusLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.statusLabel {
+  min-width: 96px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.statusValue {
+  min-width: 96px;
+}
+
+.statusDetail,
+.helper {
+  font-size: var(--font-size-helper);
+  color: var(--color-text-secondary);
+}
+
+.helper {
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+
+.button {
+  padding: 8px 16px;
+  font: inherit;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-page);
+  background: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
