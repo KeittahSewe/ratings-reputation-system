@@ -46,17 +46,18 @@ Never commit `.env`. The variables are loaded with Node's built-in `--env-file-i
 Check that it is running:
 
 ```powershell
-Invoke-RestMethod http://localhost:3000/api/health
+Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json
 ```
 
-This returns `{ "status": "ok" }`.
+This returns the API's status and the inference service's (see Health).
 
 ## Code layout
 
 | File | What it does |
 |---|---|
 | `src/app.js` | `createApp()` builds the Express app: JSON parsing, routes, 404 handler and error handler |
-| `src/server.js` | Checks the environment, creates the Supabase client and token checker, and starts listening on `PORT` |
+| `src/server.js` | Checks the environment, creates the Supabase client and token checker, starts listening on `PORT` and starts the background timer |
+| `src/background.js` | The one-minute timer: the classification retry, then the visibility sweep |
 | `src/errors.js` | `ApiError`, thrown by routes and middleware for any error the API means to send, and `validationError` for 400s |
 | `src/ids.js` | The UUID check used before any id reaches the database |
 | `src/categories.js` | The six service categories, matching the database CHECK constraints |
@@ -70,8 +71,9 @@ This returns `{ "status": "ok" }`.
 | `src/db/jobs.js` | Every query on `public.jobs`, including the conditional update behind each status change |
 | `src/jobs/status.js` | The five job actions with their roles and statuses, and the timeline steps |
 | `src/jobs/access.js` | Who may see a job, and who its two parties are |
-| `src/inference/client.js` | Calls `POST /classify` on the inference service with a 5 second timeout and two retries |
-| `src/reviews/classification.js` | Classifies a review on submit, stores the result, and retries pending reviews every minute |
+| `src/inference/client.js` | Calls `POST /classify` on the inference service with a 5 second timeout and two retries, and `GET /health` once with a 2 second limit |
+| `src/reviews/classification.js` | Classifies a review on submit, stores the result, and retries pending reviews |
+| `src/reviews/visibilitySweep.js` | Recomputes users whose received review has passed its 14-day visibility mark since their last recompute |
 | `src/reputation/score.js` | The reputation formula from plan 3.4: R, S, H and the 40/40/20 score, with no database access |
 | `src/reputation/recompute.js` | Reads a user's counted reviews and finished jobs, computes the score and stores it |
 | `src/reviews/visibility.js` | When a review becomes visible: the pair is complete, or 14 days have passed |
@@ -91,6 +93,31 @@ This returns `{ "status": "ok" }`.
 | `src/routes/insights.js` | `GET /api/me/insights` |
 
 `createApp()` takes the token checker, the data access, the reputation service and the classification service as arguments, so tests pass in fakes and import the app without starting a server.
+
+## Health
+
+Both routes are public and need no token.
+
+### GET /api/live
+
+Returns 200 `{ "status": "ok" }` and calls nothing else. This is the path for Render's health check, which arrives every few seconds and restarts the instance after repeated failures. Because it calls nothing, a sleeping inference service or a paused database cannot restart a healthy API, and the checks do not keep the inference service awake.
+
+### GET /api/health
+
+Always 200 while the API runs. `status` is the API's own; `inference` comes from one `GET /health` call to the inference service with a 2 second limit and no retry:
+
+```json
+{ "status": "ok", "inference": { "status": "ok", "model_version": "distilbert-sst5-3cls-v1.0-20261111-seed43-onnx-int8" } }
+```
+
+| `inference.status` | Meaning |
+|---|---|
+| `ok` | The service answered with its model version |
+| `timeout` | No answer within 2 seconds. On Render's free tier this usually means it is asleep; the call wakes it, so it reads `ok` a minute or so later. |
+| `unreachable` | The connection failed, as for a stopped local service |
+| `error` | It answered, but with a non-2xx status or another shape |
+
+`model_version` is `null` unless `inference.status` is `ok`. No error text from the inference service is passed on. The response is sent with `Cache-Control: no-store`. `/api/health` does not run the classification retry; the timer does.
 
 ## Errors
 
@@ -139,6 +166,7 @@ Without `--remote` the CLI targets a local Docker database, which this project d
 | `20261116200000_lock_browser_roles.sql` | Makes anything a later migration creates in `public` start closed to `anon` and `authenticated`, and stops the push if any table has RLS off or grants anything to those roles. |
 | `20261118160000_add_job_timeline.sql` | Adds `assigned_at`, `accepted_at` and `cancelled_at` to `jobs` for the Figure 4.9 timeline, each tied to the job's status by a CHECK. |
 | `20261118200000_add_reputation_review_count.sql` | Adds `review_count` to `reputation_scores`: how many reviews the stored score was built from. |
+| `20261121090000_add_visibility_sweep.sql` | Adds `reviewees_due_visibility_recompute()`, the query behind the visibility sweep, executable by `service_role` only. |
 
 The browser never queries a table. The publishable key is used only for Supabase Auth sign-up and sign-in, and every read and write goes through this API as `service_role`, which bypasses row level security. So there are no RLS policies: `anon` and `authenticated` hold no privileges on any table, and RLS stays on with no policies so that a privilege granted by mistake still exposes no rows. Supabase's security advisor reports "RLS enabled, no policy" on all six tables; that is intended.
 
@@ -352,7 +380,7 @@ For the job's client and worker only. Returns both sides from the caller's point
 
 ### Classification retry
 
-`src/server.js` starts a timer when the API starts listening. It runs once at startup and then every minute:
+`src/server.js` starts the background timer (`src/background.js`) when the API starts listening. Its first tick runs at startup and then one runs every minute. Each tick runs the classification retry and then the visibility sweep (see Reputation score), one after the other; if the retry fails or stops because the classifier is down, the sweep still runs. The retry:
 
 - It takes up to 20 reviews still pending, oldest first, leaving out any younger than 30 seconds, whose own submit request may still be classifying them.
 - Each gets one attempt. On success it is stored and the reviewee recomputed, as on submit.
@@ -398,11 +426,18 @@ A score is recomputed:
 
 - for both parties, when a job is completed or cancelled;
 - for the reviewee, when their review is classified, on submit or by the retry;
-- for the reviewer, when their review completes the pair, because the review they received earlier has just become visible.
-
-A review that becomes visible because 14 days passed has no request to trigger a recompute; the sweep for that comes with #53, on the same one-minute timer as the classification retry.
+- for the reviewer, when their review completes the pair, because the review they received earlier has just become visible;
+- for the reviewee, by the visibility sweep, when a review they received becomes visible because 14 days passed.
 
 Worked example, Peter Mwangi: 41 reviews counted, ratings 201 / 41 = 4.90, labels 32 positive, 6 neutral and 3 negative giving 181 / 41 = 4.41, and 41 completed jobs giving H = 5.00. Score 0.4 x 4.90 + 0.4 x 4.41 + 0.2 x 5.00 = 4.724, stored 4.72 and shown 4.7. `test/reputation.test.js` checks this.
+
+### Visibility sweep
+
+A review whose reviewee has not answered becomes visible 14 days after it was written, with no request to trigger a recompute. Each tick of the background timer, after the retry, calls `reviewees_due_visibility_recompute()` and recomputes up to 50 users it returns.
+
+It returns each user who has received a review that is classified, not answered by them on the same job, and whose 14-day mark is at or before now but after their `last_updated` (or who has no `reputation_scores` row). No visible-from date is stored: a recompute decides visibility and writes `last_updated` from the same moment, so a mark before `last_updated` has been counted and a mark after it has not. The recompute moves `last_updated` past the mark, so the next tick does not find that user again; a recompute that fails leaves it where it was, so the next tick tries again.
+
+Because the comparison is with `last_updated` and not with the last minute, a mark that passed while the API slept on Render is caught by the first tick after it wakes. The request that wakes the API can read the old score for the second or two before that tick finishes. Each tick that finds anyone logs one line, such as `Visibility sweep: 1 of 1 users recomputed after a review turned visible.`
 
 ## Recommendations
 
