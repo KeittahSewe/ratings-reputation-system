@@ -7,12 +7,11 @@ import { InferenceError } from '../inference/client.js'
 // attempt fails, the review stays saved with pending_classification true and
 // no sentiment_results row.
 //
-// Retry: a timer started by server.js runs retryPending() every minute. It
-// takes the oldest pending reviews and tries each once, stopping at the first
-// failure that means the service is down, so a dead classifier gets one call
-// a minute. The 14-day visibility sweep for #53 runs on the same timer.
-
-export const RETRY_INTERVAL_MS = 60_000
+// Retry: the background timer (src/background.js) runs retryPending() every
+// minute. It takes the oldest pending reviews and tries each once, stopping
+// at the first failure that means the service is down, so a dead classifier
+// gets one call a minute. The 14-day visibility sweep runs on the same timer,
+// after the retry.
 
 // A submit request can spend up to 16.5 s classifying (three 5 s attempts and
 // two short waits). The retry leaves younger reviews alone so it does not
@@ -98,15 +97,5 @@ export function createClassificationService({ reviews, inference, scoring, now =
     return running
   }
 
-  // Runs retryPending() now and then every intervalMs. Returns a function
-  // that stops the timer. unref() lets the process exit without waiting for it.
-  function start(intervalMs = RETRY_INTERVAL_MS) {
-    const tick = () => retryPending().catch((err) => logger.error('Classification retry failed:', err))
-    const timer = setInterval(tick, intervalMs)
-    timer.unref?.()
-    tick()
-    return () => clearInterval(timer)
-  }
-
-  return { classifyOnSubmit, retryPending, start, recomputeQuietly }
+  return { classifyOnSubmit, retryPending, recomputeQuietly }
 }

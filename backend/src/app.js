@@ -15,13 +15,27 @@ import { usersRouter } from './routes/users.js'
 //   users, skills, reputation, reviews, jobs: the repositories from db/
 //   scoring: the reputation service from reputation/recompute.js
 //   classification: the service from reviews/classification.js
-export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring, classification }) {
+//   inference: the client from inference/client.js, for /api/health
+export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring, classification, inference }) {
   const app = express()
   app.use(express.json({ limit: '100kb' }))
 
   // Public: no token needed.
-  app.get('/api/health', (req, res) => {
+
+  // Liveness for Render's health check, which arrives every few seconds and
+  // restarts the instance after repeated failures. It calls nothing, so a
+  // sleeping inference service or a paused database cannot restart a healthy
+  // API, and the checks do not keep the inference service awake.
+  app.get('/api/live', (req, res) => {
     res.status(200).json({ status: 'ok' })
+  })
+
+  // Status for people and the frontend (plan 3.3, #53). Always 200 while the
+  // API itself runs: status is the API's own, and inference says whether the
+  // inference service answered its /health and which model it serves.
+  app.get('/api/health', async (req, res) => {
+    res.set('Cache-Control', 'no-store')
+    res.status(200).json({ status: 'ok', inference: await inference.health() })
   })
 
   // Every /api route below this line needs a valid Supabase access token.

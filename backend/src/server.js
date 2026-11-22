@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { createApp } from './app.js'
+import { startBackgroundTimer } from './background.js'
 import { createTokenVerifier, remoteKeySet, supabaseIssuer } from './auth/tokens.js'
 import { createJobsRepo } from './db/jobs.js'
 import { createReputationRepo } from './db/reputation.js'
@@ -9,6 +10,7 @@ import { createUsersRepo } from './db/users.js'
 import { createInferenceClient } from './inference/client.js'
 import { createReputationService } from './reputation/recompute.js'
 import { createClassificationService } from './reviews/classification.js'
+import { createVisibilitySweep } from './reviews/visibilitySweep.js'
 
 const { SUPABASE_URL, SUPABASE_SECRET_KEY, INFERENCE_URL, INFERENCE_SERVICE_KEY } = process.env
 const port = process.env.PORT || 3000
@@ -51,21 +53,26 @@ const repos = {
   jobs: createJobsRepo(supabase),
 }
 const scoring = createReputationService(repos)
-const classification = createClassificationService({
-  reviews: repos.reviews,
-  inference: createInferenceClient({ url: INFERENCE_URL, serviceKey: INFERENCE_SERVICE_KEY }),
-  scoring,
-})
+const inference = createInferenceClient({ url: INFERENCE_URL, serviceKey: INFERENCE_SERVICE_KEY })
+const classification = createClassificationService({ reviews: repos.reviews, inference, scoring })
+const visibility = createVisibilitySweep({ reviews: repos.reviews, scoring })
 const app = createApp({
   verifyToken: createTokenVerifier({ issuer, keySet: remoteKeySet(issuer) }),
   ...repos,
   scoring,
   classification,
+  inference,
 })
 
 app.listen(port, () => {
   console.log(`API listening on http://localhost:${port}`)
-  // Retries reviews left pending because the inference service was down:
-  // once now, then every minute.
-  classification.start()
+  // Once now, then every minute: retry reviews left pending while the
+  // inference service was down, then recompute anyone whose received review
+  // has passed its 14-day mark (src/background.js).
+  startBackgroundTimer({
+    tasks: [
+      { name: 'Classification retry', run: () => classification.retryPending() },
+      { name: 'Visibility sweep', run: () => visibility.sweep() },
+    ],
+  })
 })

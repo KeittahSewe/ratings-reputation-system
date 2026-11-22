@@ -117,6 +117,19 @@ export function createReviewsRepo(supabase) {
       return sentimentView(data)
     },
 
+    // Up to limit user ids whose reputation is out of date because a review
+    // they received passed its 14-day visibility mark after their last
+    // recompute. The rule is the SQL function in migration 20261121090000.
+    async listRevieweesDueForVisibility({ now, days, limit }) {
+      const { data, error } = await supabase.rpc('reviewees_due_visibility_recompute', {
+        p_now: now.toISOString(),
+        p_days: days,
+        p_limit: limit,
+      })
+      if (error) throw error
+      return data.map((row) => row.user_id)
+    },
+
     // Reviews still waiting for a classification, oldest first. before keeps
     // out reviews whose submit request may still be classifying them.
     async listPending({ before, limit }) {

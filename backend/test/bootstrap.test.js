@@ -140,8 +140,8 @@ describe('POST /api/me/bootstrap', () => {
 describe('routes around authentication', () => {
   const app = createApp({ verifyToken, users: fakeUsers() })
 
-  it('serves /api/health without a token', async () => {
-    const res = await request(app).get('/api/health')
+  it('serves /api/live without a token', async () => {
+    const res = await request(app).get('/api/live')
     assert.equal(res.status, 200)
   })
 

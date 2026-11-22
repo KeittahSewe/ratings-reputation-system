@@ -3,7 +3,6 @@ import { beforeEach, describe, it } from 'node:test'
 import {
   createClassificationService,
   RETRY_BATCH,
-  RETRY_INTERVAL_MS,
   RETRY_MIN_AGE_MS,
 } from '../src/reviews/classification.js'
 import { fakeInference, fakeReviewsRepo, fakeScoring, MODEL_VERSION, quietLogger } from './reviewFakes.js'
@@ -116,38 +115,5 @@ describe('classification retry (decision of 18 November)', () => {
     assert.equal(outcome.classified, 1)
     assert.equal(review.pending_classification, false)
     assert.ok(logger.lines.some((l) => l.level === 'error' && /recompute failed/.test(l.text)))
-  })
-
-  it('start() runs now and then every minute, until stopped', async (t) => {
-    t.mock.timers.enable({ apis: ['setInterval'] })
-    let ticks = 0
-    reviews.listPending = async () => {
-      ticks += 1
-      return []
-    }
-    const flush = () => new Promise((resolve) => setImmediate(resolve))
-
-    const stop = service.start()
-    await flush()
-    assert.equal(ticks, 1)
-
-    t.mock.timers.tick(RETRY_INTERVAL_MS)
-    await flush()
-    assert.equal(ticks, 2)
-
-    stop()
-    t.mock.timers.tick(RETRY_INTERVAL_MS * 3)
-    await flush()
-    assert.equal(ticks, 2)
-  })
-
-  it('logs a tick that fails outright instead of crashing the process', async () => {
-    reviews.listPending = async () => {
-      throw new Error('database unavailable')
-    }
-    const stop = service.start(RETRY_INTERVAL_MS)
-    await new Promise((resolve) => setImmediate(resolve))
-    stop()
-    assert.ok(logger.lines.some((l) => l.level === 'error' && /Classification retry failed/.test(l.text)))
   })
 })
