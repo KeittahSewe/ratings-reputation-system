@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createApp } from './app.js'
 import { startBackgroundTimer } from './background.js'
 import { createTokenVerifier, remoteKeySet, supabaseIssuer } from './auth/tokens.js'
+import { parseOrigins } from './cors.js'
 import { createJobsRepo } from './db/jobs.js'
 import { createReputationRepo } from './db/reputation.js'
 import { createReviewsRepo } from './db/reviews.js'
@@ -37,6 +38,15 @@ try {
   console.error(`Startup failed: INFERENCE_URL is not a URL: ${INFERENCE_URL}`)
   process.exit(1)
 }
+// Without an origin list the browser could call nothing, and a trailing slash
+// would never match, so both stop the API here (#73).
+let corsOrigins
+try {
+  corsOrigins = parseOrigins(process.env.CORS_ORIGIN)
+} catch (err) {
+  console.error(`Startup failed: ${err.message}`)
+  process.exit(1)
+}
 
 // The secret key acts as service_role. Nothing about a user session is
 // stored, because each request brings its own token.
@@ -62,10 +72,12 @@ const app = createApp({
   scoring,
   classification,
   inference,
+  corsOrigins,
 })
 
 app.listen(port, () => {
   console.log(`API listening on http://localhost:${port}`)
+  console.log(`CORS allows ${corsOrigins.join(', ')}`)
   // Once now, then every minute: retry reviews left pending while the
   // inference service was down, then recompute anyone whose received review
   // has passed its 14-day mark (src/background.js).

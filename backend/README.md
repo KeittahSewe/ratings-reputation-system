@@ -29,7 +29,7 @@ Copy-Item .env.example .env
 | `SUPABASE_SECRET_KEY` | Secret key, starting `sb_secret_`. It acts as `service_role`, which bypasses row level security, so it stays on the server only. The API refuses to start without it. |
 | `INFERENCE_URL` | Base URL of the FastAPI inference service, such as `http://localhost:8000`. The API refuses to start without it. |
 | `INFERENCE_SERVICE_KEY` | Shared key the API sends in the `X-Service-Key` header. It must equal the inference service's own `INFERENCE_SERVICE_KEY`. The API refuses to start without it. |
-| `CORS_ORIGIN` | Frontend URL allowed to call the API |
+| `CORS_ORIGIN` | Frontend origins allowed to call the API from a browser, separated by commas, such as `http://localhost:5173`. Each is scheme, host and port only, with no trailing slash. The API refuses to start without it (see CORS). |
 
 No JWT secret is needed: access tokens are checked against the project's public keys (see Authentication).
 
@@ -55,7 +55,8 @@ This returns the API's status and the inference service's (see Health).
 
 | File | What it does |
 |---|---|
-| `src/app.js` | `createApp()` builds the Express app: JSON parsing, routes, 404 handler and error handler |
+| `src/app.js` | `createApp()` builds the Express app: CORS, JSON parsing, routes, 404 handler and error handler |
+| `src/cors.js` | Reads `CORS_ORIGIN` and answers cross-origin requests and preflights from the frontend |
 | `src/server.js` | Checks the environment, creates the Supabase client and token checker, starts listening on `PORT` and starts the background timer |
 | `src/background.js` | The one-minute timer: the classification retry, then the visibility sweep |
 | `src/errors.js` | `ApiError`, thrown by routes and middleware for any error the API means to send, and `validationError` for 400s |
@@ -118,6 +119,22 @@ Always 200 while the API runs. `status` is the API's own; `inference` comes from
 | `error` | It answered, but with a non-2xx status or another shape |
 
 `model_version` is `null` unless `inference.status` is `ok`. No error text from the inference service is passed on. The response is sent with `Cache-Control: no-store`. `/api/health` does not run the classification retry; the timer does.
+
+## CORS
+
+The React app runs on another origin (Vercel, or `http://localhost:5173` locally), so the browser only lets it read a response that names its origin in `Access-Control-Allow-Origin`. `src/cors.js` does this for every origin in `CORS_ORIGIN` and for no other. It runs before everything else, so error responses carry the header too and the frontend can read their message.
+
+Before any call with an `Authorization` header, the browser sends a preflight: an `OPTIONS` request with `Access-Control-Request-Method` and no token. The middleware answers it with 204 itself, before the token check, which would otherwise refuse it with 401. For an allowed origin the answer carries:
+
+| Header | Value |
+|---|---|
+| `Access-Control-Allow-Methods` | `GET, POST, PATCH, DELETE` |
+| `Access-Control-Allow-Headers` | `Authorization, Content-Type` |
+| `Access-Control-Max-Age` | `600`, so the browser reuses it for 10 minutes |
+
+Another origin gets 204 without these headers, so its browser blocks the call. Requests with no `Origin` header, such as Render's health checks or `Invoke-RestMethod`, are answered as usual without CORS headers. `Access-Control-Allow-Credentials` is never sent, because the token travels in the `Authorization` header, not in a cookie. Every response carries `Vary: Origin`.
+
+`CORS_ORIGIN` holds exact origins, separated by commas. A browser sends its origin without a path or trailing slash and in lower case, so an entry such as `https://ratings-reputation-system.vercel.app/` would never match; the API refuses to start on it and prints the entry to use instead. The API logs the allowed origins when it starts.
 
 ## Errors
 
