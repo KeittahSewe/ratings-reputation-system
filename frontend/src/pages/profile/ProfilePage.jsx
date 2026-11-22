@@ -5,22 +5,20 @@ import { LoadingState } from '../../components/LoadingState.jsx'
 import { PageTitle } from '../../components/PageTitle.jsx'
 import { apiFetch } from '../../lib/api.js'
 import { useApi } from '../../lib/useApi.js'
-import { PlaceholderPage } from '../PlaceholderPage.jsx'
+import { ClientProfileView } from './ClientProfileView.jsx'
 import { WorkerProfileView } from './WorkerProfileView.jsx'
 
 const byName = (a, b) => a.skill_name.localeCompare(b.skill_name)
 
-// /profile, the signed-in user's own profile. GET /api/me (held by
-// AuthProvider) gives the editable parts: account details and skills.
-// GET /api/users/:id gives what others see: the reputation with its counts,
-// completed jobs and the reviews received. The client profile is #86.
+// /profile, the signed-in user's own profile: Figure 4.8 for workers, 4.7 for
+// clients. GET /api/me (held by AuthProvider) gives the editable parts:
+// account details and skills. GET /api/users/:id gives what others see: the
+// reputation with its counts, completed jobs and the reviews received.
 export function ProfilePage() {
   const { me, setMe } = useAuth()
   const profile = useApi(`/users/${me.user.id}`)
   const [availabilityBusy, setAvailabilityBusy] = useState(false)
   const [availabilityError, setAvailabilityError] = useState(null)
-
-  if (me.user.role !== 'worker') return <PlaceholderPage title="Profile" figure="4.7" issue={86} />
 
   const updateUser = (user) => setMe((current) => ({ ...current, user: { ...current.user, ...user } }))
 
@@ -70,6 +68,19 @@ export function ProfilePage() {
   }
 
   const { reputation, completed_jobs: completedJobs, reviews, review_count: reviewCount } = profile.data
+  if (me.user.role === 'client') {
+    return (
+      <ClientProfileView
+        user={me.user}
+        reputation={reputation}
+        completedJobs={completedJobs}
+        reviews={reviews}
+        reviewCount={reviewCount}
+        own
+        onSaveDetails={saveDetails}
+      />
+    )
+  }
   return (
     <WorkerProfileView
       user={me.user}
