@@ -1,5 +1,6 @@
 import express from 'express'
 import { authenticate } from './auth/authenticate.js'
+import { cors } from './cors.js'
 import { ApiError } from './errors.js'
 import { insightsRouter } from './routes/insights.js'
 import { jobsRouter } from './routes/jobs.js'
@@ -16,8 +17,12 @@ import { usersRouter } from './routes/users.js'
 //   scoring: the reputation service from reputation/recompute.js
 //   classification: the service from reviews/classification.js
 //   inference: the client from inference/client.js, for /api/health
-export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring, classification, inference }) {
+//   corsOrigins: frontend origins from parseOrigins() in cors.js; none if left out
+export function createApp({ verifyToken, users, skills, reputation, reviews, jobs, scoring, classification, inference, corsOrigins = [] }) {
   const app = express()
+  // First, so preflights are answered before the token check and every
+  // response, errors included, carries the header the browser needs to read it.
+  app.use(cors(corsOrigins))
   app.use(express.json({ limit: '100kb' }))
 
   // Public: no token needed.
