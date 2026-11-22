@@ -9,7 +9,9 @@ import { computeReputation, historyCounts } from './score.js'
 // the stars Amina gave him before writing his own review.
 //
 // A review hidden by the 14-day rule becomes visible with no request to
-// trigger a recompute; the sweep for that comes with #53.
+// trigger a recompute; the visibility sweep (src/reviews/visibilitySweep.js)
+// finds it by comparing the review's 14-day mark with last_updated. That
+// works because visibility and last_updated below come from the same 'at'.
 export function createReputationService({ users, reviews, jobs, reputation, now = () => new Date() }) {
   async function recompute(userId) {
     const user = await users.findPublicById(userId)
