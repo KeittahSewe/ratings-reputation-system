@@ -31,6 +31,8 @@ function fakeDb() {
     { id: ID.grace, auth_id: AUTH.grace, name: 'Grace Otieno', role: 'worker', company_name: null, availability: false },
   ]
   const rows = []
+  // Jobs each user has reviewed, as "userId:jobId", for can_review.
+  const reviewed = new Set()
   const byId = (id) => people.find((p) => p.id === id)
   const detail = (job) => ({
     ...job,
@@ -44,6 +46,12 @@ function fakeDb() {
 
   return {
     rows,
+    reviewed,
+    reviews: {
+      async jobIdsReviewedBy(userId, jobIds) {
+        return new Set(jobIds.filter((jobId) => reviewed.has(`${userId}:${jobId}`)))
+      },
+    },
     users: {
       async findByAuthId(authId) {
         return people.find((p) => p.auth_id === authId) ?? null
@@ -74,13 +82,13 @@ function fakeDb() {
         return job ? detail(job) : null
       },
       async listForClient(clientId, filters) {
-        return filter(rows.filter((j) => j.client_id === clientId), filters)
+        return filter(rows.filter((j) => j.client_id === clientId), filters).map(detail)
       },
       async listForWorker(workerId, filters) {
-        return filter(rows.filter((j) => j.worker_id === workerId), filters)
+        return filter(rows.filter((j) => j.worker_id === workerId), filters).map(detail)
       },
       async listOpen(filters) {
-        return filter(rows, { ...filters, status: 'open' })
+        return filter(rows, { ...filters, status: 'open' }).map(detail)
       },
       async transition(id, { from, fields, unsubmitted = false }) {
         const job = rows.find((j) => j.id === id && j.status === from && (!unsubmitted || j.submitted_at === null))
@@ -114,7 +122,7 @@ describe('jobs', () => {
         recomputed.push({ client_id: job.client_id, worker_id: job.worker_id, status: job.status })
       },
     }
-    app = createApp({ verifyToken, users: db.users, jobs: db.jobs, scoring })
+    app = createApp({ verifyToken, users: db.users, jobs: db.jobs, reviews: db.reviews, scoring })
     token = {}
     for (const [name, sub] of Object.entries(AUTH)) {
       token[name] = 'Bearer ' + (await makeToken({ claims: { sub, email: `${name}@example.com` } }))
@@ -380,6 +388,26 @@ describe('jobs', () => {
       assert.equal((await get('/jobs', 'esther')).body.jobs.length, 0)
     })
 
+    it('lists jobs with both parties named and can_review on completed jobs (#84)', async () => {
+      const done = await jobAt('completed')
+      const open = await jobAt('open')
+      let res = await get('/jobs', 'amina')
+      const byId = Object.fromEntries(res.body.jobs.map((j) => [j.id, j]))
+      assert.equal(byId[done].worker.name, 'Peter Mwangi')
+      assert.equal(byId[done].client.company_name, 'Wanjiru Interiors Ltd')
+      assert.equal(byId[done].can_review, true)
+      assert.equal(byId[open].worker, null)
+      assert.equal(byId[open].can_review, false)
+
+      // Once Amina has reviewed it, the job no longer offers a review to her,
+      // but still does to Peter.
+      db.reviewed.add(`${ID.amina}:${done}`)
+      res = await get('/jobs', 'amina')
+      assert.equal(res.body.jobs.find((j) => j.id === done).can_review, false)
+      res = await get('/jobs', 'peter')
+      assert.equal(res.body.jobs.find((j) => j.id === done).can_review, true)
+    })
+
     it('rejects an unknown status filter', async () => {
       const res = await get('/jobs?status=finished', 'amina')
       assert.equal(res.status, 400)
@@ -391,6 +419,7 @@ describe('jobs', () => {
       const res = await get('/jobs/available', 'esther')
       assert.equal(res.status, 200)
       assert.equal(res.body.jobs.length, 1)
+      assert.equal(res.body.jobs[0].client.name, 'Amina Wanjiru')
       assert.equal((await get('/jobs/available', 'amina')).status, 403)
     })
 

@@ -69,7 +69,7 @@ function withTimeline(job) {
 
 // scoring: the reputation service. Completing or cancelling a job changes
 // the job history (H) of both parties, so both are recomputed.
-export function jobsRouter({ users, jobs, scoring }) {
+export function jobsRouter({ users, jobs, reviews, scoring }) {
   const router = Router()
   const signedIn = requireUser(users)
 
@@ -85,14 +85,20 @@ export function jobsRouter({ users, jobs, scoring }) {
     res.status(201).json({ job })
   })
 
-  // A client's own jobs, or the jobs assigned to a worker.
+  // A client's own jobs, or the jobs assigned to a worker. can_review marks
+  // the completed jobs the caller has not reviewed yet, so the table on
+  // Figure 4.9 can offer Leave review without a request per row (#84).
   router.get('/jobs', signedIn, async (req, res) => {
     const filters = parseFilters(req.query, { allowStatus: true })
     const list =
       req.user.role === 'client'
         ? await jobs.listForClient(req.user.id, filters)
         : await jobs.listForWorker(req.user.id, filters)
-    res.status(200).json({ jobs: list })
+    const completed = list.filter((job) => job.status === 'completed').map((job) => job.id)
+    const reviewed = await reviews.jobIdsReviewedBy(req.user.id, completed)
+    res.status(200).json({
+      jobs: list.map((job) => ({ ...job, can_review: job.status === 'completed' && !reviewed.has(job.id) })),
+    })
   })
 
   // Registered before /jobs/:id so "available" is not read as an id.

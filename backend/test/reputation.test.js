@@ -42,6 +42,10 @@ describe('reputation score (plan 3.4)', () => {
       assert.equal(result.provisional, false)
     })
 
+    it('counts 32 positive, 6 neutral and 3 negative, the 78 / 15 / 7 of Figure 4.8 (#84)', () => {
+      assert.deepEqual(result.sentiment_counts, { positive: 32, neutral: 6, negative: 3 })
+    })
+
     it('displays sentiment 4.4 and overall 4.7, as on Figures 4.8 and 4.11', () => {
       assert.equal(oneDecimal(result.sentiment_component), 4.4)
       assert.equal(oneDecimal(result.score), 4.7)
@@ -131,6 +135,12 @@ describe('reputation score (plan 3.4)', () => {
 
     it('lifts a single negative review towards neutral', () => {
       assert.equal(sentimentComponent(['negative']), 2) // (1 + 3) / 2
+    })
+
+    it('leaves the neutral prior out of the sentiment counts', () => {
+      const one = computeReputation({ role: 'worker', reviews: [{ rating: 5, label: 'positive' }], completed: 1 })
+      assert.deepEqual(one.sentiment_counts, { positive: 1, neutral: 0, negative: 0 })
+      assert.equal(one.review_count, 1)
     })
 
     it('keeps the prior at two reviews', () => {

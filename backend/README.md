@@ -42,6 +42,7 @@ Never commit `.env`. The variables are loaded with Node's built-in `--env-file-i
 | `npm run dev` | Starts the API and restarts it whenever a file changes |
 | `npm start` | Starts the API once, as on Render |
 | `npm test` | Runs the tests in `test/` with Node's built-in test runner. They need no network and no Supabase project. |
+| `npm run recompute:all` | Recomputes the stored reputation of every user who has one, with the API's own code (`scripts/recompute-all.js`). Run it after a migration that adds to `reputation_scores`, and after loading data directly. Reads `backend/.env`. |
 
 Check that it is running:
 
@@ -209,6 +210,7 @@ Without `--remote` the CLI targets a local Docker database, which this project d
 | `20261118160000_add_job_timeline.sql` | Adds `assigned_at`, `accepted_at` and `cancelled_at` to `jobs` for the Figure 4.9 timeline, each tied to the job's status by a CHECK. |
 | `20261118200000_add_reputation_review_count.sql` | Adds `review_count` to `reputation_scores`: how many reviews the stored score was built from. |
 | `20261121090000_add_visibility_sweep.sql` | Adds `reviewees_due_visibility_recompute()`, the query behind the visibility sweep, executable by `service_role` only. |
+| `20261122200000_add_reputation_sentiment_counts.sql` | Adds `positive_count`, `neutral_count` and `negative_count` to `reputation_scores`, all null or all filled and adding up to `review_count`. Rows from before it stay null until `npm run recompute:all`. |
 
 The browser never queries a table. The publishable key is used only for Supabase Auth sign-up and sign-in, and every read and write goes through this API as `service_role`, which bypasses row level security. So there are no RLS policies: `anon` and `authenticated` hold no privileges on any table, and RLS stays on with no policies so that a privilege granted by mistake still exposes no rows. Supabase's security advisor reports "RLS enabled, no policy" on all six tables; that is intended.
 
@@ -243,7 +245,7 @@ Every route here needs the caller's `users` row, so an account that has not boot
 Returns `{ "user": {...}, "skills": [...], "reputation": {...} }`.
 
 - `skills` is the worker's list, sorted by name, each `{ id, skill_name, category }`. It is always `[]` for clients.
-- `reputation` is `{ score, ratings_component, sentiment_component, history_component, last_updated }`, or `null` until the user's first review has been classified.
+- `reputation` is the object described under Reputation score below, or `null` until the user's first review counts.
 
 ### PATCH /api/me
 
@@ -282,6 +284,7 @@ Another user's public profile, for any signed-in user with a `users` row. Return
   "skills": [...],
   "reputation": { ... } or null,
   "review_count": 2,
+  "completed_jobs": 41,
   "reviews": [
     {
       "id", "rating", "review_text", "created_at",
@@ -297,6 +300,7 @@ Another user's public profile, for any signed-in user with a `users` row. Return
 - `reviews` holds the 10 newest visible reviews the user has received. `review_count` counts all visible ones.
 - A review is visible once the person reviewed has also reviewed the same job, or 14 days after it was submitted, whichever comes first. Until then it is left out of both fields.
 - `sentiment` is `null` while a review is waiting for classification.
+- `completed_jobs` counts the jobs the user has completed, as the worker or as the client. Cancelled jobs are not included.
 - `reputation` is described under Reputation score below.
 - An unknown or malformed id gets 404.
 
@@ -336,9 +340,11 @@ Body: `{ "title", "description", "category", "required_skills": [...] }`. Title 
 
 A client gets their own jobs; a worker gets the jobs assigned to them, including cancelled ones. Newest first. Optional query: `status`, `category`, and `q` to search titles.
 
+Each job carries `client` and `worker` as in `GET /api/jobs/:id` (without the timeline), and `can_review`: true when the job is completed and the caller has not reviewed it yet, so the job table can offer Leave review without a request per row.
+
 ### GET /api/jobs/available (workers)
 
-Every open job, newest first. Optional query: `category` and `q`.
+Every open job, newest first, with `client` named. Optional query: `category` and `q`.
 
 ### GET /api/jobs/:id
 
@@ -458,11 +464,14 @@ A user has no `reputation_scores` row, and `reputation` is `null`, until at leas
   "history_component": 5,
   "review_count": 41,
   "provisional": false,
+  "sentiment_counts": { "positive": 32, "neutral": 6, "negative": 3 },
   "last_updated": "..."
 }
 ```
 
 `provisional` is true while `review_count` is under three. It is worked out from `review_count` when the row is read, not stored.
+
+`sentiment_counts` says how many of the counted reviews were classified positive, neutral and negative, for the distribution bar on Figures 4.8 and 4.11. It is stored with the score, so the bar always describes the same reviews as the score, and it adds up to `review_count`. The neutral prior is not a review and is not counted. It is `null` on a row written before migration 20261122200000 and not recomputed since.
 
 A score is recomputed:
 

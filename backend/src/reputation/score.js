@@ -73,6 +73,18 @@ export function historyComponent({ role, completed, cancelled = 0 }) {
   return 5 * reliability * volume
 }
 
+// How many of the counted reviews carry each label, for the sentiment
+// distribution on Figures 4.8 and 4.11 (#84). The neutral prior is not a
+// review, so it is not counted here.
+export function sentimentCounts(labels) {
+  const counts = { positive: 0, neutral: 0, negative: 0 }
+  for (const label of labels) {
+    if (!(label in counts)) throw new TypeError(`Unknown sentiment label: ${label}.`)
+    counts[label] += 1
+  }
+  return counts
+}
+
 // Turns a user's jobs into the two counts H needs. jobs: rows with status and
 // assigned_at, where the user is the worker (role worker) or the client.
 // A client's cancellation counts only if a worker had been assigned;
@@ -104,5 +116,6 @@ export function computeReputation({ role, reviews, completed, cancelled = 0 }) {
     history_component: history,
     review_count: reviews.length,
     provisional: reviews.length < PROVISIONAL_BELOW,
+    sentiment_counts: sentimentCounts(reviews.map((r) => r.label)),
   }
 }
