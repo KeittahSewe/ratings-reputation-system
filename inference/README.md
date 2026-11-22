@@ -118,10 +118,16 @@ pytest is in `requirements-dev.txt`, so Render does not install it.
 
 | Setting | Value |
 |---|---|
-| Root directory | `inference` |
+| Service type and instance | Web service, Free |
+| Region | Frankfurt, the same as the Express API and the Supabase project |
+| Branch | `main`, auto-deploy on commit |
+| Root directory | `inference`. Render only redeploys when a file under it changes. |
 | Build command | `pip install -r requirements.txt && python -m app.model_files` |
 | Start command | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
-| Extra environment variable | `PYTHON_VERSION` = `3.11.9`, so Render uses the same Python as local runs |
+| Health check path | `/health`, which needs no key |
+| Environment variables | `HF_REPO_ID`, `HF_REVISION`, `INFERENCE_SERVICE_KEY`, and `PYTHON_VERSION` = `3.11.9` so Render uses the same Python as local runs. `PORT` is set by Render and is not added by hand. |
+
+The production `INFERENCE_SERVICE_KEY` is a 64-character random hex string, different from the local one, and is set only in the Render dashboard of this service and of the Express API. Free web services cannot receive private network traffic, so the Express API calls this service on its public `onrender.com` URL, and the key is what keeps other callers out.
 
 The model is downloaded in the build command because Render discards files a running service writes whenever it restarts or wakes from sleep. Files written during the build are part of the deployed service, so a cold start loads the model from disk without downloading it again.
 
