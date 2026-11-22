@@ -3,6 +3,7 @@ import { Shell } from '../layout/Shell.jsx'
 import { LoginForm } from '../pages/auth/LoginForm.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
+import { ClientProfileView } from '../pages/profile/ClientProfileView.jsx'
 import { WorkerProfileView } from '../pages/profile/WorkerProfileView.jsx'
 
 // Sample data shared by the figures (Chapter 4 handover, section 4).
@@ -72,6 +73,59 @@ const PETER_PROFILE = {
   ],
 }
 
+// Figure 4.7 with numbers 14 real reviews can give. The figure's sentiment
+// 4.5 cannot come from 14 reviews (the nearest are 4.43 and 4.57), so this
+// uses 12 positive, 1 neutral, 1 negative: S 4.57. R 66 / 14 = 4.71, H 5.00
+// for 14 completed jobs; score 4.71, shown as 4.7 as on the figure.
+const AMINA_PROFILE = {
+  user: {
+    ...AMINA,
+    email: 'amina.wanjiru@example.com',
+    bio: 'We refurbish residential and small office interiors around Nairobi. We hire regularly for plumbing, carpentry and electrical work.',
+    created_at: '2025-03-04T09:00:00Z',
+  },
+  reputation: {
+    score: 4.71,
+    ratings_component: 4.71,
+    sentiment_component: 4.57,
+    history_component: 5,
+    review_count: 14,
+    provisional: false,
+    sentiment_counts: { positive: 12, neutral: 1, negative: 1 },
+  },
+  completedJobs: 14,
+  reviewCount: 14,
+  reviews: [
+    {
+      id: 'a1',
+      rating: 5,
+      review_text: 'Amina was clear about what the job involved and paid the same day I finished. She had all the materials ready when I arrived, which saved me a second trip.',
+      created_at: '2026-08-18T09:00:00Z',
+      reviewer: { id: 'fixture-peter', name: 'Peter Mwangi', role: 'worker' },
+      job: { id: 'j1', title: 'Fix kitchen plumbing' },
+      sentiment: { label: 'positive', confidence_score: 0.96 },
+    },
+    {
+      id: 'a2',
+      rating: 4,
+      review_text: 'Good client overall. The brief changed once we had started, but she was reasonable about the extra time it needed and we agreed on it quickly.',
+      created_at: '2026-08-02T09:00:00Z',
+      reviewer: { id: 'fixture-grace', name: 'Grace Otieno', role: 'worker' },
+      job: { id: 'j4', title: 'Repaint two office rooms' },
+      sentiment: { label: 'neutral', confidence_score: 0.71 },
+    },
+    {
+      id: 'a3',
+      rating: 5,
+      review_text: 'Very organised. Amina answered questions quickly and the site was ready when she said it would be. I would take another job from her.',
+      created_at: '2026-07-21T09:00:00Z',
+      reviewer: { id: 'fixture-daniel', name: 'Daniel Kiprop', role: 'worker' },
+      job: { id: 'j5', title: 'Install shelving units' },
+      sentiment: { label: 'positive', confidence_score: 0.93 },
+    },
+  ],
+}
+
 // One entry per fixture. Each screen issue (#83 to #90) adds its figure here.
 // View each at the size in its title (DevTools device toolbar).
 export const FIXTURES = [
@@ -100,6 +154,15 @@ export const FIXTURES = [
     ),
   },
   {
+    id: '4.7',
+    title: 'Figure 4.7, client profile (1440 wide)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/profile">
+        <ClientProfileView {...AMINA_PROFILE} own onSaveDetails={later} />
+      </Shell>
+    ),
+  },
+  {
     id: '4.8',
     title: 'Figure 4.8, worker profile (1440 wide)',
     render: () => (
@@ -112,6 +175,15 @@ export const FIXTURES = [
           onAddSkill={later}
           onRemoveSkill={later}
         />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.8-other',
+    title: 'Figure 4.8 as another user sees it: read only (1440 wide)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/find-workers">
+        <WorkerProfileView {...PETER_PROFILE} user={{ ...PETER_PROFILE.user, email: undefined }} />
       </Shell>
     ),
   },
