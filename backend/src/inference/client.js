@@ -48,9 +48,15 @@ function parseResult(body) {
   }
 }
 
+// The limit for GET /health, kept well under the 5 seconds a health check
+// gets on Render, so /api/health always answers in time (decision of
+// 21 November). A sleeping service on Render's free tier shows as timeout.
+export const HEALTH_TIMEOUT_MS = 2000
+
 // url: base URL of the service, such as http://localhost:8000
 // serviceKey: the shared X-Service-Key value
 // timeoutMs: limit for each attempt. retries: attempts after the first one.
+// healthTimeoutMs: limit for the single /health attempt.
 // fetch and sleep can be replaced in tests.
 export function createInferenceClient({
   url,
@@ -58,10 +64,12 @@ export function createInferenceClient({
   timeoutMs = 5000,
   retries = 2,
   retryDelayMs = 500,
+  healthTimeoutMs = HEALTH_TIMEOUT_MS,
   fetch = globalThis.fetch,
   sleep = sleepFor,
 }) {
   const endpoint = new URL('/classify', url).toString()
+  const healthEndpoint = new URL('/health', url).toString()
 
   async function attempt(text) {
     let response
@@ -105,6 +113,37 @@ export function createInferenceClient({
   }
 
   return {
+    // One GET /health attempt, no retry and no service key (the route is
+    // open). Never throws. Resolves to { status, model_version }, where
+    // status is one of:
+    //   ok           the service answered { status: "ok", model_version }
+    //   timeout      no answer within healthTimeoutMs: asleep, waking or stuck
+    //   unreachable  the connection failed, as for a stopped local service
+    //   error        it answered, but with a non-2xx status or another shape
+    // model_version is null unless status is ok. No error text is passed on,
+    // because /api/health is public.
+    async health() {
+      const down = (status) => ({ status, model_version: null })
+      let response
+      try {
+        response = await fetch(healthEndpoint, { method: 'GET', signal: AbortSignal.timeout(healthTimeoutMs) })
+      } catch (err) {
+        const timedOut = err?.name === 'TimeoutError' || err?.name === 'AbortError'
+        return down(timedOut ? 'timeout' : 'unreachable')
+      }
+      if (!response.ok) return down('error')
+      try {
+        const body = await response.json()
+        if (body?.status === 'ok' && typeof body.model_version === 'string' && body.model_version.length > 0) {
+          return { status: 'ok', model_version: body.model_version }
+        }
+      } catch (err) {
+        // A body cut off by the timeout counts as a timeout, not a bad answer.
+        if (err?.name === 'TimeoutError' || err?.name === 'AbortError') return down('timeout')
+      }
+      return down('error')
+    },
+
     // Resolves to { label, confidence, model_version, sentences }, or throws
     // the last InferenceError once every attempt has failed. attempts can be
     // lowered for background retries, which try again on the next tick anyway.
