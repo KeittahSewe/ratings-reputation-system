@@ -6,6 +6,7 @@ import { AppLayout } from './layout/AppLayout.jsx'
 import { LoginPage } from './pages/LoginPage.jsx'
 import { NotFoundPage } from './pages/NotFoundPage.jsx'
 import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
+import { ProfilePage } from './pages/profile/ProfilePage.jsx'
 import { RegisterPage } from './pages/RegisterPage.jsx'
 import { StatusPage } from './pages/StatusPage.jsx'
 import { PublicOnly } from './routes/PublicOnly.jsx'
@@ -58,7 +59,7 @@ export default function App() {
               <Route path="/jobs" element={<PlaceholderPage title="My Jobs" figure="4.9" issue={87} />} />
               <Route path="/jobs/:id/review" element={<PlaceholderPage title="Leave a review" figure="4.10" issue={88} />} />
               <Route path="/insights" element={<PlaceholderPage title="Insights" figure="4.12" issue={90} />} />
-              <Route path="/profile" element={<PlaceholderPage title="Profile" figure="4.7 or 4.8" issue={85} />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/users/:id" element={<PlaceholderPage title="Profile" figure="4.7 or 4.8" issue={86} />} />
 
               <Route element={<RoleRoute role="client" />}>
