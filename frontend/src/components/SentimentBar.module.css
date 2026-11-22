@@ -1,0 +1,60 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.caption {
+  line-height: 17px;
+}
+
+.bar {
+  display: flex;
+  gap: 2px;
+  height: 28px;
+}
+
+.compact {
+  height: 12px;
+}
+
+.segment {
+  flex-basis: 0;
+  min-width: 4px;
+}
+
+.positive {
+  background: var(--color-positive);
+}
+
+.neutral {
+  background: var(--color-neutral);
+}
+
+.negative {
+  background: var(--color-negative);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}

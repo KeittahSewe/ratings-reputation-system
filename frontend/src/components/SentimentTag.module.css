@@ -1,0 +1,30 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: var(--font-size-helper);
+  font-weight: var(--font-weight-semibold);
+  line-height: 15px;
+  color: var(--color-page);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.positive {
+  background: var(--color-positive);
+}
+
+.neutral {
+  background: var(--color-neutral);
+}
+
+.negative {
+  background: var(--color-negative);
+}
+
+.pending {
+  color: var(--color-text-secondary);
+  background: var(--color-page);
+  border: var(--border-width) dashed var(--color-border);
+  padding: 4px 9px;
+}
