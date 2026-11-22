@@ -1,0 +1,10 @@
+.textarea {
+  resize: vertical;
+  line-height: var(--line-height);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

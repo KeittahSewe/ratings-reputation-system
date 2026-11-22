@@ -1,0 +1,143 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: var(--space-5) 20px;
+  background: var(--color-card);
+  border-right: var(--border-width) solid var(--color-hairline);
+}
+
+.brand {
+  margin: 0;
+  padding-bottom: var(--space-2);
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: var(--font-weight-semibold);
+  border-bottom: var(--border-width) solid var(--color-hairline);
+}
+
+.nav {
+  flex: 1;
+  margin-top: var(--space-2);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Rows are 40px. The active row is marked by the left bar and semibold text
+   as well as the white fill, so it still reads in greyscale. */
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-sm);
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+.active {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background: var(--color-page);
+  border-left-color: var(--color-primary);
+}
+
+.active:hover {
+  color: var(--color-primary);
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.userName {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+.userRole {
+  margin: 0;
+  font-size: var(--font-size-helper);
+  color: var(--color-text-secondary);
+}
+
+.logOut {
+  padding: 0;
+  font: inherit;
+  font-size: var(--font-size-helper);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logOut:hover {
+  text-decoration: underline;
+}
+
+/* Below 960px the sidebar becomes a bar across the top. */
+@media (max-width: 960px) {
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+    gap: var(--space-3);
+    height: auto;
+    padding: var(--space-3) var(--space-4);
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--color-hairline);
+  }
+
+  .brand {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .nav {
+    flex-basis: 100%;
+    order: 3;
+    margin-top: 0;
+    overflow-x: auto;
+  }
+
+  .list {
+    flex-direction: row;
+  }
+
+  .link {
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+  }
+
+  .active {
+    border-bottom-color: var(--color-primary);
+  }
+
+  .user {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-left: auto;
+  }
+}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import styles from './SignedInPlaceholder.module.css'
+import styles from './RegisterPlaceholder.module.css'
 
 // Registration is #83 (Figure 4.6). Until then, accounts are the test accounts.
 export function RegisterPlaceholder() {

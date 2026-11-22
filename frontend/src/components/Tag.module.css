@@ -1,0 +1,19 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: var(--font-size-helper);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.light {
+  background: var(--color-surface-light);
+}
+
+.ai {
+  background: var(--color-ai-accent);
+}
