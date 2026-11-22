@@ -51,6 +51,31 @@ Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json
 
 This returns the API's status and the inference service's (see Health).
 
+## Render
+
+| Setting | Value |
+|---|---|
+| Service type and instance | Web service, Free |
+| Region | Frankfurt, the same as the Supabase project and the inference service |
+| Branch | `main`, auto-deploy on commit |
+| Root directory | `backend`. Render only redeploys when a file under it changes. |
+| Build command | `npm ci --omit=dev`, which leaves out the Supabase CLI and the test packages |
+| Start command | `npm start` |
+| Health check path | `/api/live`, which calls nothing else (see Health) |
+
+| Environment variable | Value on Render |
+|---|---|
+| `SUPABASE_URL` | URL of the Supabase project |
+| `SUPABASE_SECRET_KEY` | A secret key created for Render alone in the Supabase dashboard, so it can be revoked without touching the local one |
+| `INFERENCE_URL` | `https://ratings-reputation-inference.onrender.com` |
+| `INFERENCE_SERVICE_KEY` | The production key, the same value as on the inference service and different from the local one |
+| `CORS_ORIGIN` | `https://ratings-reputation-system.vercel.app` |
+| `NODE_VERSION` | `26.13.0`, the same Node as local runs |
+
+`PORT` is set by Render and is not added by hand. The API logs `CORS allows ...` at startup, which is the quickest check that `CORS_ORIGIN` was read.
+
+On the free instance the API sleeps after 15 minutes without incoming requests and takes about a minute to wake. The background timer makes only outgoing calls, so it does not keep the API awake. Its first tick runs when the API wakes, which catches up on pending classifications and the 14-day sweep.
+
 ## Code layout
 
 | File | What it does |
