@@ -39,21 +39,23 @@ export function createJobsRepo(supabase) {
       return data
     },
 
-    // filters: { status, category, q }, all optional.
+    // filters: { status, category, q }, all optional. The lists carry the
+    // client's and worker's names, as the detail does, for the job table on
+    // Figure 4.9 (#84).
     async listForClient(clientId, filters) {
-      const { data, error } = await applyFilters(supabase.from('jobs').select(COLUMNS).eq('client_id', clientId), filters)
+      const { data, error } = await applyFilters(supabase.from('jobs').select(DETAIL).eq('client_id', clientId), filters)
       if (error) throw error
       return data
     },
 
     async listForWorker(workerId, filters) {
-      const { data, error } = await applyFilters(supabase.from('jobs').select(COLUMNS).eq('worker_id', workerId), filters)
+      const { data, error } = await applyFilters(supabase.from('jobs').select(DETAIL).eq('worker_id', workerId), filters)
       if (error) throw error
       return data
     },
 
     async listOpen(filters) {
-      const { data, error } = await applyFilters(supabase.from('jobs').select(COLUMNS), { ...filters, status: 'open' })
+      const { data, error } = await applyFilters(supabase.from('jobs').select(DETAIL), { ...filters, status: 'open' })
       if (error) throw error
       return data
     },

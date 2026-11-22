@@ -64,6 +64,17 @@ function fakes() {
         return null
       },
     },
+    jobs: {
+      // Peter: two completed and one cancelled by a client. Amina: none.
+      async historyFor(userId) {
+        if (userId !== PETER_ID) return []
+        return [
+          { status: 'completed', assigned_at: '2026-08-01T00:00:00Z', completed_at: '2026-08-12T00:00:00Z' },
+          { status: 'completed', assigned_at: '2026-09-01T00:00:00Z', completed_at: '2026-09-03T00:00:00Z' },
+          { status: 'cancelled', assigned_at: '2026-10-01T00:00:00Z', completed_at: null },
+        ]
+      },
+    },
     reviews: {
       async listReceived(userId) {
         return userId === PETER_ID ? received : []
@@ -87,6 +98,7 @@ describe('GET /api/users/:id', () => {
     assert.equal(res.body.skills.length, 1)
     assert.equal(res.body.reputation, null)
     assert.equal(res.body.review_count, 2)
+    assert.equal(res.body.completed_jobs, 2, 'cancelled jobs are not completed jobs')
     assert.deepEqual(res.body.reviews.map((r) => r.id), ['rev-pair', 'rev-old'])
     assert.equal(res.body.reviews[0].job_id, undefined)
     assert.deepEqual(res.body.reviews[0].sentiment, { label: 'positive', confidence_score: 0.97 })
@@ -98,6 +110,7 @@ describe('GET /api/users/:id', () => {
     assert.equal(res.body.user.company_name, 'Wanjiru Interiors Ltd')
     assert.deepEqual(res.body.skills, [])
     assert.deepEqual(res.body.reviews, [])
+    assert.equal(res.body.completed_jobs, 0)
   })
 
   it('answers 404 for an unknown id and for a malformed one', async () => {
