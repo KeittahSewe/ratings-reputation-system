@@ -7,6 +7,7 @@ import { JobDetail } from '../pages/jobs/JobDetail.jsx'
 import { JobFilters } from '../pages/jobs/JobFilters.jsx'
 import { JobsTable } from '../pages/jobs/JobsTable.jsx'
 import { PostJobPanel } from '../pages/jobs/PostJobPanel.jsx'
+import { RecommendationsView } from '../pages/recommendations/RecommendationsPage.jsx'
 import { ReviewForm } from '../pages/review/ReviewForm.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
@@ -178,6 +179,85 @@ const clientActions = (j) => {
   return { label: 'View details' }
 }
 
+// Figure 4.11 under the real formulas (backend README, Recommendations):
+// 88, 85, 72, 61. Sentiment counts are whole reviews, so Esther's 84 / 11 / 5
+// becomes 85 / 10 / 5 (49, 6, 3 of 58), and Samuel's and Grace's scores are
+// the nearest that whole counts give (4.35 and 4.52); the matches are as on
+// the README.
+const skill = (id, skill_name, category) => ({ id, skill_name, category })
+const rep = (score, r, sent, h, counts) => ({
+  score,
+  ratings_component: r,
+  sentiment_component: sent,
+  history_component: h,
+  review_count: counts.positive + counts.neutral + counts.negative,
+  provisional: false,
+  sentiment_counts: counts,
+})
+const RECS_411 = [
+  {
+    rank: 1,
+    worker: { id: 'fixture-esther', name: 'Esther Njeri' },
+    skills: [skill('e1', 'Electrical wiring', 'electrical'), skill('e2', 'Lighting installation', 'electrical')],
+    completed_jobs: 58,
+    reputation: rep(4.8, 4.9, 4.59, 5, { positive: 49, neutral: 6, negative: 3 }),
+    match: 88,
+    skill_match: 1,
+    explanation: [
+      'Esther holds both skills this job needs: Electrical wiring and Lighting installation.',
+      'Reputation score 4.8 from 58 reviews.',
+      'You have not hired Esther before.',
+    ],
+  },
+  {
+    rank: 2,
+    worker: { id: PETER.id, name: PETER.name },
+    skills: [
+      skill('p4', 'Basic electrical wiring', 'electrical'),
+      skill('p2', 'Bathroom installation', 'plumbing'),
+      skill('p3', 'Pipe fitting and repair', 'plumbing'),
+      skill('p1', 'Residential plumbing', 'plumbing'),
+    ],
+    completed_jobs: 41,
+    reputation: rep(4.72, 4.9, 4.41, 5, { positive: 32, neutral: 6, negative: 3 }),
+    match: 85,
+    skill_match: 0.75,
+    explanation: [
+      'Peter holds 1 of the 2 skills this job needs: Electrical wiring (listed as Basic electrical wiring), not Lighting installation.',
+      'Reputation score 4.7 from 41 reviews.',
+      'You have hired this worker before.',
+    ],
+  },
+  {
+    rank: 3,
+    worker: { id: 'fixture-samuel', name: 'Samuel Kariuki' },
+    skills: [skill('s1', 'Electrical wiring', 'electrical'), skill('s2', 'Door lock repair', 'carpentry')],
+    completed_jobs: 19,
+    reputation: rep(4.35, 4.21, 4.16, 5, { positive: 13, neutral: 4, negative: 2 }),
+    match: 72,
+    skill_match: 0.75,
+    explanation: [
+      'Samuel holds 1 of the 2 skills this job needs: Electrical wiring, not Lighting installation.',
+      'Reputation score 4.3 from 19 reviews.',
+      'You have not hired Samuel before.',
+    ],
+  },
+  {
+    rank: 4,
+    worker: { id: 'fixture-grace', name: 'Grace Otieno' },
+    skills: [skill('g1', 'Basic electrical', 'electrical'), skill('g2', 'Interior painting', 'painting')],
+    completed_jobs: 23,
+    reputation: rep(4.52, 4.5, 4.3, 5, { positive: 17, neutral: 4, negative: 2 }),
+    match: 61,
+    skill_match: 0.5,
+    explanation: [
+      'Grace lists electrical skills (Basic electrical), but neither of the 2 skills this job needs.',
+      'Reputation score 4.5 from 23 reviews.',
+      'You have not hired Grace before.',
+    ],
+  },
+]
+
 // One entry per fixture. Each screen issue (#83 to #90) adds its figure here.
 // View each at the size in its title (DevTools device toolbar).
 export const FIXTURES = [
@@ -270,6 +350,24 @@ export const FIXTURES = [
           onChange={noop}
           onSubmit={(event) => event.preventDefault()}
           onCancel={noop}
+        />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.11',
+    title: 'Figure 4.11, worker recommendation listing (1440 wide)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/find-workers">
+        <RecommendationsView
+          job={{ id: 'j4', title: 'Rewire reception lighting', category: 'electrical', required_skills: ['Electrical wiring', 'Lighting installation'] }}
+          posted="2026-09-01T09:00:00Z"
+          total={31}
+          shown={RECS_411}
+          filters={{ minScore: '', skill: '' }}
+          onFilters={noop}
+          disclosure="Ranked by the recommendation engine from skill match, reputation score and whether you have hired the worker before. It is not a paid placement and no worker can pay to appear higher."
+          onAssign={later}
         />
       </Shell>
     ),
