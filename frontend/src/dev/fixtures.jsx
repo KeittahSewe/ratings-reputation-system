@@ -2,9 +2,11 @@ import { MESSAGES } from '../auth/validation.js'
 import { PageTitle } from '../components/PageTitle.jsx'
 import { Shell } from '../layout/Shell.jsx'
 import { LoginForm } from '../pages/auth/LoginForm.jsx'
+import { JobActions } from '../pages/jobs/JobActions.jsx'
 import { JobDetail } from '../pages/jobs/JobDetail.jsx'
 import { JobFilters } from '../pages/jobs/JobFilters.jsx'
 import { JobsTable } from '../pages/jobs/JobsTable.jsx'
+import { PostJobPanel } from '../pages/jobs/PostJobPanel.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
 import { ClientProfileView } from '../pages/profile/ClientProfileView.jsx'
@@ -245,6 +247,32 @@ export const FIXTURES = [
         <JobFilters filters={{ status: '', category: '', q: '' }} onChange={noop} />
         <JobsTable jobs={JOBS_49} selectedId="j2" party="worker" onSelect={noop} actionFor={clientActions} />
         <JobDetail job={REPAINT} viewerRole="client" partyProfile={GRACE_PROFILE} onClose={noop} />
+      </Shell>
+    ),
+  },
+  {
+    id: 'job-actions',
+    title: 'Job actions and Post a job, every state (not a figure)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/jobs">
+        <PageTitle title="Job actions" />
+        <PostJobPanel onPosted={noop} onClose={noop} />
+        {[
+          ['Client, open', 'client', { status: 'open' }],
+          ['Client, assigned', 'client', { status: 'assigned', worker: GRACE }],
+          ['Client, in progress, not submitted', 'client', { status: 'in_progress', worker: GRACE, submitted_at: null }],
+          ['Client, work submitted', 'client', { status: 'in_progress', worker: GRACE, submitted_at: '2026-09-02T09:00:00Z' }],
+          ['Client, completed, not reviewed', 'client', { status: 'completed', worker: GRACE }, true],
+          ['Worker, assigned', 'worker', { status: 'assigned' }],
+          ['Worker, in progress', 'worker', { status: 'in_progress', submitted_at: null }],
+          ['Worker, submitted', 'worker', { status: 'in_progress', submitted_at: '2026-09-02T09:00:00Z' }],
+          ['Worker, completed, reviewed', 'worker', { status: 'completed' }, false],
+        ].map(([label, role, fields, canReview]) => (
+          <section key={label}>
+            <p>{label}</p>
+            <JobActions job={{ ...REPAINT, ...fields }} role={role} canReview={canReview} onChanged={noop} />
+          </section>
+        ))}
       </Shell>
     ),
   },

@@ -1,13 +1,17 @@
+import { useState } from 'react'
 import { useAuth } from '../../auth/useAuth.js'
+import { Button } from '../../components/Button.jsx'
 import { Card } from '../../components/Card.jsx'
 import { EmptyState } from '../../components/EmptyState.jsx'
 import { ErrorState } from '../../components/ErrorState.jsx'
 import { LoadingState } from '../../components/LoadingState.jsx'
 import { PageTitle } from '../../components/PageTitle.jsx'
 import { useApi } from '../../lib/useApi.js'
+import { JobActions } from './JobActions.jsx'
 import { JobDetailPanel } from './JobDetail.jsx'
 import { JobFilters } from './JobFilters.jsx'
 import { JobsTable } from './JobsTable.jsx'
+import { PostJobPanel } from './PostJobPanel.jsx'
 import { useJobFilters } from './useJobFilters.js'
 import styles from './Jobs.module.css'
 
@@ -33,10 +37,26 @@ export function JobsPage() {
   const isClient = me.user.role === 'client'
   const view = useJobFilters('/jobs')
   const list = useApi(view.apiPath, { keepPrevious: true })
+  const [posting, setPosting] = useState(false)
+
+  // can_review comes with the list row; a job opened from a link that the
+  // current filters hide falls back to offering the review page, which says
+  // if the review was already written.
+  const canReviewFor = (job) => list.data?.jobs.find((row) => row.id === job.id)?.can_review ?? job.status === 'completed'
+
+  function posted(job) {
+    setPosting(false)
+    view.showFresh(job.id)
+    list.reload()
+  }
 
   return (
     <>
-      <PageTitle title="My Jobs" />
+      <PageTitle
+        title="My Jobs"
+        actions={isClient && !posting && <Button onClick={() => setPosting(true)}>Post a job</Button>}
+      />
+      {posting && <PostJobPanel onPosted={posted} onClose={() => setPosting(false)} />}
       <JobFilters filters={view.filters} onChange={view.setFilters} />
       <JobList
         list={list}
@@ -50,7 +70,25 @@ export function JobsPage() {
             : 'Clients assign workers from a ranked list built from skills, reputation and past hires. Keeping your skills and availability up to date on your profile helps you rank.'
         }
       />
-      {view.selectedId && <JobDetailPanel key={view.selectedId} jobId={view.selectedId} viewerRole={me.user.role} onClose={view.close} />}
+      {view.selectedId && (
+        <JobDetailPanel
+          key={view.selectedId}
+          jobId={view.selectedId}
+          viewerRole={me.user.role}
+          onClose={view.close}
+          actions={(job, reloadJob) => (
+            <JobActions
+              job={job}
+              role={me.user.role}
+              canReview={canReviewFor(job)}
+              onChanged={() => {
+                reloadJob()
+                list.reload()
+              }}
+            />
+          )}
+        />
+      )}
     </>
   )
 }

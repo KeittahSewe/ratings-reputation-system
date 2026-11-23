@@ -12,11 +12,13 @@ import styles from './Jobs.module.css'
 
 // Loads one job and the other party's profile for the detail panel.
 export function JobDetailPanel({ jobId, viewerRole, onClose, actions }) {
-  const job = useApi(`/jobs/${jobId}`)
-  const other = job.status === 'ready' ? (viewerRole === 'client' ? job.data.job.worker : job.data.job.client) : null
-  const profile = useApi(other ? `/users/${other.id}` : null)
+  // keepPrevious: after a status change the panel reloads in place rather
+  // than flashing back to a spinner.
+  const job = useApi(`/jobs/${jobId}`, { keepPrevious: true })
+  const other = job.data ? (viewerRole === 'client' ? job.data.job.worker : job.data.job.client) : null
+  const profile = useApi(other ? `/users/${other.id}` : null, { keepPrevious: true })
 
-  if (job.status === 'loading') {
+  if (!job.data && job.status === 'loading') {
     return (
       <Card title="Job details" aside={<LinkButton onClick={onClose}>Close details</LinkButton>}>
         <LoadingState label="Loading the job" />
@@ -38,7 +40,7 @@ export function JobDetailPanel({ jobId, viewerRole, onClose, actions }) {
     <JobDetail
       job={job.data.job}
       viewerRole={viewerRole}
-      partyProfile={profile.status === 'ready' ? profile.data : null}
+      partyProfile={profile.data}
       onClose={onClose}
       actions={actions?.(job.data.job, job.reload)}
     />

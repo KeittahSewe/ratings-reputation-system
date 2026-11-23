@@ -22,18 +22,16 @@ export function useJobFilters(basePath) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typed])
 
+  // Starts from the address as it is now, not as it was when this render ran:
+  // the delayed search update would otherwise put back a selection or filter
+  // changed in the meantime.
   function update(changes) {
-    setParams(
-      (current) => {
-        const next = new URLSearchParams(current)
-        for (const [key, value] of Object.entries(changes)) {
-          if (value) next.set(key, value)
-          else next.delete(key)
-        }
-        return next
-      },
-      { replace: true },
-    )
+    const next = new URLSearchParams(window.location.search)
+    for (const [key, value] of Object.entries(changes)) {
+      if (value) next.set(key, value)
+      else next.delete(key)
+    }
+    setParams(next, { replace: true })
   }
 
   const apiPath = useMemo(() => {
@@ -55,6 +53,11 @@ export function useJobFilters(basePath) {
       if (next.status !== status || next.category !== category) update({ status: next.status, category: next.category })
     },
     select: (id) => update({ job: id }),
+    // After posting: clear the filters so the new job is in the list, and open it.
+    showFresh: (id) => {
+      setTyped('')
+      update({ job: id, status: null, category: null, q: null })
+    },
     close: () => update({ job: null }),
   }
 }
