@@ -9,6 +9,8 @@ import { LoginPage } from './pages/LoginPage.jsx'
 import { NotFoundPage } from './pages/NotFoundPage.jsx'
 import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
 import { ProfilePage } from './pages/profile/ProfilePage.jsx'
+import { FindWorkersPage } from './pages/recommendations/FindWorkersPage.jsx'
+import { RecommendationsPage } from './pages/recommendations/RecommendationsPage.jsx'
 import { UserProfilePage } from './pages/profile/UserProfilePage.jsx'
 import { RegisterPage } from './pages/RegisterPage.jsx'
 import { ReviewPage } from './pages/review/ReviewPage.jsx'
@@ -67,11 +69,8 @@ export default function App() {
               <Route path="/users/:id" element={<UserProfilePage />} />
 
               <Route element={<RoleRoute role="client" />}>
-                <Route path="/find-workers" element={<PlaceholderPage title="Find Workers" figure="4.11" issue={89} />} />
-                <Route
-                  path="/jobs/:id/recommendations"
-                  element={<PlaceholderPage title="Recommended workers" figure="4.11" issue={89} />}
-                />
+                <Route path="/find-workers" element={<FindWorkersPage />} />
+                <Route path="/jobs/:id/recommendations" element={<RecommendationsPage />} />
               </Route>
               <Route element={<RoleRoute role="worker" />}>
                 <Route path="/jobs/available" element={<AvailableJobsPage />} />

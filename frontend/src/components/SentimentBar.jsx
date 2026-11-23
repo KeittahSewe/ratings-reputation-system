@@ -12,16 +12,38 @@ const SEGMENTS = [
 // class, so the bar never depends on colour (the dissertation prints in
 // greyscale). Widths are proportions, so the bar fills whatever width it is
 // given; segments are separated by a 2px gap in the surface colour.
-// counts: { positive, neutral, negative }. compact drops the heading, for the
-// 300px bars on recommendation cards.
-export function SentimentBar({ counts, compact = false }) {
+// counts: { positive, neutral, negative }. inline is the row on the
+// recommendation cards of Figure 4.11: a label, a 300px bar and one sentence
+// with every percentage and the total.
+export function SentimentBar({ counts, inline = false }) {
   const total = counts.positive + counts.neutral + counts.negative
   const percent = percentages(counts)
   if (!percent) return null
+  if (inline) {
+    return (
+      <div className={styles.inline}>
+        <span className={styles.inlineLabel}>Review sentiment</span>
+        <div className={`${styles.bar} ${styles.inlineBar}`} aria-hidden="true">
+          {SEGMENTS.filter(({ key }) => counts[key] > 0).map(({ key, label }) => (
+            <span
+              key={key}
+              className={`${styles.segment} ${styles[key]}`}
+              style={{ flexGrow: counts[key] }}
+              title={`${label}: ${percent[key]} percent (${plural(counts[key], 'review')})`}
+            />
+          ))}
+        </div>
+        <span className={styles.inlineText}>
+          Positive {percent.positive} percent, neutral {percent.neutral} percent, negative {percent.negative} percent of{' '}
+          {plural(total, 'review')}
+        </span>
+      </div>
+    )
+  }
   return (
     <figure className={styles.figure}>
-      {!compact && <figcaption className={styles.caption}>Sentiment distribution across {plural(total, 'review')}</figcaption>}
-      <div className={`${styles.bar} ${compact ? styles.compact : ''}`} aria-hidden="true">
+      <figcaption className={styles.caption}>Sentiment distribution across {plural(total, 'review')}</figcaption>
+      <div className={styles.bar} aria-hidden="true">
         {SEGMENTS.filter(({ key }) => counts[key] > 0).map(({ key, label }) => (
           <span
             key={key}

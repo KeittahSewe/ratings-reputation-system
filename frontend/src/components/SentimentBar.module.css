@@ -15,8 +15,22 @@
   height: 28px;
 }
 
-.compact {
-  height: 12px;
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+}
+
+.inlineLabel {
+  color: var(--color-text-secondary);
+}
+
+.inlineBar {
+  width: 300px;
+  height: 18px;
 }
 
 .segment {
