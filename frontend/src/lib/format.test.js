@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { formatDate, formatMonthYear, formatScore, formatStored, percentages, plural } from './format.js'
+import { formatDate, formatMonthYear, formatShortDate, formatScore, formatStored, percentages, plural } from './format.js'
 
 test('scores show one decimal, rounded half up like the API', () => {
   assert.equal(formatScore(4.72), '4.7')
@@ -30,4 +30,9 @@ test('dates are written out in Nairobi time', () => {
 test('plural', () => {
   assert.equal(plural(1, 'review'), '1 review')
   assert.equal(plural(41, 'review'), '41 reviews')
+})
+
+test('short dates as in the job table, never Sept', () => {
+  assert.equal(formatShortDate('2026-09-01T08:00:00Z'), '01 Sep 2026')
+  assert.equal(formatShortDate('2026-08-11T22:30:00Z'), '12 Aug 2026')
 })
