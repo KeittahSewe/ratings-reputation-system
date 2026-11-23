@@ -4,10 +4,10 @@ import { AuthProvider } from './auth/AuthProvider.jsx'
 import { LoadingState } from './components/LoadingState.jsx'
 import { AppLayout } from './layout/AppLayout.jsx'
 import { AvailableJobsPage } from './pages/jobs/AvailableJobsPage.jsx'
+import { InsightsPage } from './pages/insights/InsightsPage.jsx'
 import { JobsPage } from './pages/jobs/JobsPage.jsx'
 import { LoginPage } from './pages/LoginPage.jsx'
 import { NotFoundPage } from './pages/NotFoundPage.jsx'
-import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
 import { ProfilePage } from './pages/profile/ProfilePage.jsx'
 import { FindWorkersPage } from './pages/recommendations/FindWorkersPage.jsx'
 import { RecommendationsPage } from './pages/recommendations/RecommendationsPage.jsx'
@@ -24,8 +24,7 @@ import { RoleRoute } from './routes/RoleRoute.jsx'
 const DevFiguresPage = import.meta.env.DEV ? lazy(() => import('./dev/DevFiguresPage.jsx')) : null
 
 // Routes. vercel.json sends every path to index.html, so each of these loads
-// when opened or refreshed directly. Each placeholder names the issue that
-// builds its screen.
+// when opened or refreshed directly.
 export default function App() {
   return (
     <BrowserRouter>
@@ -64,7 +63,7 @@ export default function App() {
               <Route index element={<Navigate to="/jobs" replace />} />
               <Route path="/jobs" element={<JobsPage />} />
               <Route path="/jobs/:id/review" element={<ReviewPage />} />
-              <Route path="/insights" element={<PlaceholderPage title="Insights" figure="4.12" issue={90} />} />
+              <Route path="/insights" element={<InsightsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/users/:id" element={<UserProfilePage />} />
 

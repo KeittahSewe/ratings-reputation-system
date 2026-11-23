@@ -7,12 +7,14 @@ import { JobDetail } from '../pages/jobs/JobDetail.jsx'
 import { JobFilters } from '../pages/jobs/JobFilters.jsx'
 import { JobsTable } from '../pages/jobs/JobsTable.jsx'
 import { PostJobPanel } from '../pages/jobs/PostJobPanel.jsx'
+import { InsightsView } from '../pages/insights/InsightsView.jsx'
 import { RecommendationsView } from '../pages/recommendations/RecommendationsPage.jsx'
 import { ReviewForm } from '../pages/review/ReviewForm.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
 import { ClientProfileView } from '../pages/profile/ClientProfileView.jsx'
 import { WorkerProfileView } from '../pages/profile/WorkerProfileView.jsx'
+import { AMINA_INSIGHTS, EMPTY_INSIGHTS, PETER_INSIGHTS } from './insightsFixtures.js'
 
 // Sample data shared by the figures (Chapter 4 handover, section 4).
 export const AMINA = { id: 'fixture-amina', name: 'Amina Wanjiru', role: 'client', company_name: 'Wanjiru Interiors Ltd' }
@@ -395,6 +397,33 @@ export const FIXTURES = [
             <JobActions job={{ ...REPAINT, ...fields }} role={role} canReview={canReview} onChanged={noop} />
           </section>
         ))}
+      </Shell>
+    ),
+  },
+  {
+    id: '4.12',
+    title: 'Figure 4.12, personal insights dashboard, worker (1440 wide)',
+    render: () => (
+      <Shell user={PETER} onLogOut={noop} activeTo="/insights">
+        <InsightsView insights={PETER_INSIGHTS} selected="6m" onPeriod={noop} />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.12-client',
+    title: 'Figure 4.12, insights for a client over 3 months, with a mixed theme and a review pending',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/insights">
+        <InsightsView insights={AMINA_INSIGHTS} selected="3m" onPeriod={noop} />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.12-empty',
+    title: 'Figure 4.12, insights with nothing counted yet (Esther)',
+    render: () => (
+      <Shell user={{ id: 'fixture-esther', name: 'Esther Njeri', role: 'worker' }} onLogOut={noop} activeTo="/insights">
+        <InsightsView insights={EMPTY_INSIGHTS} selected="6m" onPeriod={noop} />
       </Shell>
     ),
   },
