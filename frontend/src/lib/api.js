@@ -99,10 +99,21 @@ export async function apiFetch(path, { method = 'GET', body, signal, auth = true
   }
 }
 
-// Sent once when the app loads, without waiting for the answer. The API's
-// /health also calls the inference service, so both Render services start
-// waking while the user is still typing on the sign-in page.
+const INFERENCE_URL = import.meta.env.VITE_INFERENCE_URL
+
+// Wakes the inference service from the browser. While it sleeps on Render,
+// the API's own call to it gets an error at once instead of waking it
+// (finding of 22 November), so a review submitted then would only be saved
+// as pending. A request from outside Render does wake it. no-cors: the
+// answer is not read, so the service needs no CORS setting.
+export function wakeInference() {
+  if (!INFERENCE_URL) return
+  fetch(`${INFERENCE_URL}/health`, { mode: 'no-cors', cache: 'no-store' }).catch(() => {})
+}
+
+// Sent once when the app loads, without waiting for the answers, so both
+// Render services start waking while the user is still on the sign-in page.
 export function wakeServices() {
-  if (!API_BASE_URL) return
-  fetch(`${API_BASE_URL}/health`, { cache: 'no-store' }).catch(() => {})
+  if (API_BASE_URL) fetch(`${API_BASE_URL}/health`, { cache: 'no-store' }).catch(() => {})
+  wakeInference()
 }

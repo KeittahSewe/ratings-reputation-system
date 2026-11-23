@@ -3,10 +3,11 @@ import styles from './Card.module.css'
 // A card with an 18px heading. action sits beside the heading (such as Edit),
 // aside sits at the far right (such as Add skill). ai gives the card the
 // AI-accent left rule and border used for engine output, as on the reputation
-// card in Figures 4.7 and 4.8.
-export function Card({ title, action, aside, ai = false, children, as: Tag = 'section', ...rest }) {
+// card in Figures 4.7 and 4.8. plain gives a white card with a hairline, as
+// the form card of Figure 4.10.
+export function Card({ title, action, aside, ai = false, plain = false, children, as: Tag = 'section', ...rest }) {
   return (
-    <Tag className={`${styles.card} ${ai ? styles.ai : ''}`} {...rest}>
+    <Tag className={`${styles.card} ${ai ? styles.ai : ''} ${plain ? styles.plain : ''}`} {...rest}>
       {(title || action || aside) && (
         <div className={styles.header}>
           <div className={styles.headingGroup}>

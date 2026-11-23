@@ -7,6 +7,7 @@ import { JobDetail } from '../pages/jobs/JobDetail.jsx'
 import { JobFilters } from '../pages/jobs/JobFilters.jsx'
 import { JobsTable } from '../pages/jobs/JobsTable.jsx'
 import { PostJobPanel } from '../pages/jobs/PostJobPanel.jsx'
+import { ReviewForm } from '../pages/review/ReviewForm.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
 import { ClientProfileView } from '../pages/profile/ClientProfileView.jsx'
@@ -247,6 +248,29 @@ export const FIXTURES = [
         <JobFilters filters={{ status: '', category: '', q: '' }} onChange={noop} />
         <JobsTable jobs={JOBS_49} selectedId="j2" party="worker" onSelect={noop} actionFor={clientActions} />
         <JobDetail job={REPAINT} viewerRole="client" partyProfile={GRACE_PROFILE} onClose={noop} />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.10',
+    title: 'Figure 4.10, review submission (1440 x 1024)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/jobs">
+        <PageTitle title="Leave a review" />
+        <ReviewForm
+          job={{ title: 'Replace office door locks' }}
+          reviewee={{ name: 'Samuel Kariuki' }}
+          revieweeRole="worker"
+          completedAt="2026-08-20T09:00:00Z"
+          values={{
+            rating: 3,
+            text: 'Samuel did the work and the locks are fine, but he arrived almost two hours late on the first day and I had to call twice to find out where he was. Once he was on site he was quick and tidy. I would use him again if the scheduling side improved.',
+          }}
+          errors={{}}
+          onChange={noop}
+          onSubmit={(event) => event.preventDefault()}
+          onCancel={noop}
+        />
       </Shell>
     ),
   },
