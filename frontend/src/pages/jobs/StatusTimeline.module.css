@@ -1,0 +1,114 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+}
+
+.steps {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 26px;
+  padding-right: var(--space-3);
+}
+
+/* The line runs from this step's marker to the next one's. */
+.step::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-hairline);
+}
+
+.step:last-child::before {
+  right: auto;
+  width: 0;
+}
+
+.lineDone::before {
+  background: var(--color-primary);
+}
+
+.marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  background: var(--color-page);
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+}
+
+.done .marker {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.cancelled .marker {
+  background: var(--color-negative);
+  border-color: var(--color-negative);
+}
+
+.label {
+  line-height: 17px;
+}
+
+.done .label,
+.cancelled .label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.pending .label {
+  color: var(--color-text-secondary);
+}
+
+.detail {
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 960px) {
+  .steps {
+    grid-auto-flow: row;
+    gap: var(--space-3);
+  }
+
+  .step {
+    padding-top: 0;
+    padding-left: 26px;
+  }
+
+  .step::before {
+    top: 15px;
+    left: 6px;
+    right: auto;
+    bottom: -12px;
+    width: 3px;
+    height: auto;
+  }
+
+  .step:last-child::before {
+    display: none;
+  }
+}

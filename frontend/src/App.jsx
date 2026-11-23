@@ -3,6 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { AuthProvider } from './auth/AuthProvider.jsx'
 import { LoadingState } from './components/LoadingState.jsx'
 import { AppLayout } from './layout/AppLayout.jsx'
+import { AvailableJobsPage } from './pages/jobs/AvailableJobsPage.jsx'
+import { JobsPage } from './pages/jobs/JobsPage.jsx'
 import { LoginPage } from './pages/LoginPage.jsx'
 import { NotFoundPage } from './pages/NotFoundPage.jsx'
 import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
@@ -57,7 +59,7 @@ export default function App() {
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
               <Route index element={<Navigate to="/jobs" replace />} />
-              <Route path="/jobs" element={<PlaceholderPage title="My Jobs" figure="4.9" issue={87} />} />
+              <Route path="/jobs" element={<JobsPage />} />
               <Route path="/jobs/:id/review" element={<PlaceholderPage title="Leave a review" figure="4.10" issue={88} />} />
               <Route path="/insights" element={<PlaceholderPage title="Insights" figure="4.12" issue={90} />} />
               <Route path="/profile" element={<ProfilePage />} />
@@ -71,7 +73,7 @@ export default function App() {
                 />
               </Route>
               <Route element={<RoleRoute role="worker" />}>
-                <Route path="/jobs/available" element={<PlaceholderPage title="Available Jobs" figure="4.9" issue={87} />} />
+                <Route path="/jobs/available" element={<AvailableJobsPage />} />
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />

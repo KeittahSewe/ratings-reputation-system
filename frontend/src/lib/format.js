@@ -31,6 +31,19 @@ export function formatMonthYear(iso) {
   return new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: TIME_ZONE }).format(new Date(iso))
 }
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+// 01 Sep 2026, as in the job table of Figure 4.9. Built from numeric parts
+// because some browsers abbreviate September as "Sept".
+export function formatShortDate(iso) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'numeric', year: 'numeric', timeZone: TIME_ZONE })
+      .formatToParts(new Date(iso))
+      .map((p) => [p.type, p.value]),
+  )
+  return `${parts.day} ${MONTHS[Number(parts.month) - 1]} ${parts.year}`
+}
+
 // Whole-number percentages that add up to 100, by largest remainder (the
 // API's insights use the same rule). counts: { positive, neutral, negative }.
 // Returns null when there is nothing to divide.

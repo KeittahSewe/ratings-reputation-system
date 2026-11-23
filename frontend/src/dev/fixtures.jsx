@@ -1,6 +1,10 @@
 import { MESSAGES } from '../auth/validation.js'
+import { PageTitle } from '../components/PageTitle.jsx'
 import { Shell } from '../layout/Shell.jsx'
 import { LoginForm } from '../pages/auth/LoginForm.jsx'
+import { JobDetail } from '../pages/jobs/JobDetail.jsx'
+import { JobFilters } from '../pages/jobs/JobFilters.jsx'
+import { JobsTable } from '../pages/jobs/JobsTable.jsx'
 import { RegisterForm } from '../pages/auth/RegisterForm.jsx'
 import { PlaceholderPage } from '../pages/PlaceholderPage.jsx'
 import { ClientProfileView } from '../pages/profile/ClientProfileView.jsx'
@@ -126,6 +130,51 @@ const AMINA_PROFILE = {
   ],
 }
 
+// Figure 4.9. "Replace bathroom tiles" was in the Tiling category, which is
+// not one of the six; it becomes a cleaning job. Grace's reputation follows
+// the 18 November job history rule (H 5.00 for 23 jobs): 4.53, shown 4.5.
+const GRACE = { id: 'fixture-grace', name: 'Grace Otieno' }
+const job = (id, title, category, status, created, worker, extra = {}) => ({
+  id,
+  title,
+  category,
+  status,
+  created_at: `${created}T09:00:00Z`,
+  client: { id: AMINA.id, name: AMINA.name, company_name: AMINA.company_name },
+  worker,
+  can_review: false,
+  ...extra,
+})
+const JOBS_49 = [
+  job('j1', 'Fix kitchen plumbing', 'plumbing', 'completed', '2026-08-12', { id: PETER.id, name: PETER.name }, { can_review: true }),
+  job('j2', 'Repaint two office rooms', 'painting', 'in_progress', '2026-08-24', GRACE),
+  job('j3', 'Install shelving units', 'carpentry', 'assigned', '2026-08-28', { id: 'fixture-daniel', name: 'Daniel Kiprop' }),
+  job('j4', 'Rewire reception lighting', 'electrical', 'open', '2026-09-01', null),
+  job('j5', 'Deep clean the reception', 'cleaning', 'open', '2026-09-02', null),
+]
+const REPAINT = {
+  ...JOBS_49[1],
+  description:
+    'Two rooms on the second floor, roughly 40 square metres in total. Walls and ceilings, two coats. Existing furniture needs covering and moving back afterwards. Paint is already on site. Work must happen outside office hours, so weekday evenings or Saturday.',
+  required_skills: ['Interior painting'],
+  timeline: [
+    { step: 'posted', at: '2026-08-24T09:00:00Z' },
+    { step: 'assigned', at: '2026-08-26T09:00:00Z' },
+    { step: 'accepted', at: '2026-08-30T09:00:00Z' },
+    { step: 'submitted', at: null },
+    { step: 'completed', at: null },
+  ],
+}
+const GRACE_PROFILE = {
+  reputation: { score: 4.53, ratings_component: 4.5, sentiment_component: 4.33, history_component: 5, review_count: 23, provisional: false },
+  completed_jobs: 23,
+}
+const clientActions = (j) => {
+  if (j.can_review) return { label: 'Leave review', to: '#' }
+  if (j.status === 'open') return { label: 'Find workers', to: '#' }
+  return { label: 'View details' }
+}
+
 // One entry per fixture. Each screen issue (#83 to #90) adds its figure here.
 // View each at the size in its title (DevTools device toolbar).
 export const FIXTURES = [
@@ -184,6 +233,18 @@ export const FIXTURES = [
     render: () => (
       <Shell user={AMINA} onLogOut={noop} activeTo="/find-workers">
         <WorkerProfileView {...PETER_PROFILE} user={{ ...PETER_PROFILE.user, email: undefined }} />
+      </Shell>
+    ),
+  },
+  {
+    id: '4.9',
+    title: 'Figure 4.9, job management, client (1440 x 1024)',
+    render: () => (
+      <Shell user={AMINA} onLogOut={noop} activeTo="/jobs">
+        <PageTitle title="My Jobs" />
+        <JobFilters filters={{ status: '', category: '', q: '' }} onChange={noop} />
+        <JobsTable jobs={JOBS_49} selectedId="j2" party="worker" onSelect={noop} actionFor={clientActions} />
+        <JobDetail job={REPAINT} viewerRole="client" partyProfile={GRACE_PROFILE} onClose={noop} />
       </Shell>
     ),
   },
