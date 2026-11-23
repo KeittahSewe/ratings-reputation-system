@@ -27,6 +27,7 @@ Copy-Item .env.example .env
 | `VITE_SUPABASE_URL` | URL of the Supabase project |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Publishable key of the Supabase project, starting `sb_publishable_`. Used only for sign-up and sign-in; it can read no table. |
 | `VITE_API_BASE_URL` | Base URL of the Express API, ending in `/api` |
+| `VITE_INFERENCE_URL` | Optional. Base URL of the inference service (`http://localhost:8000` locally, `https://ratings-reputation-inference.onrender.com` on Vercel). The browser only sends it a `GET /health` it never reads, to wake it: while it sleeps on Render, the API's own call to it fails at once instead of waking it, so a review would be saved as pending. |
 
 Never commit `.env`. Only variables that start with `VITE_` are visible in the browser, so never put a secret such as the Supabase secret key here.
 
@@ -62,7 +63,7 @@ At sign-up the name and role go into the account's `user_metadata`. `AuthProvide
 
 `apiFetch` sends the token, turns `{ error: { code, message } }` into an `ApiError` with `status`, `code` and `message`, refreshes the session once on 401 `token_expired`, and retries a GET once after a network failure. It allows 75 seconds a request, because a sleeping Render service holds the request while it wakes (about 24 s for the API and 33 s for the inference service). After 5 seconds `LoadingState` says the server is waking and counts the seconds.
 
-When the app loads it sends one `GET /api/health` without waiting for the answer. The API's health route calls the inference service, so both start waking while the user is on the log-in page.
+When the app loads it sends one `GET /api/health` to the API, and one `GET /health` straight to the inference service, without waiting for either answer, so both Render services start waking while the user is on the log-in page. The review page sends the inference request again when it opens.
 
 ## Routes
 

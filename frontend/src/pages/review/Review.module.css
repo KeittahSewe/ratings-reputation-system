@@ -1,0 +1,127 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5) var(--space-7);
+  padding: var(--space-5);
+  background: var(--color-card);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-md);
+}
+
+.contextItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contextItem:first-child {
+  flex: 1;
+}
+
+.contextLabel {
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+}
+
+.contextValue {
+  font-size: 16px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 19px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-card);
+  border: var(--border-width) solid var(--color-ai-accent);
+  border-left: var(--rule-width) solid var(--color-ai-accent);
+  border-radius: var(--radius-sm);
+}
+
+.stepsHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.stepsTitle {
+  margin: 0;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: 20px;
+  line-height: 17px;
+}
+
+.stepList li::marker {
+  font-weight: var(--font-weight-semibold);
+}
+
+.final {
+  margin: 0;
+  font-size: var(--font-size-helper);
+  color: var(--color-text-secondary);
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.buttons button {
+  min-height: 44px;
+  min-width: 104px;
+}
+
+.formError {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-page);
+  border-left: var(--rule-width) solid var(--color-negative);
+  border-radius: var(--radius-sm);
+}
+
+.ownReview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--space-4);
+  background: var(--color-page);
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+}
+
+.ownHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.reviewText {
+  margin: 0;
+  line-height: 17px;
+  white-space: pre-line;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--font-size-helper);
+  line-height: 15px;
+  color: var(--color-text-secondary);
+}

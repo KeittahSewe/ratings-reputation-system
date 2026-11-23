@@ -11,6 +11,7 @@ import { PlaceholderPage } from './pages/PlaceholderPage.jsx'
 import { ProfilePage } from './pages/profile/ProfilePage.jsx'
 import { UserProfilePage } from './pages/profile/UserProfilePage.jsx'
 import { RegisterPage } from './pages/RegisterPage.jsx'
+import { ReviewPage } from './pages/review/ReviewPage.jsx'
 import { StatusPage } from './pages/StatusPage.jsx'
 import { PublicOnly } from './routes/PublicOnly.jsx'
 import { RequireAuth } from './routes/RequireAuth.jsx'
@@ -60,7 +61,7 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route index element={<Navigate to="/jobs" replace />} />
               <Route path="/jobs" element={<JobsPage />} />
-              <Route path="/jobs/:id/review" element={<PlaceholderPage title="Leave a review" figure="4.10" issue={88} />} />
+              <Route path="/jobs/:id/review" element={<ReviewPage />} />
               <Route path="/insights" element={<PlaceholderPage title="Insights" figure="4.12" issue={90} />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/users/:id" element={<UserProfilePage />} />
