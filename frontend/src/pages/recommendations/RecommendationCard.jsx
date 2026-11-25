@@ -13,8 +13,9 @@ const MAX_TAGS = 2
 // reasons. The reasons strip is the screen's answer to literature gap 3:
 // every card says in words why the worker ranked where they did, one
 // sentence per term of the match score, with the score beside it.
-// onAssign is absent in the figure fixture.
-export function RecommendationCard({ rec, jobTitle, onAssign }) {
+// onAssign is absent in the figure fixture. showProfileLink is false on the
+// landing page, where the workers are examples with no profile to open.
+export function RecommendationCard({ rec, jobTitle, onAssign, showProfileLink = true }) {
   const [confirming, setConfirming] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
@@ -74,9 +75,11 @@ export function RecommendationCard({ rec, jobTitle, onAssign }) {
           )}
         </div>
         <div className={styles.actions}>
-          <Link to={`/users/${worker.id}`} className={styles.secondaryLink}>
-            View profile
-          </Link>
+          {showProfileLink && (
+            <Link to={`/users/${worker.id}`} className={styles.secondaryLink}>
+              View profile
+            </Link>
+          )}
           {onAssign && !confirming && <Button onClick={() => setConfirming(true)}>Assign to job</Button>}
         </div>
       </div>

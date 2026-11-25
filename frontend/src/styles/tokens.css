@@ -24,6 +24,7 @@
 
   /* Typography */
   --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-size-display: 40px; /* landing page headline only */
   --font-size-page-title: 28px;
   --font-size-section-heading: 18px;
   --font-size-body: 14px;
