@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import styles from './AuthCard.module.css'
 
 // The centred 560px card of Figure 4.6, with no sidebar: a heading, a line
@@ -5,6 +6,9 @@ import styles from './AuthCard.module.css'
 export function AuthCard({ title, subtitle, footer, children }) {
   return (
     <main className={styles.page}>
+      <Link to="/" className={styles.home}>
+        Back to the home page
+      </Link>
       <div className={styles.card}>
         <header className={styles.heading}>
           <h1 className={styles.title}>{title}</h1>

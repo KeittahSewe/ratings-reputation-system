@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { BrowserRouter, Route, Routes } from 'react-router'
 import { AuthProvider } from './auth/AuthProvider.jsx'
 import { LoadingState } from './components/LoadingState.jsx'
 import { AppLayout } from './layout/AppLayout.jsx'
@@ -15,6 +15,7 @@ import { UserProfilePage } from './pages/profile/UserProfilePage.jsx'
 import { RegisterPage } from './pages/RegisterPage.jsx'
 import { ReviewPage } from './pages/review/ReviewPage.jsx'
 import { StatusPage } from './pages/StatusPage.jsx'
+import { HomeRoute } from './routes/HomeRoute.jsx'
 import { PublicOnly } from './routes/PublicOnly.jsx'
 import { RequireAuth } from './routes/RequireAuth.jsx'
 import { RoleRoute } from './routes/RoleRoute.jsx'
@@ -30,6 +31,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/status" element={<StatusPage />} />
           <Route
             path="/login"
@@ -60,7 +62,6 @@ export default function App() {
 
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
-              <Route index element={<Navigate to="/jobs" replace />} />
               <Route path="/jobs" element={<JobsPage />} />
               <Route path="/jobs/:id/review" element={<ReviewPage />} />
               <Route path="/insights" element={<InsightsPage />} />
