@@ -1,9 +1,10 @@
 import styles from './Tag.module.css'
 
-// A small filled label. light is the light-blue surface fill used for role
-// and skill tags; ai is the AI-accent fill reserved for output of the
-// sentiment model, scoring engine and recommendation engine. Text is always
-// the primary text colour, because the AI accent fails contrast as text.
+// A small label. light is white with a thin border, used for role, status
+// and skill tags, so that a filled tag always means engine output. ai is the
+// AI-accent fill reserved for output of the sentiment model, scoring engine
+// and recommendation engine. Text is always the primary text colour, because
+// the AI accent fails contrast as text.
 // quiet drops the semibold, for category tags beside a skill name.
 export function Tag({ variant = 'light', quiet = false, children }) {
   return <span className={`${styles.tag} ${styles[variant]} ${quiet ? styles.quiet : ''}`}>{children}</span>

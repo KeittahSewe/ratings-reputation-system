@@ -63,3 +63,43 @@ export const REPUTATION_WEIGHTS = [
   { label: 'Review sentiment, read by the model', weight: 40 },
   { label: 'Job history', weight: 20 },
 ]
+
+// The hiring flow, in order. Workers never apply; the client assigns from
+// the ranked list and the worker accepts.
+export const HIRING_STEPS = [
+  { title: 'Post a job', text: 'The client describes the work and the skills it needs.' },
+  {
+    title: 'Get a ranked list',
+    text: 'The recommendation engine ranks the workers who are free and says why each one sits where they do.',
+  },
+  { title: 'Assign a worker', text: 'The client picks someone from the list, and the worker accepts the job.' },
+  { title: 'Review each other', text: 'When the job is done, both sides write a review and the model reads it.' },
+]
+
+// Amina and Peter review each other after Fix kitchen plumbing, with the
+// texts and classifications of the Figure 4.7 and 4.8 fixtures.
+export const EXAMPLE_REVIEW_PAIR = [
+  {
+    from: 'Amina Wanjiru',
+    to: 'Peter',
+    rating: 5,
+    short: 'Peter arrived when he said he would and explained what was wrong before starting.',
+    text: 'Peter arrived when he said he would and explained what was wrong before starting. The leak has not come back.',
+    sentiment: { label: 'positive', confidence_score: 0.97 },
+  },
+  {
+    from: 'Peter Mwangi',
+    to: 'Amina',
+    rating: 5,
+    text: 'Amina was clear about what the job involved and paid the same day I finished.',
+    sentiment: { label: 'positive', confidence_score: 0.96 },
+  },
+]
+
+// Peter's first suggestion on the Figure 4.12 fixture, worked out by the
+// insights API's rules.
+export const EXAMPLE_GUIDANCE = {
+  title: 'Tell clients about a delay as soon as you know about it.',
+  detail:
+    'Advance notice of delays comes up negative in 4 of your 33 reviews. 2 of those 4 still gave you four or five stars.',
+}

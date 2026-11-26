@@ -25,7 +25,6 @@
   padding: var(--space-4);
   background: var(--color-page);
   border: var(--border-width) solid var(--color-hairline);
-  border-left: var(--rule-width) solid var(--color-primary);
   border-radius: var(--radius-sm);
 }
 

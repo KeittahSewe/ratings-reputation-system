@@ -130,7 +130,6 @@
   padding: 12px var(--space-4);
   background: var(--color-card);
   border: var(--border-width) solid var(--color-ai-accent);
-  border-left: var(--rule-width) solid var(--color-ai-accent);
   border-radius: var(--radius-sm);
 }
 
@@ -149,7 +148,6 @@
   gap: var(--space-3);
   padding: var(--space-4);
   border: var(--border-width) solid var(--color-hairline);
-  border-left: var(--rule-width) solid var(--color-primary);
   border-radius: var(--radius-sm);
 }
 

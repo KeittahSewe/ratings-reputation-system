@@ -42,7 +42,6 @@
   padding: var(--space-4) var(--space-5);
   background: var(--color-card);
   border: var(--border-width) solid var(--color-ai-accent);
-  border-left: var(--rule-width) solid var(--color-ai-accent);
   border-radius: var(--radius-sm);
 }
 

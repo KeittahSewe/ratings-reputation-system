@@ -7,15 +7,15 @@
 
 :root {
   /* Colours */
-  --color-text: #092327;
-  --color-text-secondary: #4a5a64;
-  --color-primary: #0b5351;
-  --color-ai-accent: #00a9a5; /* fill, tag background or left border only, never text */
-  --color-border: #4e8098;
-  --color-hairline: #cbd9e2;
-  --color-surface-light: #90c2e7;
+  --color-text: #040403;
+  --color-text-secondary: #4d5a49;
+  --color-primary: #5b7553;
+  --color-ai-accent: #9ddbad; /* fill, tag background or left border only, never text */
+  --color-border: #8eb897;
+  --color-hairline: #d8e6d3;
+  --color-surface-light: #c3e8bd;
   --color-page: #ffffff;
-  --color-card: #f2f8f9;
+  --color-card: #f3f8f1;
 
   /* Sentiment colours. Always pair with a text label and a number. */
   --color-positive: #2e7d32;
@@ -47,7 +47,7 @@
   --radius-md: 8px;
   --radius-pill: 999px;
   --border-width: 1px;
-  --rule-width: 4px; /* left rules: active nav item, AI accent, selected row */
+  --rule-width: 4px; /* left rules: active nav item and error messages only */
 
   /* Layout. Frames are 1440 wide: a 240px sidebar and a 1200px content area.
      The one breakpoint is 960px; media queries cannot read variables, so CSS

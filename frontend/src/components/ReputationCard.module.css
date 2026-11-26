@@ -74,7 +74,6 @@
   line-height: 17px;
   background: var(--color-page);
   border: var(--border-width) solid var(--color-ai-accent);
-  border-left: var(--rule-width) solid var(--color-ai-accent);
   border-radius: var(--radius-sm);
 }
 
