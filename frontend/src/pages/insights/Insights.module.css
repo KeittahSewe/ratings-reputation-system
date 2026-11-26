@@ -49,7 +49,6 @@
 
 .statAi {
   border-color: var(--color-ai-accent);
-  border-left: var(--rule-width) solid var(--color-ai-accent);
 }
 
 .statLabel {

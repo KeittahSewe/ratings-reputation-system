@@ -11,7 +11,8 @@
 }
 
 .light {
-  background: var(--color-surface-light);
+  background: var(--color-page);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-border);
 }
 
 .ai {

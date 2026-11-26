@@ -1,7 +1,7 @@
 // Checks the two colour rules from the Chapter 4 handover that a linter cannot.
 //
-// 1. The AI accent (#00A9A5) never colours text. Against white it reaches
-//    about 2.5 to 1, under the 4.5 to 1 that body text needs, so it is used as
+// 1. The AI accent (#9DDBAD) never colours text. Against white it reaches
+//    about 1.6 to 1, under the 4.5 to 1 that body text needs, so it is used as
 //    a fill, a tag background or a left rule only.
 // 2. Colours come from src/styles/tokens.css. A hex colour anywhere else is a
 //    colour the palette does not know about.
@@ -20,9 +20,9 @@ const CHECKED = /\.(css|jsx|js)$/
 
 // A text colour set to the AI accent, as a variable or as the hex value, in
 // CSS (`color: var(--color-ai-accent)`) or in an inline style.
-const AI_AS_TEXT = /(^|[^-\w])color\s*:\s*['"]?\s*(var\(\s*--color-ai-accent\s*\)|#00a9a5)/i
+const AI_AS_TEXT = /(^|[^-\w])color\s*:\s*['"]?\s*(var\(\s*--color-ai-accent\s*\)|#9ddbad)/i
 // SVG text takes its colour from fill.
-const AI_AS_SVG_TEXT = /<text[^>]*(fill=["']?(var\(--color-ai-accent\)|#00a9a5))/i
+const AI_AS_SVG_TEXT = /<text[^>]*(fill=["']?(var\(--color-ai-accent\)|#9ddbad))/i
 // A hex colour: #abc, #abcd, #aabbcc or #aabbccdd, not part of a word or an
 // HTML entity such as &#123;.
 const HEX = /(?<![&\w])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![0-9a-z_-])/i

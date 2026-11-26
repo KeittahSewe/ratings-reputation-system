@@ -89,7 +89,7 @@ The sidebar lists only items with a screen of their own. Figures 4.7 to 4.12 als
 
 `npm run check:design` enforces the two colour rules from the Chapter 4 handover that a linter cannot:
 
-- the AI accent (`--color-ai-accent`, #00A9A5) is never a text colour, because against white it reaches about 2.5 to 1, under the 4.5 to 1 body text needs;
+- the AI accent (`--color-ai-accent`, #9DDBAD) is never a text colour, because against white it reaches about 1.6 to 1, under the 4.5 to 1 body text needs;
 - no hex colour appears outside `src/styles/tokens.css`.
 
 Run it with lint and build before every pull request.
